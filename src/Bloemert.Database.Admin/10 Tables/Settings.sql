@@ -1,0 +1,9 @@
+﻿CREATE TABLE [dbo].[Settings]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+  [Deleted] BIT NOT NULL DEFAULT 0, 
+  [Description] NVARCHAR(MAX) NOT NULL, 
+  [Key] NVARCHAR(128) NULL, 
+  [Name] NVARCHAR(128) NULL, 
+  [Value] NVARCHAR(256) NOT NULL,
+)

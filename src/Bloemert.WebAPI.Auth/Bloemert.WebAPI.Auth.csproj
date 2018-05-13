@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <WarningLevel>0</WarningLevel>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Nancy.Authentication.Basic" Version="2.0.0-clinteastwood" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Bloemert.Data.Entity.Auth\Bloemert.Data.Entity.Auth.csproj" />
+    <ProjectReference Include="..\Bloemert.Lib.WebAPI\Bloemert.Lib.WebAPI.csproj" />
+  </ItemGroup>
+
+</Project>

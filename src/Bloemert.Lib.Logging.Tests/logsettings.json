@@ -1,0 +1,26 @@
+﻿{
+  "Serilog": {
+    "Using": [
+      "Serilog.Sinks.Literate",
+      "Serilog.Sinks.Debug",
+      "Serilog.Sinks.RollingFile"
+    ],
+    "MinimumLevel": "Debug",
+    "WriteTo": [
+      { "Name": "Debug" },
+      {
+        "Name": "RollingFile",
+        "Args": {
+          "pathFormat": "c:/temp/Logs/RollingFileTest.json",
+          "formatter": "Serilog.Formatting.Json.JsonFormatter, Serilog",
+          "shared": "true"
+        },
+        "shared": "true"
+      }
+    ],
+    "Enrich": [ "FromLogContext", "WithMachineName", "WithThreadId" ],
+    "Properties": {
+      "Application": "EinsteinTest"
+    }
+  }
+}

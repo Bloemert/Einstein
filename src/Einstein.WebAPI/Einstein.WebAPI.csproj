@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>netcoreapp2.0</TargetFrameworks>
+    <Platforms>AnyCPU;x64</Platforms>
+		<RuntimeIdentifiers>win7-x64</RuntimeIdentifiers>
+	</PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Buffering" Version="0.2.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Owin" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.0.1" />
+    <PackageReference Include="Nancy.Authentication.Basic" Version="2.0.0-clinteastwood" />
+    <PackageReference Include="Nancy.Bootstrappers.Autofac" Version="2.0.0-clinteastwood" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Bloemert.Data.Entity.Auth\Bloemert.Data.Entity.Auth.csproj" />
+    <ProjectReference Include="..\Bloemert.Lib.WebAPI\Bloemert.Lib.WebAPI.csproj" />
+    <ProjectReference Include="..\Bloemert.WebAPI.Auth\Bloemert.WebAPI.Auth.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="logsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

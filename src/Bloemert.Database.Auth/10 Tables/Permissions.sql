@@ -1,0 +1,7 @@
+﻿CREATE TABLE [dbo].[Permissions]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+  [Deleted] BIT NOT NULL DEFAULT 0, 
+	[Name] NVARCHAR(128) NOT NULL,
+	[Description] NVARCHAR(max) NULL
+)
