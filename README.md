@@ -7,7 +7,8 @@ Version: 0.1 Under development!
 
 ### How do I get set up? ###
 
-Summary of set up, Configuration, Dependencies
+Summary of set up, Configuration, Dependencies:
+
 	* REST Layer:
 		** Overall:   
 			*** C# Dotnet core v2.+ https://dotnet.github.io/ 
@@ -22,7 +23,6 @@ Summary of set up, Configuration, Dependencies
 		** ConnectionLayer:
 			*** NancyFX Web Framework for .NET http://nancyfx.org/
 			*** Microsoft Kestrel Webserver https://docs.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel?view=aspnetcore-2.1&tabs=aspnetcore2x
-	
 	* UI Layer:
 		** ASP.NET Core 2.0 https://github.com/aspnet/home
 		** Vui.js 2.0 https://vuejs.org/
