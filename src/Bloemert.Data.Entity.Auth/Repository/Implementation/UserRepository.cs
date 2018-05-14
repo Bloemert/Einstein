@@ -1,7 +1,9 @@
-﻿using Bloemert.Data.Core;
+﻿using Autofac;
+using Bloemert.Data.Core;
 using Bloemert.Data.Entity.Auth.Entity;
 using Bloemert.Data.Entity.Auth.Repository;
 using Bloemert.Lib.Common;
+using Bloemert.Lib.Config;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -18,10 +20,12 @@ namespace Bloemert.Data.Entity.Auth.Repository.Implementation
 
 		public override Regex ExcludePropertyMatch { get; set; } = new Regex(@"^PasswordData$");
 
+		public IAppConfig AppConfig { get; }
+
 		public UserRepository(ICommonRepositoryDependencies crd)
 			: base(crd)
 		{
-
+			AppConfig = crd.IoC.Resolve<IAppConfig>();
 		}
 
 		public User Validate(string login, string password)
@@ -38,7 +42,8 @@ namespace Bloemert.Data.Entity.Auth.Repository.Implementation
 				throw new ArgumentNullException("password");
 			}
 
-			string Salt = "3xc313nc3@bl0emert.c0m!";
+			// Keep your Password Salt in User/Environment specific config settings!
+			string Salt = AppConfig.GetValue("PasswordSalt");
 			System.Security.Cryptography.SHA512 hasher = System.Security.Cryptography.SHA512.Create();
 			byte[] pwdHashed = hasher.ComputeHash(
 													hasher.ComputeHash(
