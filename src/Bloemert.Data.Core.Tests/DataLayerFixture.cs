@@ -18,6 +18,7 @@ namespace Bloemert.Data.Core.Tests
 			ContainerBuilder builder = new ContainerBuilder();
 
 			builder.RegisterModule<Bloemert.Data.Core.ModuleLoader>();
+			builder.RegisterModule<Bloemert.Lib.Config.ModuleLoader>();
 
 			builder.RegisterType<TestRepository>()
 							.As<ITestRepository>()

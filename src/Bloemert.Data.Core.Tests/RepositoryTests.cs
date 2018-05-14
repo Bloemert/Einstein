@@ -15,12 +15,14 @@ namespace Bloemert.Data.Core.Tests
 	{
 		DataLayerFixture fixture;
 
+		private const string Skip = "Needs Database: Check appsettings.json of this UnitTest project! Not running now!";
+
 		public RepositoryTests(DataLayerFixture fxtr)
 		{
 			fixture = fxtr;
 		}
 
-		[Fact]
+		[Fact(Skip = Skip)]
 		public void TestNewEntityAndSave()
 		{
 			// Prepare
@@ -41,7 +43,8 @@ namespace Bloemert.Data.Core.Tests
 			Assert.True(testRepository.DeleteEntity(testerSaved.Id));
 		}
 
-		[Fact]
+		[Fact(Skip = Skip)]
+
 		public async Task TestNewEntityAndSaveAsync()
 		{
 			// Prepare
@@ -64,7 +67,7 @@ namespace Bloemert.Data.Core.Tests
 
 
 
-		[Fact]
+		[Fact(Skip = Skip)]
 		public void TestGetEntity()
 		{
 			// Prepare
@@ -86,7 +89,7 @@ namespace Bloemert.Data.Core.Tests
 			Assert.True(testRepository.DeleteEntity(testerSaved.Id));
 		}
 
-		[Fact]
+		[Fact(Skip = Skip)]
 		public async Task TestGetEntityAsync()
 		{
 			// Prepare
@@ -110,7 +113,7 @@ namespace Bloemert.Data.Core.Tests
 
 
 
-		[Fact]
+		[Fact(Skip = Skip)]
 		public void TestListEntity()
 		{
 			// Prepare
@@ -148,7 +151,7 @@ namespace Bloemert.Data.Core.Tests
 		}
 
 
-		[Fact]
+		[Fact(Skip = Skip)]
 		public async Task TestListEntityAsync()
 		{
 			// Prepare

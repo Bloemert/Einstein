@@ -11,24 +11,25 @@ namespace Bloemert.Lib.Config
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			/* Moved to the front line in Program.cs
+			/* Moved to the front line in Program.cs 
+			 * This only exists for failback and UnitTests that need generic AppConfig
+			 */
 			// Get appsettings.json config info
-			string userEnvConfigFile = $"{ Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}/Einstein.WebAPI/appsettings.{ Environment.GetEnvironmentVariable("Einstein.WebAPI.EnvironmentName")}.json";
-
 			var configuration = new ConfigurationBuilder()
 					.AddJsonFile("appsettings.json")
-					.AddJsonFile(userEnvConfigFile, optional: true)
 					.Build();
+
 
 			// Register IConfiguration
 			builder.RegisterInstance(configuration)
 				.As<IConfiguration>()
+				.IfNotRegistered(typeof(IConfiguration))
 				.SingleInstance();
 
 			builder.RegisterType<AppConfig>()
 				.As<IAppConfig>()
+				.IfNotRegistered(typeof(IAppConfig))
 				.SingleInstance();
-				*/
 		}
 
 	}

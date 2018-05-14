@@ -12,7 +12,7 @@ namespace Bloemert.Lib.Config.Tests
 		{
 			var builder = new ContainerBuilder();
 			builder.RegisterModule<Bloemert.Lib.Config.ModuleLoader>();
-			
+
 			Container = builder.Build();
 		}
 
