@@ -3,6 +3,9 @@
 Einstein - Tech Radar
 Free and opensource Tech Radar for companies or communities who want to track there skills and knowledge!
 
+### License ###
+MIT License. See details at https://github.com/Bloemert/Einstein/blob/master/LICENSE
+
 Version: 0.1 Under development!
 
 ### How do I get set up? ###
@@ -38,3 +41,4 @@ Summary of set up, Configuration, Dependencies:
 ### Who do I talk to? ###
 
 * For bugs, feature requests, and/or idea's use the Einstein issue tracker on GitHub: https://github.com/Bloemert/Einstein/issues
+

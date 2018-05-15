@@ -1,12 +1,17 @@
 <template>
-    <div class="container box is-fluid is-paddingless">
-        <div class="container is-fluid is-marginless">
-            <nav-menu />
-        </div>
-        <div class="container is-fluid is-marginless">
-            <router-view></router-view>
-        </div>
+  <div class="container box is-fluid">
+    <div class="container is-fluid">
+      <nav-menu />
     </div>
+    <div class="container is-fluid">
+      <router-view id="main" class="main-content"></router-view>
+    </div>
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <a href="https://github.com/Bloemert/Einstein"><strong>Einstein - Tech Radar</strong></a> by <a href="https://www.bloemert.com/">Bloemert Team</a> and Community!
+        </div>
+    </footer>
+  </div>
 </template>
 
 <script>
@@ -31,30 +36,13 @@
 </script>
 
 <style lang="scss">
-@import "~bulma/sass/utilities/_all";
+  .footer {
+    padding: 3px 3px 3px 3px;
+  }
 
-$primary: #8c67ef;
-$primary-invert: findColorInvert($primary);
-$twitter: #4099FF;
-$twitter-invert: findColorInvert($twitter);
+  .main-content {
+    height: calc(74vh);
+    padding: 15px 15px 15px 15px;
+  }
 
-$colors: (
-    "white": ($white, $black),
-    "black": ($black, $white),
-    "light": ($light, $light-invert),
-    "dark": ($dark, $dark-invert),
-    "primary": ($primary, $primary-invert),
-    "info": ($info, $info-invert),
-    "success": ($success, $success-invert),
-    "warning": ($warning, $warning-invert),
-    "danger": ($danger, $danger-invert),
-    "twitter": ($twitter, $twitter-invert)
-);
-
-$link: $primary;
-$link-invert: $primary-invert;
-$link-focus-border: $primary;
-
-@import "~bulma";
-@import "~buefy/src/scss/buefy";
 </style>

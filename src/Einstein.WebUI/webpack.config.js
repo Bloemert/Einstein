@@ -49,11 +49,13 @@ module.exports = (env) => {
 			path.resolve('node_modules', 'vue/dist'),
 		  ]
 		},
-		{ test: /\.css$/, use: isDevBuild ? ['style-loader', 'css-loader'] : ExtractTextPlugin.extract({ use: 'css-loader?minimize' }) },
 		{ test: /\.vue$/, include: /ClientApp/, loader: 'vue-loader', options: { loaders: [{ js: 'babel-loader' } ] } },
 		{ test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' },
 		{ test: /\.scss?$/, loaders: ['style-loader', 'css-loader', 'sass-loader'] },
-		{ test: /\.css?$/, loaders: ['style-loader', 'css-loader', 'sass-loader'] },
+			{
+				test: /\.css$/,
+				loader: 'style-loader!css-loader'
+			},
 		{ test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'file-loader?mimetype=image/svg+xml' },
 		{
 		  test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
