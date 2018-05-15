@@ -6,10 +6,13 @@ Vue.use(Vuex);
 
 
 const modCore = {
+	namespaced: true,
+
 	state: {
 		currentUser: {
 			id: -1,
 			name: 'UNKNOWN',
+			password: 'secret!',
 			token: null,
 			admin: false
 		} 
@@ -20,31 +23,13 @@ const modCore = {
 		}
 	},
 	mutations: {
-		setCurrentUserID(state, id) {
-			state.currentUser.id = id;
-		},
-		setCurrentUserName(state, name) {
-			state.currentUser.name = name;
-		},
-		setCurrentUserToken(state, token) {
-			state.currentUser.token = token;
-		},
-		setCurrentUserIsAdmin(state, admin) {
-			state.currentUser.admin = admin;
+		setCurrentUser(state, newData) {
+			state.currentUser = newData;
 		}
 	},
 	actions: {
-		setCurrentUserID(context, id) {
-			context.commit('setCurrentUserID', { id: id });
-		},
-		setCurrentUserName(context, name) {
-			context.commit('setCurrentUserName', { name: name });
-		},
-		setCurrentUserToken(context, token) {
-			context.commit('setCurrentUserToken', { token: token });
-		},
-		setCurrentUserIsAdmin(context, admin) {
-			context.commit('setCurrentUserIsAdmin', { admin: admin });
+		setCurrentUser(context, newData) {
+			context.commit('setCurrentUser', newData);
 		}
 	}
 }

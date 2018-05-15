@@ -25,56 +25,114 @@ module.exports = (env) => {
 	},
 
 	module: {
-	  rules: [
-		{
-		  test: /\.ts?$/, include: '/ClientApp/', exclude: '/node_modules/',
-		  use: {
-				loader: 'ts-loader',
+		rules: [
+
+			// Vue files with subloader(s)
+			{
+				test: /\.vue$/,
+				include: /ClientApp/,
+				loader: 'vue-loader'
+				/*,
 				options: {
-					appendTsSuffixTo: [/\.vue$/]
+					loaders: [{
+						js: 'babel-loader', options: {
+							"plugins": [
+								["transform-es2015-spread", {
+									"loose": true
+								}]
+							]
+						}
+					}]
+				}*/
+			},
+
+			// Typescript (Does not work yet!)
+			{
+				test: /\.ts?$/,
+				exclude: '/node_modules/',
+				include: '/ClientApp/',
+				use: {
+					loader: 'ts-loader',
+					options: {
+						appendTsSuffixTo: [/\.vue$/]
+					}
 				}
-		  }
-		},
-		{
-		  test: /\.js$/,
-		  loader: 'babel-loader',
-		  exclude: /node_modules/,
-		},
-		{
-		  // if you use vue.common.js, you can remove it
-		  test: /\.esm.js$/,
-		  loader: 'babel-loader',
-		  exclude: /node_modules\/(?!vue(?!\W))/,
-		  include: [
-			path.resolve('node_modules', 'vue/dist'),
-		  ]
-		},
-		{ test: /\.vue$/, include: /ClientApp/, loader: 'vue-loader', options: { loaders: [{ js: 'babel-loader' } ] } },
-		{ test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' },
-		{ test: /\.scss?$/, loaders: ['style-loader', 'css-loader', 'sass-loader'] },
+			},
+
+			// Javascript
+			{
+				test: /\.js$/,
+				loader: 'babel-loader'
+				/*,
+				exclude: /node_modules/,
+				options: {
+					"plugins": [
+						["transform-es2015-spread", {
+							"loose": true
+						}]
+					]
+				}
+				*/
+			},
+
+			// Javascript specific
+			{
+				// if you use vue.common.js, you can remove it
+				test: /\.esm.js$/,
+				loader: 'babel-loader',
+				exclude: /node_modules\/(?!vue(?!\W))/,
+				include: [
+					path.resolve('node_modules', 'vue/dist'),
+				],
+				/*
+				options: {
+					"plugins": [
+						["transform-es2015-spread", {
+							"loose": true
+						}]
+					]
+				}
+				*/
+			},
+			
+
+
+			// Image(s)
+			{ test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' },
+
+			// Sass / Scss styling
+			{ test: /\.scss?$/, loaders: ['style-loader', 'css-loader', 'sass-loader'] },
+
+			// CSS styling
 			{
 				test: /\.css$/,
 				loader: 'style-loader!css-loader'
 			},
-		{ test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'file-loader?mimetype=image/svg+xml' },
-		{
-		  test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-		  use: [
+
+			// Scalable Vector Graphics (SVG) files
+			{ test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'file-loader?mimetype=image/svg+xml' },
+
+			// Font files
 			{
-			  loader: 'url-loader',
-			  options: {
-				limit: 10000,
-				mimetype: 'application/font-woff'
-			  }
+				test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+				use: [
+				{
+					loader: 'url-loader',
+					options: {
+					limit: 10000,
+					mimetype: 'application/font-woff'
+					}
+				}
+				]
+			},
+			{
+				test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+				use: [
+				{ loader: 'file-loader' }
+				]
 			}
-		  ]
-		},
-		{
-		  test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-		  use: [
-			{ loader: 'file-loader' }
-		  ]
-		},
+
+		/*
 		{
 		  test: /node_modules[\\\/]vis[\\\/].*\.js$/,
 		  loader: 'babel-loader',
@@ -84,10 +142,14 @@ module.exports = (env) => {
 			plugins: [
 			  "transform-es3-property-literals",
 			  "transform-es3-member-expression-literals",
-			  "transform-runtime"
+				"transform-runtime",
+				["transform-es2015-spread", {
+					"loose": true
+				}]
 			]
 		  }
 		}
+		*/
 	  ]
 	},
 

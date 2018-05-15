@@ -34,6 +34,7 @@ const app = new Vue({
   },
   components: {
       'app': App 
-	}
+	},
+	store: store
 });
 
