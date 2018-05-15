@@ -13,7 +13,7 @@
                             Einstein
                         </p>
                         <p class="subtitle is-tiny">
-                            Knowledge Tracker
+                            Tech Radar
                         </p>
                     </div>
                 </div>

@@ -25,6 +25,7 @@
 
           <template slot-scope="props">
             <b-table-column field="id" label="ID" width="20" size="is-small">{{ props.row.id }}</b-table-column>
+            <b-table-column field="dirty" label="Dirty" ><b-checkbox v-model="props.row.dirty" size="is-small"></b-checkbox></b-table-column>
             <b-table-column field="active" label="Active" size="is-small"><b-checkbox v-model="props.row.active" size="is-small"></b-checkbox></b-table-column>
             <b-table-column field="login" label="Login" size="is-small">{{ props.row.login }}</b-table-column>
             <b-table-column field="expireDate" label="Expire date" size="is-small">{{ props.row.expireDate }}</b-table-column>
@@ -74,16 +75,16 @@
   export default {
     name: 'UsersMasterDetail',
 
+    props: ['row'],
+
     data() {
       return {
         data: [],
-        changed: [],
         selected: { empty: true },
         errors: []
       }
     },
 
-    props: ['row'],
 
     created() {
       HTTP.get('/api/users/list.json')
@@ -94,6 +95,19 @@
         .catch(e => {
           this.errors.push(e)
         });
+    },
+
+    watch: {
+      '$props': {
+        handler: function (val, oldVal) {
+          console.log('watch', val);
+        },
+        deep: true
+      }
+    },
+
+    mounted() {
+      console.log(this.data.dirty);
     },
 
     computed: {
