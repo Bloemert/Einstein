@@ -1,7 +1,7 @@
 ﻿import Vue from 'vue';
 import Vuex from 'vuex';
 import 'es6-promise/auto';
-import { HTTP } from './js/axios-common';
+import axios from 'axios';
 var _ = require('lodash');
 
 Vue.use(Vuex);
@@ -22,6 +22,9 @@ const modCore = {
 		}
 	},
 	getters: {
+		getAppSettings: state => {
+			return state.appSettings;
+		},
 		getCurrentUser: state => {
 			return state.currentUser;
 		}
@@ -54,10 +57,12 @@ const modCore = {
 				payload.router.push({ path: '/' })
 			})
 		},
+
 		login(context, payload) {
 			return new Promise((resolve) => {
 
-				HTTP.get(this.state.core.appSettings.baseUrl + '/users/login.json', {
+				// Don't use the generic HTTP instance heir because you get old credentials during login...!
+				axios.get(this.state.core.appSettings.baseUrl + '/users/login.json', {
 					withCredentials: true,
 					auth: {
 						username: payload.userName,

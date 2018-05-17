@@ -4,7 +4,7 @@
       <nav-menu />
     </div>
     <div class="container is-fluid">
-      <router-view id="main" class="main-content"></router-view>
+      <router-view class="main-content"></router-view>
     </div>
     <footer class="footer">
         <div class="content has-text-centered">

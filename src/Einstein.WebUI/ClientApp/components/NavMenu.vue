@@ -67,7 +67,7 @@
           <router-link class="nav-item is-tab" to="/" exact>Home</router-link>
         </li>
         <li v-if="user.admin">
-          <router-link class="nav-item is-tab" to="/admin/test">Admin</router-link>
+          <router-link class="nav-item is-tab" to="/admin">Admin</router-link>
         </li>
       </ul>
     </nav>

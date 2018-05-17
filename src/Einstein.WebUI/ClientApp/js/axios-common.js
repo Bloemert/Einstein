@@ -1,15 +1,29 @@
 ﻿import axios from 'axios';
 import store from './../store.js'; // path to your Vuex store
-//import Vue from 'vue'
 
-let user = store.getters['core/getCurrentUser'];
+let appSettings = store.getters['core/getAppSettings'];
 
-export const HTTP = axios.create({
-	baseURL: 'http://localhost:8088',
+const HTTP = axios.create({
+	baseURL: appSettings.baseUrl,
 	withCredentials: true,
-	auth: {
-		username: user.name,
-		password: user.password
-	},
 	crossDomain: true
 })
+
+HTTP.interceptors.request.use(function (config) {
+	// Do something before request is sent
+	let user = store.getters['core/getCurrentUser'];
+
+	config.auth = {
+		username: user.name,
+		password: user.password
+	}
+
+	return config;
+}, function (error) {
+	// Do something with request error
+	alert('Error in HTTP request interceptor! : ' + error);
+	return Promise.reject(error);
+	});
+
+
+export default HTTP;

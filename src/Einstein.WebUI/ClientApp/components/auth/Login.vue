@@ -64,18 +64,6 @@
         login: 'login'
       })
     }
-
-    //computed: {
-    //  user: {
-    //    get() {
-    //      return this.$store.state.core.currentUser;
-    //    },
-    //    set(value) {
-    //      this.$store.dispatch('core/setCurrentUser', value);
-    //    }
-    //  }
-    //}
-
   }
 
 
