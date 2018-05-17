@@ -8,6 +8,7 @@ namespace Bloemert.WebAPI.Auth
 	using System.Security.Principal;
 	using Bloemert.Data.Entity.Auth.Entity;
 	using Bloemert.Data.Entity.Auth.Repository;
+	using Bloemert.WebAPI.Auth.Models;
 	using Nancy.Authentication.Basic;
 
 	public class UserValidator : IUserValidator
@@ -27,10 +28,9 @@ namespace Bloemert.WebAPI.Auth
 			}
 
 			User user = users.Validate(username, password);
-			if (user != null)
+			if ( user != null )
 			{
-				return new ClaimsPrincipal(new GenericIdentity(user.Login));
-				//return new UserPrincipal(user);
+				return new UserPrincipal(new UserIdentity(user));
 			}
 
 			return null;

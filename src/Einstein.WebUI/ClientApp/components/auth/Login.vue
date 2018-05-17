@@ -34,7 +34,7 @@
       <div class="field-body">
         <div class="field">
           <div class="control">
-            <button class="button is-primary" @click="doLogin()">
+            <button class="button is-primary" @click="login({userName: userName, userPassword: userPassword, router: $router})">
               Login
             </button>
           </div>
@@ -49,41 +49,32 @@
 
   const { mapState, mapActions } = createNamespacedHelpers('core')
 
-  var _ = require('lodash');
-
   export default {
     name: 'Login',
 
     data() {
       return {
-        userName: '',
-        userPassword: ''
-      }
-    },
-
-    computed: {
-      ...mapState({
-        currentUser: state => state.currentUser,
-      })
-    },
-
-    mounted: function () {
-      if (this.currentUser) {
-        this.userName = this.currentUser.name;
-        this.userPassword = this.currentUser.password;
+        userName: 'Guest',
+        userPassword: 'Welcome!'
       }
     },
 
     methods: {
-      doLogin() {
-        var clonedUser = _.cloneDeep(this.currentUser);
-        clonedUser.name = this.userName;
-        clonedUser.password = this.userPassword;
-        this.$store.dispatch('core/setCurrentUser',
-          clonedUser
-        );
-      }
+      ...mapActions({
+        login: 'login'
+      })
     }
+
+    //computed: {
+    //  user: {
+    //    get() {
+    //      return this.$store.state.core.currentUser;
+    //    },
+    //    set(value) {
+    //      this.$store.dispatch('core/setCurrentUser', value);
+    //    }
+    //  }
+    //}
 
   }
 

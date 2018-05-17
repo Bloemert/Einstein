@@ -20,6 +20,33 @@ namespace Bloemert.WebAPI.Auth.Modules
 			ITwoWayMapper<User, UserModel> mapper)
 			: base(appCfg, usersRepository, mapper, "/users")
 		{
+
+			Get("/login", args =>
+			{
+				if ( this.Context.CurrentUser == null || !this.Context.CurrentUser.Identity.IsAuthenticated)
+				{ 
+					return Negotiate
+									.WithModel(new ModelWrapper<LoginModel> { Error = new AccessViolationException("Login failed!") })
+									.WithStatusCode(HttpStatusCode.Forbidden);
+				}
+
+				User user = this.Context.CurrentUser.Identity.AsUserIdentity().PersistentUser;
+
+				// Login has it's own model!
+				ModelWrapper<LoginModel> model = new ModelWrapper<LoginModel>
+				{
+					Data = new LoginModel
+					{
+						Id = user.Id,
+						Name = user.Login,
+						Admin = true
+					}
+				};
+
+				return Negotiate
+								.WithModel(model);
+			});
 		}
+
 	}
 }

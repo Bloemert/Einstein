@@ -33,7 +33,8 @@ namespace Einstein.WebAPI.Core
 
 			pipelines.EnableBasicAuthentication(new BasicAuthenticationConfiguration(
 																								container.Resolve<IUserValidator>(),
-																									"Einstein"));
+																									"Einstein",
+																									UserPromptBehaviour.Never));
 
 			pipelines.EnableCORS();
 		}

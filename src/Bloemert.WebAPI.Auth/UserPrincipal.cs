@@ -8,21 +8,12 @@ namespace Bloemert.WebAPI.Auth
 {
 	public class UserPrincipal : ClaimsPrincipal
 	{
-		protected User PersistentUser { get; set; }
+		public override IIdentity Identity { get; }
 
-		public UserPrincipal(IPrincipal principal) : base(principal)
+		public UserPrincipal(IIdentity identity) 
 		{
+			Identity = identity;
 		}
-
-		public UserPrincipal(User user) 
-		{
-			PersistentUser = user;
-		}
-
-
-		public string FullName => FindFirst(ClaimTypes.Name).Value;
-
-		public string EMail => FindFirst(ClaimTypes.Email).Value;
 
 	}
 }
