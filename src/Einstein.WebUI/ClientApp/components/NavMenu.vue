@@ -94,7 +94,7 @@
         set(value) {
           var clonedUser = _.cloneDeep(this.$store.state.core.currentUser);
           clonedUser.id = value;
-          this.$store.dispatch('core/setCurrentUser', clonedUser);
+          this.$store.dispatch('core/updateCurrentUser', clonedUser);
         }
       },
 
@@ -105,7 +105,7 @@
         set(value) {
           var clonedUser = _.cloneDeep(this.$store.state.core.currentUser);
           clonedUser.name = value;
-          this.$store.dispatch('core/setCurrentUser', clonedUser);
+          this.$store.dispatch('core/updateCurrentUser', clonedUser);
         }
       },
 
@@ -115,7 +115,7 @@
         },
         set(value) {
           var clonedUser = _.cloneDeep(value);
-          this.$store.dispatch('core/setCurrentUser', clonedUser);
+          this.$store.dispatch('core/updateCurrentUser', clonedUser);
         }
       }
     },
@@ -123,7 +123,7 @@
     created() {
       let sessionUser = window.sessionStorage.getItem('sessionUser');
       if (sessionUser && sessionUser != 'null') {
-        this.$store.dispatch('core/setCurrentUser', JSON.parse(sessionUser));
+        this.$store.dispatch('core/updateCurrentUser', JSON.parse(sessionUser));
       }
     },
 

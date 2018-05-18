@@ -94,11 +94,11 @@ namespace Bloemert.Data.Core.Templates
 
 
 
-		public virtual string CreateInsertQuery()
+		public virtual string CreateInsertQuery(IList<string> excludedColumns)
 		{
 			StringBuilder valuesPart = new StringBuilder("VALUES ( ");
 
-			var columns = Repository.GetColumnsFromMetaData(RequestedColumns.NO_PRIMARYKEY);
+			var columns = Repository.GetColumnsFromMetaData(RequestedColumns.NO_PRIMARYKEY, excludedColumns);
 			foreach (string col in columns)
 			{
 				if (valuesPart.Length > 10)
@@ -121,11 +121,11 @@ namespace Bloemert.Data.Core.Templates
 				;
 		}
 
-		public virtual string CreateUpdateQuery()
+		public virtual string CreateUpdateQuery(IList<string> excludedColumns = null)
 		{
 			StringBuilder setPart = new StringBuilder("SET \n");
 
-			foreach (string col in Repository.GetColumnsFromMetaData(RequestedColumns.NO_PRIMARYKEY))
+			foreach (string col in Repository.GetColumnsFromMetaData(RequestedColumns.NO_PRIMARYKEY, excludedColumns))
 			{
 				if (setPart.Length > 5)
 				{

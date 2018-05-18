@@ -15,9 +15,9 @@ namespace Bloemert.Data.Core.Templates
 
 		string CreatePagedListQuery(string searchFilter, IList<string> sortColumns);
 
-		string CreateInsertQuery();
+		string CreateInsertQuery(IList<string> excludedColumns = null);
 
-		string CreateUpdateQuery();
+		string CreateUpdateQuery(IList<string> excludedColumns = null);
 
 		string CreateDeleteQuery();
 

@@ -15,7 +15,7 @@ namespace Bloemert.Data.Core
 
 		IEnumerable<DbColumnInfo> ReadMetadataFromTable();
 		
-		IList<string> GetColumnsFromMetaData(RequestedColumns cols = RequestedColumns.ALL);
+		IList<string> GetColumnsFromMetaData(RequestedColumns cols = RequestedColumns.ALL, IList<string> excludedColumns = null);
 
 
 		E NewEntity();

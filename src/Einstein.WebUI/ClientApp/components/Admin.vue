@@ -34,6 +34,7 @@
     overflow-y: scroll;
     overflow-x: hidden;
     width: 100%;
+    height: calc(65vh);
     position: absolute;
   }
 

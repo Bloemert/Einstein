@@ -29,16 +29,6 @@
     name: 'Logout',
 
     computed: {
-      userId: {
-        get() {
-          return this.$store.state.core.currentUser.id;
-        },
-        set(value) {
-          var clonedUser = _.cloneDeep(this.$store.state.core.currentUser);
-          clonedUser.id = value;
-          this.$store.dispatch('core/setCurrentUser', clonedUser);
-        }
-      },
       userName: {
         get() {
           return this.$store.state.core.currentUser.name;
@@ -46,30 +36,11 @@
         set(value) {
           var clonedUser = _.cloneDeep(this.$store.state.core.currentUser);
           clonedUser.name = value;
-          this.$store.dispatch('core/setCurrentUser', clonedUser);
-        }
-      },
-      userPassword: {
-        get() {
-          return this.$store.state.core.currentUser.password;
-        },
-        set(value) {
-          var clonedUser = _.cloneDeep(this.$store.state.core.currentUser);
-          clonedUser.password = value;
-          this.$store.dispatch('core/setCurrentUser', clonedUser);
-        }
-      },
-      userAdmin: {
-        get() {
-          return this.$store.state.core.currentUser.admin;
-        },
-        set(value) {
-          var clonedUser = _.cloneDeep(this.$store.state.core.currentUser);
-          clonedUser.admin = value;
-          this.$store.dispatch('core/setCurrentUser', clonedUser);
+          this.$store.dispatch('core/updateCurrentUser', clonedUser);
         }
       }
     },
+
     methods: {
       ...mapActions({
         logout: 'logout'

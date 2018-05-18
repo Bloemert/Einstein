@@ -46,6 +46,23 @@ namespace Bloemert.WebAPI.Auth.Modules
 				return Negotiate
 								.WithModel(model);
 			});
+
+
+			Put("/{id}/save", args =>
+			{
+				ModelWrapper<UserModel> model = this.Bind<ModelWrapper<UserModel>>();
+
+				User entity = Mapper.Map(model.Data);
+
+				if (!String.IsNullOrEmpty(model.Data.NewPassword))
+				{
+					entity.PasswordData = usersRepository.HashPassword(model.Data.NewPassword);
+				}
+
+				return Negotiate
+								.WithModel(new ModelWrapper<UserModel> { Data = Mapper.Map(Repository.SaveEntity(entity)) });
+			});
+
 		}
 
 	}

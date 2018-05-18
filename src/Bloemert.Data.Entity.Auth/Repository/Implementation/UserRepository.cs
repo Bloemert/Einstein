@@ -53,17 +53,40 @@ namespace Bloemert.Data.Entity.Auth.Repository.Implementation
 		}
 
 
-		public override IList<string> GetColumnsFromMetaData(RequestedColumns cols = RequestedColumns.ALL)
+
+		public override User SaveEntity(User entity)
 		{
-			return (from ci in QueryTemplate.EntityMetadata
-							where (cols == RequestedColumns.ALL ||
-											(!ci.IsExcludedProperty || !cols.HasFlag(RequestedColumns.NO_EXCLUDED)) &&
-											(!ci.IsIdentity || !cols.HasFlag(RequestedColumns.NO_PRIMARYKEY)) &&
-											(!ci.IsComputed || !cols.HasFlag(RequestedColumns.NO_COMPUTED)))
-							select ci.ColumnName)
-							.Except(new string[] { "PasswordData"})
-							.ToList();
+			IDbParameters dbParameters = DbParameters.Create(entity);
+			IList<string> excludedColumns = null;
+
+			if (String.IsNullOrEmpty(entity.PasswordData))
+			{
+				excludedColumns = new List<string> { "PasswordData" };
+			}
+
+			if (entity.Id > 0)
+			{
+				return this.Db.ExecuteAndQuery<User>(QueryTemplate.CreateUpdateQuery(excludedColumns), dbParameters);
+			}
+			else
+			{
+				return Db.ExecuteAndQuery<User>(QueryTemplate.CreateInsertQuery(excludedColumns), dbParameters);
+			}
 		}
+
+
+
+		//public override IList<string> GetColumnsFromMetaData(RequestedColumns cols = RequestedColumns.ALL)
+		//{
+		//	return (from ci in QueryTemplate.EntityMetadata
+		//					where (cols == RequestedColumns.ALL ||
+		//									(!ci.IsExcludedProperty || !cols.HasFlag(RequestedColumns.NO_EXCLUDED)) &&
+		//									(!ci.IsIdentity || !cols.HasFlag(RequestedColumns.NO_PRIMARYKEY)) &&
+		//									(!ci.IsComputed || !cols.HasFlag(RequestedColumns.NO_COMPUTED)))
+		//					select ci.ColumnName)
+		//					//.Except(new string[] { "PasswordData"})
+		//					.ToList();
+		//}
 
 	}
 }

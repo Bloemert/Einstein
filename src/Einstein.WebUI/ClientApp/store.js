@@ -1,11 +1,15 @@
 ﻿import Vue from 'vue';
 import Vuex from 'vuex';
+
+import modAdmin from './components/admin/store.js';
+
+import undoRedoHistory from './UndoRedoHistory.js';
+
 import 'es6-promise/auto';
 import axios from 'axios';
 var _ = require('lodash');
 
 Vue.use(Vuex);
-
 
 const modCore = {
 	namespaced: true,
@@ -30,13 +34,13 @@ const modCore = {
 		}
 	},
 	mutations: {
-		setCurrentUser(state, newData) {
+		updateCurrentUser(state, newData) {
 			state.currentUser = newData;
 		}
 	},
 	actions: {
-		setCurrentUser(context, newData) {
-			context.commit('setCurrentUser', newData);
+		updateCurrentUser(context, newData) {
+			context.commit('updateCurrentUser', newData);
 		},
 
 		logout(context, payload) {
@@ -48,7 +52,7 @@ const modCore = {
 				clonedUser.password = 'Welcome!'
 				clonedUser.admin = false;
 
-				this.dispatch('core/setCurrentUser', clonedUser);
+				this.dispatch('core/updateCurrentUser', clonedUser);
 
 				if (typeof window !== 'undefined') {
 					window.sessionStorage.setItem('sessionUser', null);
@@ -81,6 +85,9 @@ const modCore = {
 
 						window.sessionStorage.setItem('sessionUser', JSON.stringify(this.state.core.currentUser) );
 
+						// Clear Undo / Redo history cache because we don't want to do this for login/logout!
+						undoRedoHistory.clear();
+
 						payload.router.push({ path: '/' })
 					})
 					.catch(e => {
@@ -92,10 +99,26 @@ const modCore = {
 }
 
 
+const undoRedoPlugin = (store) => {
+	// initialize and save the starting stage
+	undoRedoHistory.init(store);
+	let firstState = _.cloneDeep(store.state);
+	undoRedoHistory.addState(firstState);
+
+	store.subscribe((mutation, state) => {
+		// is called AFTER every mutation
+		undoRedoHistory.addState(_.cloneDeep(state));
+	});
+}
+
+
 const store = new Vuex.Store({
 	modules: {
-		core: modCore
-	}
+		core: modCore,
+		admin: modAdmin
+	},
+
+	plugins: [undoRedoPlugin]
 })
 
 export default store;

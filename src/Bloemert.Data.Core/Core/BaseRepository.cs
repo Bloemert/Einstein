@@ -89,13 +89,14 @@ namespace Bloemert.Data.Core
 			return dbConnection.Query<DbColumnInfo>(QueryTemplate.CreateMetaDataQuery());
 		}
 
-		public virtual IList<string> GetColumnsFromMetaData(RequestedColumns cols = RequestedColumns.ALL)
+		public virtual IList<string> GetColumnsFromMetaData(RequestedColumns cols = RequestedColumns.ALL, IList<string> excludedColumns = null)
 		{
 			return (from ci in QueryTemplate.EntityMetadata
 							where (cols == RequestedColumns.ALL || 
 											(!ci.IsExcludedProperty || !cols.HasFlag(RequestedColumns.NO_EXCLUDED) ) &&
 											(!ci.IsIdentity || !cols.HasFlag(RequestedColumns.NO_PRIMARYKEY) ) &&
-											(!ci.IsComputed || !cols.HasFlag(RequestedColumns.NO_COMPUTED)) )
+											(!ci.IsComputed || !cols.HasFlag(RequestedColumns.NO_COMPUTED)) &&
+											(excludedColumns == null || !excludedColumns.Contains(ci.ColumnName)))
 							select ci.ColumnName).ToList();
 		}
 
@@ -144,27 +145,32 @@ namespace Bloemert.Data.Core
 
 		public virtual E SaveEntity(E entity)
 		{
+			IDbParameters dbParameters = DbParameters.Create(entity);
+
 			if (entity.Id > 0)
 			{ 
-				this.Db.Execute(QueryTemplate.CreateUpdateQuery(), DbParameters.Create(entity));
+				this.Db.Execute(QueryTemplate.CreateUpdateQuery(), dbParameters);
 			}
 			else
 			{
-				entity = Db.ExecuteAndQuery<E>(QueryTemplate.CreateInsertQuery(), DbParameters.Create(entity));
+				entity = Db.ExecuteAndQuery<E>(QueryTemplate.CreateInsertQuery(), dbParameters);
 			}
 
 			return entity;
 		}
 
+
 		public virtual async Task<E> SaveEntityAsync(E entity)
 		{
+			IDbParameters dbParameters = DbParameters.Create(entity);
+
 			if (entity.Id > 0)
 			{
-				await this.Db.ExecuteAsync(QueryTemplate.CreateUpdateQuery(), DbParameters.Create(entity) );
+				await this.Db.ExecuteAsync(QueryTemplate.CreateUpdateQuery(), dbParameters);
 			}
 			else
 			{
-				entity = await Db.ExecuteAndQueryAsync<E>(QueryTemplate.CreateInsertQuery(), DbParameters.Create(entity) );
+				entity = await Db.ExecuteAndQueryAsync<E>(QueryTemplate.CreateInsertQuery(), dbParameters);
 			}
 
 			return entity;

@@ -25,14 +25,17 @@ namespace Bloemert.Data.Core
 
 		public DefaultDbParameters()
 		{
+			DynamicParameters.RemoveUnused = true;
 		}
 
 		public DefaultDbParameters(object dbParams)
+			: this()
 		{
 			AddDynamicParams(dbParams);
 		}
 
 		public DefaultDbParameters(string name, object value)
+			: this()
 		{
 			AddInputParameter(name, value);
 		}
@@ -117,5 +120,6 @@ namespace Bloemert.Data.Core
 		{
 			return DynamicParameters.Get<T>(name);
 		}
+
 	}
 }
