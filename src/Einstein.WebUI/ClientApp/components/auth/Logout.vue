@@ -22,8 +22,6 @@
   import { HTTP } from '../../js/axios-common';
   import { createNamespacedHelpers } from 'vuex'
   const { mapState, mapActions } = createNamespacedHelpers('core')
-  var _ = require('lodash');
-
 
   export default {
     name: 'Logout',
@@ -34,7 +32,7 @@
           return this.$store.state.core.currentUser.name;
         },
         set(value) {
-          var clonedUser = _.cloneDeep(this.$store.state.core.currentUser);
+          var clonedUser = _cloneDeep(this.$store.state.core.currentUser);
           clonedUser.name = value;
           this.$store.dispatch('core/updateCurrentUser', clonedUser);
         }

@@ -1,5 +1,4 @@
-﻿import Vue from 'vue';
-import VueRouter from 'vue-router';
+﻿import VueRouter from 'vue-router';
 
 import Login from './components/auth/Login.vue'
 import Logout from './components/auth/Logout.vue'

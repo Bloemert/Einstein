@@ -11,7 +11,7 @@
       </ul>
     </nav>
 
-    <router-view name="adminView" class="admin-content is-scrollable">
+    <router-view name="adminView" class="admin-content">
       Test
     </router-view>
   </section>
@@ -27,15 +27,3 @@
     }
   }
 </script>
-
-<style lang="scss">
-
-  .is-scrollable {
-    overflow-y: scroll;
-    overflow-x: hidden;
-    width: 100%;
-    height: calc(65vh);
-    position: absolute;
-  }
-
-</style>

@@ -1,13 +1,8 @@
-﻿import Vue from 'vue';
-import Vuex from 'vuex';
+﻿import Vuex from 'vuex';
 
-import modAdmin from './components/admin/store.js';
+import modAdmin from './components/admin/store';
 
-import undoRedoHistory from './UndoRedoHistory.js';
-
-import 'es6-promise/auto';
 import axios from 'axios';
-var _ = require('lodash');
 
 Vue.use(Vuex);
 
@@ -16,7 +11,7 @@ const modCore = {
 
 	state: {
 		appSettings: {
-			baseUrl: 'http://localhost:8088/api'
+			baseUrl: 'http://localhost:8088/api',
 		},
 		currentUser: {
 			id: -1,
@@ -46,13 +41,13 @@ const modCore = {
 		logout(context, payload) {
 			return new Promise((resolve) => {
 
-				let clonedUser = _.cloneDeep(this.state.core.currentUser);
+				let clonedUser = _cloneDeep(context.getters.getCurrentUser);
 				clonedUser.id = -1;
 				clonedUser.name = 'Guest';
 				clonedUser.password = 'Welcome!'
 				clonedUser.admin = false;
 
-				this.dispatch('core/updateCurrentUser', clonedUser);
+				context.dispatch('updateCurrentUser', clonedUser);
 
 				if (typeof window !== 'undefined') {
 					window.sessionStorage.setItem('sessionUser', null);
@@ -76,17 +71,17 @@ const modCore = {
 				})
 					.then(response => {
 						// JSON responses are automatically parsed.
-						var validatedUser = response.data.data;
+						var authenticatedUser = response.data.data;
+						let clonedUser = _cloneDeep(context.getters.getCurrentUser);
 
-						this.state.core.currentUser.id = validatedUser.id;
-						this.state.core.currentUser.name = payload.userName;
-						this.state.core.currentUser.password = payload.userPassword;
-						this.state.core.currentUser.admin = validatedUser.admin;
+						clonedUser.id = authenticatedUser.id;
+						clonedUser.name = payload.userName;
+						clonedUser.password = payload.userPassword;
+						clonedUser.admin = authenticatedUser.admin;
+
+						context.dispatch('updateCurrentUser', clonedUser);
 
 						window.sessionStorage.setItem('sessionUser', JSON.stringify(this.state.core.currentUser) );
-
-						// Clear Undo / Redo history cache because we don't want to do this for login/logout!
-						undoRedoHistory.clear();
 
 						payload.router.push({ path: '/' })
 					})
@@ -99,26 +94,13 @@ const modCore = {
 }
 
 
-const undoRedoPlugin = (store) => {
-	// initialize and save the starting stage
-	undoRedoHistory.init(store);
-	let firstState = _.cloneDeep(store.state);
-	undoRedoHistory.addState(firstState);
-
-	store.subscribe((mutation, state) => {
-		// is called AFTER every mutation
-		undoRedoHistory.addState(_.cloneDeep(state));
-	});
-}
-
-
 const store = new Vuex.Store({
+	strict: true, // @ToDo: process.env.NODE_ENV !== 'production',
+
 	modules: {
 		core: modCore,
 		admin: modAdmin
-	},
-
-	plugins: [undoRedoPlugin]
+	}
 })
 
 export default store;

@@ -49,6 +49,7 @@ namespace Einstein.WebAPI
 					.UseKestrel()
 					.UseStartup<Startup>()
 					.UseUrls(AppConfig.GetValues("URLs").Values.ToArray())
+					.UseEnvironment(AppConfig.GetValue("Environment"))
 					.Build();
 
 			host.Run();

@@ -1,150 +1,265 @@
+<!--
+
+Remarks:
+1.  b-field horizontal together with dynamic type setting does not show e.g. is-danger red box!
+    Workarround is using extra inner b-field.
+2.  vuevalidate (validation lib used) needs the variable path/name used in :value to be the same as in the validators part else validator values won't update correctly!
+
+-->
+
 <template>
-  <section>
-    <!--<b-field label="Dirty" size="is-small">
-      <b-checkbox id="userDirty" v-model="dirty" size="is-small" rounded>Record changed!</b-checkbox>
-    </b-field>-->
+  <section class="form-scrollable">
 
+    <form @submit.prevent="">
+      <b-tag :type="form.status.result == 'OK' ? 'is-primary block' : 'is-danger block'">
+        Status: {{ form.status.action }} => {{ form.status.result }}
+      </b-tag>
 
-    <b-field label="Login" size="is-small">
-      <b-input id="userLogin" v-model.trim="selected.login" @input="$v.selected.login.$touch()" @blur="inputChange($v.selected.login)" placeholder="User name or email" size="is-small" rounded></b-input>
-    </b-field>
-
-    <b-field label="Active" size="is-small">
-      <b-checkbox id="userActive" v-model="selected.active" @input="$v.selected.active.$touch()" @blur="inputChange($v.selected.active)" size="is-small" rounded>Active</b-checkbox>
-    </b-field>
-
-    <div class="form-group" v-bind:class="{ 'form-group--error': $v.selected.newPassword.$error }">
-      <b-field label="Password" size="is-small">
-        <b-input id="userPassword" type="password" password-reveal v-model.trim="selected.newPassword" @input="$v.selected.newPassword.$touch()"  @blur="inputChange($v.selected.newPassword)" placeholder="New password" size="is-small" rounded></b-input>
+      <b-field label="Login" horizontal>
+        <div class="tile is-vertical">
+          <b-field :type="fieldType($v.login)">
+            <b-input id="userLogin"
+                     v-model.lazy="login"
+                     @input="onInput($v.login, 'login', $event)"
+                     placeholder="New login">
+            </b-input>
+          </b-field>
+          <div>
+            <span class="help is-danger" v-if="$v.login.$dirty && !$v.login.required">Login is required.</span>
+            <span class="help is-danger" v-if="$v.login.$dirty && !$v.login.minLength">Login must have at least {{ $v.login.$params.minLength.min }} letters.</span>
+            <span class="help is-danger" v-if="$v.login.$dirty && !$v.login.isUnique">Login is already taken.</span>
+          </div>
+        </div>
       </b-field>
-    </div><span class="form-group__message" v-if="!$v.selected.newPassword.required">Password is required.</span><span class="form-group__message" v-if="!$v.selected.newPassword.minLength">Password must have at least {{ $v.selected.newPassword.$params.minLength.min }} letters.</span>
 
-    <div class="form-group" v-bind:class="{ 'form-group--error': $v.confirmPassword.$error }">
-      <b-field label="Confirm password" size="is-small">
-        <b-input id="userConfirmPassword" type="password" password-reveal v-model.trim="confirmPassword" @input="$v.confirmPassword.$touch()" @blur="inputChange($v.confirmPassword)" placeholder="Confirm password" size="is-small" rounded></b-input>
+
+      <b-field label="Active" horizontal>
+        <div class="tile is-vertical">
+          <b-field>
+            <b-checkbox id="userActive"
+                        v-model.lazzy="active">
+            </b-checkbox>
+          </b-field>
+          <div>
+            <span class="help is-warning">Most times you need this checked!</span>
+          </div>
+        </div>
       </b-field>
-    </div><span class="form-group__message" v-if="!$v.confirmPassword.sameAsPassword">Passwords must be identical.</span>
 
-    <b-field label="Last login" size="is-small">
-      <b-datepicker v-model="lastloginDate"
-                    @input="$v.lastloginDate.$touch()"
-                    placeholder="Type or select a date..."
-                    icon="calendar-today"
-                    :readonly="false"
-                    size="is-small" rounded>
-      </b-datepicker>
-      <b-timepicker v-model="lastloginTime"
-                    @input="$v.lastloginTime.$touch()"
-                    placeholder="Type or select a time..."
-                    icon="clock"
-                    :readonly="false"
-                    size="is-small" rounded>
-      </b-timepicker>
-    </b-field>
+      <b-field label="Password" horizontal>
+        <div class="tile is-vertical">
+          <b-field>
+            <b-input id="userPassword" type="password"
+                     password-reveal
+                     v-model.lazzy="newPassword"
+                     placeholder="New password"></b-input>
+          </b-field>
+          <div>
+            <span class="help is-danger" v-if="$v.newPassword.$dirty && !$v.newPassword.required">Password is required.</span>
+            <span class="help is-danger" v-if="$v.newPassword.$dirty && !$v.newPassword.minLength">Password must have at least {{ $v.newPassword.$params.minLength.min }} letters.</span>
+          </div>
+        </div>
+      </b-field>
 
-    <b-field label="Expire date" size="is-small">
-      <b-datepicker v-model="expireDate"
-                    @input="$v.expireDate.$touch()"
-                    placeholder="Type or select a date..."
-                    icon="calendar-today"
-                    :readonly="false"
-                    size="is-small" rounded>
-      </b-datepicker>
-      <b-timepicker v-model="expireTime"
-                    @input="$v.expireTime.$touch()"
-                    placeholder="Type or select a time..."
-                    icon="clock"
-                    :readonly="false"
-                    size="is-small" rounded>
-      </b-timepicker>
-    </b-field>
+      <b-field label="Confirm" horizontal>
+        <div class="tile is-vertical">
+          <b-field>
+            <b-input id="userConfirmPassword" type="password"
+                     password-reveal
+                     v-model.lazzy="$v.confirmPassword.$model"
+                     placeholder="Confirm password">
+            </b-input>
+          </b-field>
+          <span class="help is-danger" v-if="($v.newPassword.$dirty || $v.confirmPassword.$dirty) && !$v.confirmPassword.sameAsPassword">Passwords must be identical.</span>
+        </div>
+      </b-field>
 
-    <b-field label="Good Logins">
-      <b-input id="goodLogins" v-model.number="selected.goodLogins" @input="$v.selected.goodLogins.$touch()"  @blur="inputChange($v.selected.goodLogins)" type="number" size="is-small" rounded></b-input>
-    </b-field>
 
-    <b-field label="Failed attempts">
-      <b-input id="failedAttempts" v-model.number="selected.failedAttempts" @input="$v.selected.failedAttempts.$touch()"  @blur="inputChange($v.selected.failedAttempts)" type="number" size="is-small" rounded></b-input>
-    </b-field>
+      <b-field label="Expire date" horizontal>
+        <b-datepicker v-model.lazzy="expireDate"
+                      placeholder="Type or select a date..."
+                      icon="calendar"
+                      :readonly="false">
+        </b-datepicker>
+        <b-timepicker v-model.lazzy="expireDate"
+                      placeholder="Type or select a time..."
+                      icon="clock"
+                      :readonly="false">
+        </b-timepicker>
+      </b-field>
+
+
+      <b-field label="Last login" horizontal>
+        <b-datepicker v-model.lazzy="lastLogin"
+                      placeholder="Type or select a date..."
+                      icon="calendar"
+                      :readonly="true">
+        </b-datepicker>
+        <b-timepicker v-model.lazzy="lastLogin"
+                      placeholder="Type or select a time..."
+                      icon="clock"
+                      :readonly="true">
+        </b-timepicker>
+      </b-field>
+
+      <b-field label="Good Logins" horizontal>
+        <b-input id="goodLogins" :value.number="goodLogins" type="number" :readonly="true"></b-input>
+      </b-field>
+
+      <b-field label="Failed attempts" horizontal>
+        <b-input id="failedAttempts" :value.number="failedAttempts" type="number" :readonly="true"></b-input>
+      </b-field>
+
+    </form>
 
   </section>
+
 </template>
 
 <script>
   import { HTTP } from '../../js/axios-common';
-  import { required, sameAs, minLength } from 'vuelidate/lib/validators'
-  import { createNamespacedHelpers } from 'vuex'
-  const { mapState, mapActions } = createNamespacedHelpers('admin')
- 
-  
-  export default {
 
-    props: ['selected'],
+  import { mapUsersActions, mapUsersFields, mapUsersMultiRowFields } from './store/users';
+
+  import { required, requiredIf, sameAs, minLength } from 'vuelidate/lib/validators';
+
+  export default {
 
     data() {
       return {
-        data: {},
-        errors: [],
+        selectedChanged: true,
 
-        confirmPassword: "",
-        lastloginDate: null,
-        lastloginTime: null,
-        expireDate: null,
-        expireTime: null,
+        form: {
+          status: {
+            action: 'Loading',
+            result: 'OK'
+          },
+
+          isdirty: false
+        },
+          
+        errors: []
       }
     },
 
     methods: {
-      ...mapActions({
-        updateUser: 'updateUser'
+      ...mapUsersActions({
+        isUserUniqueByField: 'isUniqueByField'
       }),
 
-      inputChange(validator) {
-        if (!validator.$invalid && validator.$dirty) { 
-          this.updateUser({ oldUser: this.$parent.rowState, updatedUser: this.selected });
-        }
+      isFormDirty: function() {
+        return  
+          this.$v.login.$dirty && 
+          this.$v.active.$dirty &&
+          this.$v.newPassword.$dirty &&
+          this.$v.confirmPassword.$dirty &&
+          this.$v.expireDate.$dirty
+      },
 
-        this.$parent.rowState = this.selected;
+      onInput(fieldValidator, fieldName, fieldValue) {
+        if (!this.selectedChanged) {
+          fieldValidator.$touch();
+        }
+        //else if (fieldValidator.$dirty) {
+        //  fieldValidator.$reset();
+        //}
+        this.selectedChanged = false;
+      },
+
+      /*
+       * Vuevalidate behaviour is using AND on $dirty for all childrens validators in a form.
+       * For $invalid the behaviour is using OR as what we want.
+       * For $error should be ($invalid && $dirty) but our expirience is different..
+       * We like an OR so beneath a dedicated function...
+       */
+
+      fieldType(v) {
+        return v.$error ? 'is-danger' : !this.selectedChanged && v.$dirty ? 'is-success' : '';
+      }
+
+    },
+
+    computed: {
+      ...mapUsersFields([
+        'selectedUser.status',
+        'selectedUser.login',
+        'selectedUser.active',
+        'selectedUser.newPassword',
+        'selectedUser.expireDate',
+        'selectedUser.lastLogin',
+        'selectedUser.failedAttempts',
+        'selectedUser.goodLogins',
+        'selectedSeqno'
+      ])
+    },
+
+    watch: {
+      selectedSeqno: function (newValue, oldValue) {
+        if (newValue != oldValue) {
+          this.selectedChanged = true;
+          this.$v.$reset();
+        }
       }
     },
 
+    mounted: function () {
+      this.form.status = { action: 'Loaded', result: 'OK' };
+    },
+
+
     validations: {
 
-      selected: {
         login: {
-          required
+          required,
+          minLength: minLength(4),
+          async isUnique(value) {
+            if (value === '' || this.selectedChanged ) return true;
+
+            return await this.isUserUniqueByField({ fieldName: 'login', fieldValue: value })
+              .then((unique) => {
+                return unique;
+              })
+              .catch((error) => {
+                return false;
+              });
+          }
         },
         active: {
-          required
+          //minLength: minLength(1)
         },
-
         newPassword: {
-          required,
-          minLength: minLength(8)
+          required: requiredIf(function (model) {
+            return this.$v.newPassword.$dirty || this.$v.confirmPassword.$dirty
+          }),
+          minLength: minLength(6)
+        },
+        confirmPassword: {
+          sameAsPassword: function (confirmPassword) {
+            return this.newPassword == confirmPassword;
+          }
         },
 
-        goodLogins: {
+        expireDate: {
+
         },
-        failedAttempts: {
-        }
-      },
 
-      confirmPassword: {
-        sameAsPassword: function (confirmPassword) {
-          return this.selected.newPassword == confirmPassword;
-        }
-      },
+        lastLogin: {
 
-      lastloginDate: {
-      },
-      lastloginTime: {
-      },
+        },
 
-      expireDate: {
-      },
-      expireTime: {
-      },
+
+      form: ['login', 'active'],
+
+      // Passwords validation are threated differently!
+      passwordsForm: ['newPassword', 'confirmPassword'],
     }
-
   }
 </script>
+
+<style lang="scss">
+
+  .form-scrollable {
+    height: calc(100vh - ( 360px ));
+    overflow-y: scroll;
+  }
+</style>

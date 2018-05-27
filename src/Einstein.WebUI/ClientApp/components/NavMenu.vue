@@ -5,7 +5,7 @@
       <div class="column is-4">
         <div class="columns">
           <div class="column is-3">
-            <b-icon class="is-large fa-3x" pack="fa" icon="universal-access" />
+            <i class="fas fa-universal-access fa-4x" />
           </div>
           <div class="column is-9">
             <p class="title">
@@ -23,7 +23,7 @@
         <b-field style="margin-top:15px;">
           <b-input placeholder="Search..."
                    type="search"
-                   icon-pack="fa"
+                   icon-pack="fas"
                    icon="search">
           </b-input>
         </b-field>
@@ -36,10 +36,10 @@
           <a class="navbar-item" slot="trigger">
             <div class="columns">
               <div class="column">
-                <b-icon pack="fa fa-2x" icon="user-circle"></b-icon>
+                <i class="fas fa-user-circle fa-2x"/>
               </div>
               <div class="column">
-                <b-icon pack="fa" icon="caret-down"></b-icon>
+                <i class="fas fa-caret-down"/>
               </div>
             </div>
           </a>
@@ -50,12 +50,12 @@
           <hr class="dropdown-divider">
           <b-dropdown-item v-if="userId <= 0" value="Login">
             <router-link to="/login">
-              <b-icon pack="fa" icon="sign-in" /> Login
+              <b-icon pack="fas" icon="sign-in-alt" /> Login
             </router-link>
           </b-dropdown-item>
           <b-dropdown-item v-if="userId > 0" value="Logout">
             <router-link to="/logout">
-              <b-icon pack="fa" icon="sign-out" /> Logout
+              <b-icon pack="fas" icon="sign-out-alt" /> Logout
             </router-link>
           </b-dropdown-item>
         </b-dropdown>
@@ -74,7 +74,6 @@
   </section>
 </template>
 <script>
-  import Vue from 'vue';
   import Login from './auth/Login.vue';
 
   import { mapGetters } from 'vuex';
@@ -92,7 +91,7 @@
           return this.$store.state.core.currentUser.id;
         },
         set(value) {
-          var clonedUser = _.cloneDeep(this.$store.state.core.currentUser);
+          var clonedUser = _cloneDeep(this.$store.state.core.currentUser);
           clonedUser.id = value;
           this.$store.dispatch('core/updateCurrentUser', clonedUser);
         }
@@ -103,7 +102,7 @@
           return this.$store.state.core.currentUser.name;
         },
         set(value) {
-          var clonedUser = _.cloneDeep(this.$store.state.core.currentUser);
+          var clonedUser = _cloneDeep(this.$store.state.core.currentUser);
           clonedUser.name = value;
           this.$store.dispatch('core/updateCurrentUser', clonedUser);
         }
@@ -114,7 +113,7 @@
           return this.$store.state.core.currentUser;
         },
         set(value) {
-          var clonedUser = _.cloneDeep(value);
+          var clonedUser = _cloneDeep(value);
           this.$store.dispatch('core/updateCurrentUser', clonedUser);
         }
       }
@@ -133,7 +132,7 @@
   });
 </script>
 <style lang="scss">
-  .is-active {
+  .nav-item.is-tab.is-active {
     color: white !important;
     font-weight: bold;
     background-color: hsl(271, 100%, 71%);

@@ -11,14 +11,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="4.6.2" />
-    <PackageReference Include="Autofac.Extras.AggregateService" Version="4.1.0" />
-    <PackageReference Include="Dapper" Version="1.50.4" />
-    <PackageReference Include="Dapper.FluentMap" Version="1.6.0" />
+    <PackageReference Include="Dapper" Version="1.50.5" />
     <PackageReference Include="System.Data.Common" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Bloemert.Lib.Auto\Bloemert.Lib.Auto.csproj" />
     <ProjectReference Include="..\Bloemert.Lib.Logging\Bloemert.Lib.Logging.csproj" />
   </ItemGroup>
 

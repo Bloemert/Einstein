@@ -1,9 +1,14 @@
 ﻿using Autofac;
-using Bloemert.Lib.Auto.Mapping.AutoMapper.Autofac;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Nancy.Owin;
-
+using System;
+using System.Net.WebSockets;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Einstein.WebAPI.Core
 {
@@ -13,7 +18,7 @@ namespace Einstein.WebAPI.Core
 		public static ContainerBuilder IoCBuilder { get; set; }
 
 		public Startup(IHostingEnvironment env)
-		{ 
+		{
 			RegisterModules();
 		}
 
@@ -26,10 +31,20 @@ namespace Einstein.WebAPI.Core
 		}
 
 
-		public void Configure(IApplicationBuilder app)
+
+
+		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 		{
-			app.UseResponseBuffering();
+			if (env.IsDevelopment())
+			{
+				app.UseDeveloperExceptionPage();
+
+				TelemetryConfiguration.Active.DisableTelemetry = true;
+			}
+
+			//app.UseResponseBuffering();
 			app.UseOwin(x => x.UseNancy(opt => opt.Bootstrapper = new Bootstrapper(IoCBuilder)));
 		}
+
 	}
 }

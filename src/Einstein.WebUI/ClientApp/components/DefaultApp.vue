@@ -15,7 +15,6 @@
 </template>
 
 <script>
-    import Vue from 'vue';
     import VueRouter from 'vue-router';
     import NavMenu from './NavMenu.vue';
 
@@ -36,12 +35,18 @@
 </script>
 
 <style lang="scss">
+  html, body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
   .footer {
     padding: 3px 3px 3px 3px;
   }
 
   .main-content {
-    height: calc(74vh);
+    height: calc(100vh - 200px);
     padding: 15px 15px 15px 15px;
   }
 

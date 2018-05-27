@@ -8,19 +8,23 @@
 	</PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Buffering" Version="0.2.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Owin" Version="2.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.0.3" />
     <PackageReference Include="Nancy.Authentication.Basic" Version="2.0.0-clinteastwood" />
     <PackageReference Include="Nancy.Bootstrappers.Autofac" Version="2.0.0-clinteastwood" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.2.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Bloemert.Data.Entity.Auth\Bloemert.Data.Entity.Auth.csproj" />
     <ProjectReference Include="..\Bloemert.Lib.WebAPI\Bloemert.Lib.WebAPI.csproj" />
     <ProjectReference Include="..\Bloemert.WebAPI.Auth\Bloemert.WebAPI.Auth.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.ApplicationInsights">
+      <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.applicationinsights\2.4.0\lib\netstandard1.3\Microsoft.ApplicationInsights.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>
