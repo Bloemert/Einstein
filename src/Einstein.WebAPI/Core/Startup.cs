@@ -27,7 +27,9 @@ namespace Einstein.WebAPI.Core
 			// Initialize DataLayer
 			IoCBuilder.RegisterModule<Bloemert.Data.Core.ModuleLoader>();
 			IoCBuilder.RegisterModule<Bloemert.Data.Entity.Auth.ModuleLoader>();
+			IoCBuilder.RegisterModule<Bloemert.Data.Entity.Skills.ModuleLoader>();
 			IoCBuilder.RegisterModule<Bloemert.WebAPI.Auth.ModuleLoader>();
+			IoCBuilder.RegisterModule<Bloemert.WebAPI.Skills.ModuleLoader>();
 		}
 
 

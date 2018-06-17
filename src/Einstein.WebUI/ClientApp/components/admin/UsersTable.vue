@@ -13,10 +13,6 @@
       </div>
     </header>
 
-    <b-tag :type="form.status.result == 'OK' ? 'is-primary block' : 'is-danger block'">
-      Status: {{ form.status.action }} => {{ form.status.result }}
-    </b-tag>
-
     <div class="columns">
       <div class="column">
 
@@ -31,6 +27,12 @@
           </div>
           <div slot="filter__login">
             <b-input type="search" class="form-control table-column-filter" v-model="filterLogin" @input="searchByField('login', $event)" placeholder="Filter by login"></b-input>
+          </div>
+          <div slot="filter__lastname">
+            <b-input type="search" class="form-control table-column-filter" v-model="filterLastname" @input="searchByField('lastname', $event)" placeholder="Filter by Lastname"></b-input>
+          </div>
+          <div slot="filter__firstname">
+            <b-input type="search" class="form-control table-column-filter" v-model="filterFirstname" @input="searchByField('firstname', $event)" placeholder="Filter by Firstname"></b-input>
           </div>
         </v-client-table>
         <b-pagination :total="users.length"
@@ -53,7 +55,7 @@
 <script>
   import 'buefy/lib/buefy.css';
 
-  import { ServerTable, ClientTable, Event } from 'vue-tables-2';
+  import { ClientTable, Event } from 'vue-tables-2';
 
   import { mapUsersActions, mapUsersFields, mapUsersMultiRowFields } from './store/users';
 
@@ -76,11 +78,16 @@
             action: 'Loading',
             result: 'OK'
           },
-
-          isdirty: false
         },
-        columns: ['id', 'login'],
+        columns: [
+          'id',
+          'login',
+          'lastname',
+          'firstname',
+        ],
+
         options: {
+          useVuex: true,
           filterByColumn: true,
           filterable: [],
           customFilters: [{
@@ -92,9 +99,21 @@
           {
             name: 'login',
             callback: function (row, query) {
-              return row.login.indexOf(query.login) !== -1;
+              return row.login ? row.login.toString().indexOf(query.login) !== -1 : !query.login;
             }
-          }
+          },
+          {
+            name: 'lastname',
+            callback: function (row, query) {
+              return row.lastname ? row.lastname.indexOf(query.lastname) !== -1 : !query.lastname;
+            }
+            },
+            {
+              name: 'firstname',
+              callback: function (row, query) {
+                return row.firstname ? row.firstname.indexOf(query.firstname) !== -1 : !query.firstname;
+              }
+            }
           ],
 
           perPageValues: [],
@@ -106,6 +125,8 @@
 
         filterId: null,
         filterLogin: null,
+        filterFirstname: null,
+        filterLastname: null,
 
         errors: []
       }
@@ -115,31 +136,70 @@
     methods: {
       ...mapUsersActions({
         loadData: 'loadFromDB',
-        //addUser: 'addUser',
-        //removeUser: 'removeUser',
+        addUser: 'addUser',
+        removeUser: 'removeUser',
         //saveData: 'saveUserChangesToDB'
       }),
 
-      addRow() {
-        //var arr = this.data;
-        //var btable = this.$refs.btable;
+      getUIRowBySeqno(seqno) {
+        return document.getElementsByClassName('row-seqno-' + seqno)[0];
+      },
 
-        //this.addUser().then(() => {
-        //  btable.selectRow(arr[arr.length - 1]);
-        //});
+      refreshCSSClasses() {
+        var that = this;
+
+        _forEach(that.users, function (row) {
+          var uiRow = that.getUIRowBySeqno(row.seqno);
+
+          if (uiRow) {
+            if (row.status.added) {
+              uiRow.classList.add('row-added');
+            } else {
+              uiRow.classList.remove('row-added');
+            }
+
+            if (row.status.removed ) {
+              uiRow.classList.add('row-removed');
+            } else {
+              uiRow.classList.remove('row-removed');
+            }
+
+            if (row.seqno == that.selectedSeqno) {
+              uiRow.classList.add('row-selected');
+            } else {
+              uiRow.classList.remove('row-selected');
+            }
+
+          }
+
+        })
+      },
+
+      addRow() {
+        this.addUser().then(() => {
+          this.refreshCSSClasses();
+        });
+      },
+
+      removeRow() {
+        this.$dialog.confirm({
+          title: 'Remove user...',
+          message: 'User will be permanently removed after clicking on Save!',
+          onConfirm: () => {
+
+            this.removeUser(this.users[this.selectedSeqno]).then(() => {
+              this.refreshCSSClasses();
+            });
+          }
+        })
       },
 
       saveChanges() {
 
-        //this.saveData();
-
-        //this.$refs.btable.selectRow(this.data[0]);
       },
 
       refresh() {
-        //this.$refs.btable.selectRow(this.data[0]);
-
-        //this.loadData();
+        this.loadData();
       },
 
       undo() {
@@ -148,38 +208,25 @@
       redo() {
       },
 
-      removeRow() {
-        //this.removeUser(this.selected);
-      },
+
 
       onRowClick: function (uicomponent) {
-
-        this.form.status = { action: 'Selecting', result: 'OK' };
 
         if (uicomponent.event) {
           uicomponent.event.preventDefault();
         }
 
-        if (this.selectedUser && this.selectedUser.status.result != 'OK') {
-          this.$dialog.alert({
-            title: 'Notification',
-            message: 'Please leave the updated form in a valid state or click refresh to undo your changes!'
-          });
-        } else {
-          if (this.selectedUser) {
-            var oldUIRow = document.getElementsByClassName('row-seqno-' + this.selectedSeqno)[0];
-
-            if (oldUIRow) {
-              oldUIRow.classList.remove('row-selected');
-            }
-          }
-
-          uicomponent.event.currentTarget.classList.add('row-selected');
-
+        //if (this.users[this.selectedSeqno] && this.users[this.selectedSeqno].status.result != 'OK') {
+        //  this.$dialog.alert({
+        //    title: 'Notification',
+        //    message: 'Please leave the updated form in a valid state or click refresh to undo your changes!'
+        //  });
+        //} else
+        {
           this.selectedSeqno = uicomponent.row.seqno;
+          this.refreshCSSClasses();
         }
 
-        this.form.status = { action: 'Selected', result: 'OK' };
       },
 
       onPageChange: function (newPage) {
@@ -197,28 +244,17 @@
     },
 
     mounted: function () {
-      this.form.status = { action: 'Loaded', result: 'OK' };
+      this.form.status.loaded = true;
     },
 
     computed: {
-      //...mapUsersState(
-      //  {
-      //    //users: state => state.userRows,
-      //    currentSeqno: state => state.userCurrentSeqno,
-      //    currentPage: state => state.userCurrentPage
-      //  }
-      //),
 
       ...mapUsersFields({
         users: 'rows',
         selectedSeqno: 'selectedSeqno',
-        selectedUser: 'selectedUser',
-        currentPage: 'currentPage'
+        currentPage: 'currentPage',
       }),
 
-      //...mapUsersMultiRowFields(
-      //),
-      //...mapCoreGetters(['getAppSettings']),
     },
 
     components: {
@@ -236,7 +272,7 @@
 <style type="text/scss">
 
   .table tr th:nth-child(1), td:nth-child(1) {
-    width: 20%;
+    width: 15%;
   }
 
   .VuePagination {
@@ -245,7 +281,7 @@
 
   .table-body-scroll tbody {
     display: block;
-    height: calc(100vh - (335px + 140px));
+    height: calc(100vh - (335px + 180px));
     overflow-y: scroll;
   }
 
@@ -258,6 +294,16 @@
   .row-selected {
     background-color: #8c67ef;
     color: white;
+  }
+
+  .row-added td:first-child {
+    color: #00c104;
+    text-decoration: underline;
+  }
+
+  .row-removed td:first-child {
+    color: #ff4242;
+    text-decoration: line-through;
   }
 
   .iadd {

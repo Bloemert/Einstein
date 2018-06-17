@@ -182,7 +182,10 @@ module.exports = (env) => {
 				_cloneDeep: ['lodash', 'cloneDeep'],
 				_forEach: ['lodash', 'forEach'],
 				_some: ['lodash', 'some'],
-				_find: ['lodash', 'find']
+				_find: ['lodash', 'find'],
+				_get: ['lodash', 'get'],
+				_last: ['lodash', 'last'],
+				_remove: ['lodash', 'remove']
 			})
 		].concat(isDevBuild ? [
 			// Plugins that apply in development builds only

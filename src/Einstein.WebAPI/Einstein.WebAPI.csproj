@@ -17,8 +17,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Bloemert.Data.Entity.Auth\Bloemert.Data.Entity.Auth.csproj" />
+    <ProjectReference Include="..\Bloemert.Data.Entity.Skills\Bloemert.Data.Entity.Skills.csproj" />
     <ProjectReference Include="..\Bloemert.Lib.WebAPI\Bloemert.Lib.WebAPI.csproj" />
     <ProjectReference Include="..\Bloemert.WebAPI.Auth\Bloemert.WebAPI.Auth.csproj" />
+    <ProjectReference Include="..\Bloemert.WebAPI.Skills\Bloemert.WebAPI.Skills.csproj" />
   </ItemGroup>
 
   <ItemGroup>

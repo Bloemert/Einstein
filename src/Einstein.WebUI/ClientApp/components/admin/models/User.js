@@ -4,8 +4,11 @@ export class User {
 		seqno = 0,
 
 		status = {
-			action: '',
-			result: ''
+			valid: true,
+			added: false,
+			modified: false,
+			removed: false,
+			loaded: false
 		},
 
 		id = -1,
@@ -14,7 +17,12 @@ export class User {
 		active = false,
 		login = '',
 
+		firstname = '',
+		lastname = '',
+		email = '',
+
 		newPassword = '',
+		confirmPassword = '',
 
 		expireDate = new Date(),
 		lastLogin = new Date(),
@@ -31,7 +39,12 @@ export class User {
 		this.active = active;
 		this.login = login;
 
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.email = email;
+
 		this.newPassword = newPassword;
+		this.confirmPassword = confirmPassword;
 
 		this.expireDate = expireDate;
 		this.lastLogin = lastLogin;

@@ -7,7 +7,7 @@
     <Name>Einstein.Database</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
-    <ProjectGuid>{7b7d1c4c-3002-40df-842d-80a0f3c5b597}</ProjectGuid>
+    <ProjectGuid>{577308e6-ee90-4075-8443-78d9184e9879}</ProjectGuid>
     <DSP>Microsoft.Data.Tools.Schema.Sql.Sql120DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
@@ -84,6 +84,17 @@
   <ItemGroup>
     <Folder Include="Properties" />
     <Folder Include="10 Tables" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="10 Tables\AuditLogs.sql" />
+    <Build Include="10 Tables\Settings.sql" />
+    <Build Include="10 Tables\Users.sql" />
+    <Build Include="10 Tables\ActionPermissions.sql" />
+    <Build Include="10 Tables\Permissions.sql" />
+    <Build Include="10 Tables\Roles.sql" />
+    <Build Include="10 Tables\Sessions.sql" />
+    <Build Include="10 Tables\UserRoles.sql" />
+    <Build Include="10 Tables\TechSpots.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Einstein.Database.refactorlog" />

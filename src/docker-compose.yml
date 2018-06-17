@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  einstein.webui:
+    image: ${DOCKER_REGISTRY}einsteinwebui
+    build:
+      context: .
+      dockerfile: Einstein.WebUI\Dockerfile

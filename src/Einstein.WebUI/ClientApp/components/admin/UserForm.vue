@@ -11,33 +11,17 @@ Remarks:
   <section class="form-scrollable">
 
     <form @submit.prevent="">
-      <b-tag :type="form.status.result == 'OK' ? 'is-primary block' : 'is-danger block'">
-        Status: {{ form.status.action }} => {{ form.status.result }}
-      </b-tag>
-
-      <b-field label="Login" horizontal>
-        <div class="tile is-vertical">
-          <b-field :type="fieldType($v.login)">
-            <b-input id="userLogin"
-                     v-model.lazy="login"
-                     @input="onInput($v.login, 'login', $event)"
-                     placeholder="New login">
-            </b-input>
-          </b-field>
-          <div>
-            <span class="help is-danger" v-if="$v.login.$dirty && !$v.login.required">Login is required.</span>
-            <span class="help is-danger" v-if="$v.login.$dirty && !$v.login.minLength">Login must have at least {{ $v.login.$params.minLength.min }} letters.</span>
-            <span class="help is-danger" v-if="$v.login.$dirty && !$v.login.isUnique">Login is already taken.</span>
-          </div>
-        </div>
-      </b-field>
-
+      <div v-if="isFormDirty()">
+        <b-tag :type="!$v.$anyError ? 'is-primary block' : 'is-danger block'">
+          Status: {{ selected.status.action }} => {{ selected.status.result }}
+        </b-tag>
+      </div>
 
       <b-field label="Active" horizontal>
         <div class="tile is-vertical">
           <b-field>
             <b-checkbox id="userActive"
-                        v-model.lazzy="active">
+                        v-model.lazzy="selected.active">
             </b-checkbox>
           </b-field>
           <div>
@@ -46,42 +30,115 @@ Remarks:
         </div>
       </b-field>
 
+      <b-field label="Login" horizontal>
+        <div class="tile is-vertical">
+          <b-field :type="fieldType($v.selected.login)">
+            <b-input id="userLogin"
+                     v-model.trim="selected.login"
+                     autocomplete="username"
+                     @input="onInput($v.selected.login, 'login', $event)"
+                     placeholder="New login">
+            </b-input>
+          </b-field>
+          <div>
+            <span class="help is-danger" v-if="isFormDirty() && !$v.selected.login.required">Login is required.</span>
+            <span class="help is-danger" v-if="isFormDirty() && !$v.selected.login.minLength">Login must have at least {{ $v.selected.login.$params.minLength.min }} letters.</span>
+            <span class="help is-danger" v-if="isFormDirty() && !$v.selected.login.isUnique">Login is already taken.</span>
+          </div>
+        </div>
+      </b-field>
+
+      <b-field label="Firstname" horizontal>
+        <div class="tile is-vertical">
+          <b-field :type="fieldType($v.selected.firstname)">
+            <b-input id="userFirstname"
+                     v-model.trim="selected.firstname"
+                     autocomplete="first-name"
+                     @input="onInput($v.selected.firstname, 'firstname', $event)"
+                     placeholder="New firstname">
+            </b-input>
+          </b-field>
+          <div>
+            <span class="help is-danger" v-if="isFormDirty() && !$v.selected.firstname.required">Firstname is required.</span>
+            <span class="help is-danger" v-if="isFormDirty() && !$v.selected.firstname.minLength">Firstname must have at least {{ $v.selected.firstname.$params.minLength.min }} letters.</span>
+          </div>
+        </div>
+      </b-field>
+
+      <b-field label="Lastname" horizontal>
+        <div class="tile is-vertical">
+          <b-field :type="fieldType($v.selected.lastname)">
+            <b-input id="userLastname"
+                     v-model.trim="selected.lastname"
+                     autocomplete="family-name"
+                     @input="onInput($v.selected.lastname, 'lastname', $event)"
+                     placeholder="New lastname">
+            </b-input>
+          </b-field>
+          <div>
+            <span class="help is-danger" v-if="isFormDirty() && !$v.selected.lastname.required">Lastname is required.</span>
+            <span class="help is-danger" v-if="isFormDirty() && !$v.selected.lastname.minLength">Lastname must have at least {{ $v.selected.lastname.$params.minLength.min }} letters.</span>
+          </div>
+        </div>
+      </b-field>
+
+      <b-field label="Email" horizontal>
+        <div class="tile is-vertical">
+          <b-field :type="fieldType($v.selected.email)">
+            <b-input id="userEmail"
+                     v-model.trim="selected.email"
+                     autocomplete="email"
+                     @input="onInput($v.selected.email, 'email', $event)"
+                     placeholder="New email">
+            </b-input>
+          </b-field>
+          <div>
+            <span class="help is-danger" v-if="isFormDirty() && !$v.selected.email.required">Email is required.</span>
+            <span class="help is-danger" v-if="isFormDirty() && !$v.selected.email.email">Email must be valid!</span>
+          </div>
+        </div>
+      </b-field>
+
+
+
       <b-field label="Password" horizontal>
         <div class="tile is-vertical">
-          <b-field>
+          <b-field :type="fieldType($v.selected.newPassword)">
             <b-input id="userPassword" type="password"
                      password-reveal
-                     v-model.lazzy="newPassword"
+                     v-model.trim="selected.newPassword"
+                     @input="onInput($v.selected.newPassword, 'newPassword', $event)"
                      placeholder="New password"></b-input>
           </b-field>
           <div>
-            <span class="help is-danger" v-if="$v.newPassword.$dirty && !$v.newPassword.required">Password is required.</span>
-            <span class="help is-danger" v-if="$v.newPassword.$dirty && !$v.newPassword.minLength">Password must have at least {{ $v.newPassword.$params.minLength.min }} letters.</span>
+            <span class="help is-danger" v-if="isFormDirty() && !$v.selected.newPassword.required">Password is required.</span>
+            <span class="help is-danger" v-if="isFormDirty() && !$v.selected.newPassword.minLength">Password must have at least {{ $v.selected.newPassword.$params.minLength.min }} letters.</span>
           </div>
         </div>
       </b-field>
 
       <b-field label="Confirm" horizontal>
         <div class="tile is-vertical">
-          <b-field>
+          <b-field :type="fieldType($v.selected.confirmPassword)">
             <b-input id="userConfirmPassword" type="password"
                      password-reveal
-                     v-model.lazzy="$v.confirmPassword.$model"
+                     v-model.trim="selected.confirmPassword"
+                     @input="onInput($v.selected.confirmPassword, 'confirmPassword', $event)"
                      placeholder="Confirm password">
             </b-input>
           </b-field>
-          <span class="help is-danger" v-if="($v.newPassword.$dirty || $v.confirmPassword.$dirty) && !$v.confirmPassword.sameAsPassword">Passwords must be identical.</span>
+          <span class="help is-danger" v-if="isFormDirty() && !$v.selected.confirmPassword.sameAsPassword">Passwords must be identical.</span>
         </div>
       </b-field>
 
 
       <b-field label="Expire date" horizontal>
-        <b-datepicker v-model.lazzy="expireDate"
+        <b-datepicker v-model.lazzy="selected.expireDate"
                       placeholder="Type or select a date..."
                       icon="calendar"
                       :readonly="false">
         </b-datepicker>
-        <b-timepicker v-model.lazzy="expireDate"
+        <b-timepicker v-model.lazy="selected.expireDate"
                       placeholder="Type or select a time..."
                       icon="clock"
                       :readonly="false">
@@ -90,12 +147,12 @@ Remarks:
 
 
       <b-field label="Last login" horizontal>
-        <b-datepicker v-model.lazzy="lastLogin"
+        <b-datepicker v-model.lazy="selected.lastLogin"
                       placeholder="Type or select a date..."
                       icon="calendar"
                       :readonly="true">
         </b-datepicker>
-        <b-timepicker v-model.lazzy="lastLogin"
+        <b-timepicker v-model.lazy="selected.lastLogin"
                       placeholder="Type or select a time..."
                       icon="clock"
                       :readonly="true">
@@ -103,11 +160,11 @@ Remarks:
       </b-field>
 
       <b-field label="Good Logins" horizontal>
-        <b-input id="goodLogins" :value.number="goodLogins" type="number" :readonly="true"></b-input>
+        <b-input id="goodLogins" v-model.lazy="selected.goodLogins" type="number" :readonly="true"></b-input>
       </b-field>
 
       <b-field label="Failed attempts" horizontal>
-        <b-input id="failedAttempts" :value.number="failedAttempts" type="number" :readonly="true"></b-input>
+        <b-input id="failedAttempts" v-model.lazy="selected.failedAttempts" type="number" :readonly="true"></b-input>
       </b-field>
 
     </form>
@@ -121,23 +178,16 @@ Remarks:
 
   import { mapUsersActions, mapUsersFields, mapUsersMultiRowFields } from './store/users';
 
-  import { required, requiredIf, sameAs, minLength } from 'vuelidate/lib/validators';
+  import { required, requiredIf, email, sameAs, minLength } from 'vuelidate/lib/validators';
+
+  const touchMap = new WeakMap();
 
   export default {
 
     data() {
       return {
-        selectedChanged: true,
+        selectedSeqnoChanged: true,
 
-        form: {
-          status: {
-            action: 'Loading',
-            result: 'OK'
-          },
-
-          isdirty: false
-        },
-          
         errors: []
       }
     },
@@ -147,73 +197,100 @@ Remarks:
         isUserUniqueByField: 'isUniqueByField'
       }),
 
-      isFormDirty: function() {
-        return  
-          this.$v.login.$dirty && 
-          this.$v.active.$dirty &&
-          this.$v.newPassword.$dirty &&
-          this.$v.confirmPassword.$dirty &&
-          this.$v.expireDate.$dirty
+      isFormDirty() {
+        return this.$v.form.$anyDirty || this.$v.passwordsForm.$anyDirty;
+      },
+
+      delayTouch($v) {
+        $v.$reset()
+        if (touchMap.has($v)) {
+          clearTimeout(touchMap.get($v))
+        }
+        touchMap.set($v, setTimeout($v.$touch, 1000))
+      },
+
+      storeValidFieldData(fieldValidator, fieldName, fieldValue) {
+          if (!fieldValidator.$anyError) {
+            if (this.selected[fieldName] === fieldValue) {
+              fieldValidator.$reset();
+            }
+            else {
+              this.selected[fieldName] = fieldValue;
+            }
+          }
       },
 
       onInput(fieldValidator, fieldName, fieldValue) {
-        if (!this.selectedChanged) {
+        //this.delayTouch(fieldValidator);
+        if (!this.selectedSeqnoChanged) {
           fieldValidator.$touch();
         }
-        //else if (fieldValidator.$dirty) {
-        //  fieldValidator.$reset();
-        //}
-        this.selectedChanged = false;
       },
 
-      /*
-       * Vuevalidate behaviour is using AND on $dirty for all childrens validators in a form.
-       * For $invalid the behaviour is using OR as what we want.
-       * For $error should be ($invalid && $dirty) but our expirience is different..
-       * We like an OR so beneath a dedicated function...
-       */
+      onBlur(fieldValidator, fieldName, fieldValue) {
+        //storeValidFieldData(fieldValidator, fieldName, fieldValue)
+
+      },
 
       fieldType(v) {
-        return v.$error ? 'is-danger' : !this.selectedChanged && v.$dirty ? 'is-success' : '';
+        return v.$anyDirty ? v.$anyError ? 'is-danger' : 'is-success' : '';
       }
 
+
+    },
+
+
+
+    updated: function (par1, par2, par3) {
+      this.$nextTick(function () {
+        // Code that will run only after the
+        // entire view has been re-rendered
+        if (this.selectedSeqnoChanged) {
+          this.$v.$reset();
+          this.selectedSeqnoChanged = false;
+        }
+      })
+    },
+
+
+    watch: {
+      // whenever question changes, this function will run
+      selectedSeqno: function (newSeqno, oldSeqno) {
+        if (newSeqno != oldSeqno) {
+          this.selectedSeqnoChanged = true;
+        }
+      }
     },
 
     computed: {
-      ...mapUsersFields([
-        'selectedUser.status',
-        'selectedUser.login',
-        'selectedUser.active',
-        'selectedUser.newPassword',
-        'selectedUser.expireDate',
-        'selectedUser.lastLogin',
-        'selectedUser.failedAttempts',
-        'selectedUser.goodLogins',
-        'selectedSeqno'
-      ])
-    },
+      ...mapUsersFields({
+        selectedSeqno: 'selectedSeqno',
+      }),
 
-    watch: {
-      selectedSeqno: function (newValue, oldValue) {
-        if (newValue != oldValue) {
-          this.selectedChanged = true;
-          this.$v.$reset();
+      ...mapUsersMultiRowFields(
+        { users: 'rows' }
+      ),
+
+      selected: {
+        get: function() {
+          return this.users[this.selectedSeqno];
         }
       }
     },
 
+
     mounted: function () {
-      this.form.status = { action: 'Loaded', result: 'OK' };
+      this.$v.$reset();
     },
 
 
     validations: {
-
+      selected: {
         login: {
           required,
           minLength: minLength(4),
           async isUnique(value) {
-            if (value === '' || this.selectedChanged ) return true;
+            if (value === '' ) return true;
 
             return await this.isUserUniqueByField({ fieldName: 'login', fieldValue: value })
               .then((unique) => {
@@ -224,18 +301,32 @@ Remarks:
               });
           }
         },
+        lastname: {
+          required,
+          minLength: minLength(4)
+        },
+        firstname: {
+          required,
+          minLength: minLength(4)
+        },
+        email: {
+          required,
+          email
+        },
         active: {
-          //minLength: minLength(1)
         },
         newPassword: {
           required: requiredIf(function (model) {
-            return this.$v.newPassword.$dirty || this.$v.confirmPassword.$dirty
+            return this.$v.selected.newPassword.$dirty || this.$v.selected.confirmPassword.$dirty
           }),
-          minLength: minLength(6)
+          minLength: minLength(6),
+          sameAsPassword: function (newPassword) {
+            return this.selected.confirmPassword == newPassword;
+          }
         },
         confirmPassword: {
           sameAsPassword: function (confirmPassword) {
-            return this.newPassword == confirmPassword;
+            return this.selected.newPassword == confirmPassword;
           }
         },
 
@@ -246,12 +337,12 @@ Remarks:
         lastLogin: {
 
         },
+      },
 
-
-      form: ['login', 'active'],
+      form: ['selected.login', 'selected.active', 'selected.firstname', 'selected.lastname', 'selected.email'],
 
       // Passwords validation are threated differently!
-      passwordsForm: ['newPassword', 'confirmPassword'],
+      passwordsForm: ['selected.newPassword', 'selected.confirmPassword'],
     }
   }
 </script>

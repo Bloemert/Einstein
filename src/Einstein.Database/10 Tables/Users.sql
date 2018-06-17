@@ -8,5 +8,8 @@
     [ExpireDate] DATETIME NULL, 
     [LastLogin] DATETIME NULL, 
     [FailedAttempts] INT NOT NULL DEFAULT 0, 
-    [GoodLogins] INT NOT NULL DEFAULT 0
+    [GoodLogins] INT NOT NULL DEFAULT 0, 
+    [Firstname] NVARCHAR(150) NULL, 
+    [Lastname] NVARCHAR(150) NULL, 
+    [Email] NVARCHAR(150) NULL
 )
