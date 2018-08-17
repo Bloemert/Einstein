@@ -5,7 +5,7 @@
       <div class="column is-4">
         <div class="columns">
           <div class="column is-3">
-            <i class="fas fa-universal-access fa-4x" />
+            <i class="fas fa-universal-access fa-4x app-logo" />
           </div>
           <div class="column is-9">
             <p class="title">
@@ -21,7 +21,8 @@
       <!-- Center -->
       <div class="column  is-4">
         <b-field style="margin-top:15px;">
-          <b-input placeholder="Search..."
+          <b-input class="search"
+                   placeholder="Search..."
                    type="search"
                    icon-pack="fas"
                    icon="search">
@@ -66,8 +67,20 @@
         <li>
           <router-link class="nav-item is-tab" to="/" exact>Home</router-link>
         </li>
-        <li v-if="user.admin">
+        <li v-if="user && user.admin">
           <router-link class="nav-item is-tab" to="/admin">Admin</router-link>
+        </li>
+        <li v-if="userId > 0">
+          <router-link class="nav-item is-tab" to="/spots">Spots</router-link>
+        </li>
+        <li v-if="userId > 0">
+          <router-link class="nav-item is-tab" to="/sectors">Sectors</router-link>
+        </li>
+        <li v-if="userId > 0">
+          <router-link class="nav-item is-tab" to="/rings">Rings</router-link>
+        </li>
+        <li>
+          <router-link class="nav-item is-tab" to="/about">About</router-link>
         </li>
       </ul>
     </nav>
@@ -132,9 +145,26 @@
   });
 </script>
 <style lang="scss">
+@import '../styles/site.scss';
+
   .nav-item.is-tab.is-active {
-    color: white !important;
     font-weight: bold;
-    background-color: hsl(271, 100%, 71%);
+    background-color: $primary;
+    color: $primary-invert;
+  }
+
+  .app-logo {
+    color: $primary;
+    background-color: $primary-invert;
+  }
+
+  a.navbar-item div div i {
+    color: $primary;
+    background-color: $primary-invert;
+  }
+
+
+  .search {
+    display: none;
   }
 </style>

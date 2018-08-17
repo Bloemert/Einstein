@@ -11,7 +11,7 @@ namespace Bloemert.Lib.WebAPI
 	{
 		public DT Data { get; set; }
 
-		public Exception Error { get; set; }
+		public string Error { get; set; }
 
 		public User ActiveUser { get; set; }
 

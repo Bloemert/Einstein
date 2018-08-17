@@ -21,7 +21,7 @@ Remarks:
         <div class="tile is-vertical">
           <b-field>
             <b-checkbox id="userActive"
-                        v-model.lazzy="selected.active">
+                        :value="selected.active" @change.native="selected.active = $event.target.value">
             </b-checkbox>
           </b-field>
           <div>
@@ -34,7 +34,7 @@ Remarks:
         <div class="tile is-vertical">
           <b-field :type="fieldType($v.selected.login)">
             <b-input id="userLogin"
-                     v-model.trim="selected.login"
+                     :value="selected.login" @change.native="selected.login = $event.target.value" 
                      autocomplete="username"
                      @input="onInput($v.selected.login, 'login', $event)"
                      placeholder="New login">
@@ -52,7 +52,7 @@ Remarks:
         <div class="tile is-vertical">
           <b-field :type="fieldType($v.selected.firstname)">
             <b-input id="userFirstname"
-                     v-model.trim="selected.firstname"
+                     :value="selected.firstname" @change.native="selected.firstname = $event.target.value" 
                      autocomplete="first-name"
                      @input="onInput($v.selected.firstname, 'firstname', $event)"
                      placeholder="New firstname">
@@ -69,7 +69,7 @@ Remarks:
         <div class="tile is-vertical">
           <b-field :type="fieldType($v.selected.lastname)">
             <b-input id="userLastname"
-                     v-model.trim="selected.lastname"
+                     :value="selected.lastname" @change.native="selected.lastname = $event.target.value" 
                      autocomplete="family-name"
                      @input="onInput($v.selected.lastname, 'lastname', $event)"
                      placeholder="New lastname">
@@ -86,7 +86,7 @@ Remarks:
         <div class="tile is-vertical">
           <b-field :type="fieldType($v.selected.email)">
             <b-input id="userEmail"
-                     v-model.trim="selected.email"
+                     :value="selected.email" @change.native="selected.email = $event.target.value" 
                      autocomplete="email"
                      @input="onInput($v.selected.email, 'email', $event)"
                      placeholder="New email">
@@ -106,7 +106,7 @@ Remarks:
           <b-field :type="fieldType($v.selected.newPassword)">
             <b-input id="userPassword" type="password"
                      password-reveal
-                     v-model.trim="selected.newPassword"
+                     :value="selected.newPassword" @change.native="selected.newPassword = $event.target.value" 
                      @input="onInput($v.selected.newPassword, 'newPassword', $event)"
                      placeholder="New password"></b-input>
           </b-field>
@@ -122,7 +122,7 @@ Remarks:
           <b-field :type="fieldType($v.selected.confirmPassword)">
             <b-input id="userConfirmPassword" type="password"
                      password-reveal
-                     v-model.trim="selected.confirmPassword"
+                     :value="selected.confirmPassword" @change.native="selected.confirmPassword = $event.target.value" 
                      @input="onInput($v.selected.confirmPassword, 'confirmPassword', $event)"
                      placeholder="Confirm password">
             </b-input>
@@ -133,12 +133,12 @@ Remarks:
 
 
       <b-field label="Expire date" horizontal>
-        <b-datepicker v-model.lazzy="selected.expireDate"
+        <b-datepicker :value="selected.expireDate" @change.native="selected.expireDate = $event.target.value" 
                       placeholder="Type or select a date..."
                       icon="calendar"
                       :readonly="false">
         </b-datepicker>
-        <b-timepicker v-model.lazy="selected.expireDate"
+        <b-timepicker :value="selected.expireDate" @change.native="selected.expireDate = $event.target.value" 
                       placeholder="Type or select a time..."
                       icon="clock"
                       :readonly="false">
@@ -147,12 +147,12 @@ Remarks:
 
 
       <b-field label="Last login" horizontal>
-        <b-datepicker v-model.lazy="selected.lastLogin"
+        <b-datepicker :value="selected.lastLogin" @change.native="selected.lastLogin = $event.target.value" 
                       placeholder="Type or select a date..."
                       icon="calendar"
                       :readonly="true">
         </b-datepicker>
-        <b-timepicker v-model.lazy="selected.lastLogin"
+        <b-timepicker :value="selected.lastLogin" @change.native="selected.lastLogin = $event.target.value" 
                       placeholder="Type or select a time..."
                       icon="clock"
                       :readonly="true">
@@ -160,11 +160,11 @@ Remarks:
       </b-field>
 
       <b-field label="Good Logins" horizontal>
-        <b-input id="goodLogins" v-model.lazy="selected.goodLogins" type="number" :readonly="true"></b-input>
+        <b-input id="goodLogins" :value="selected.goodLogins" @change.native="selected.goodLogins = $event.target.value" type="number" :readonly="true"></b-input>
       </b-field>
 
       <b-field label="Failed attempts" horizontal>
-        <b-input id="failedAttempts" v-model.lazy="selected.failedAttempts" type="number" :readonly="true"></b-input>
+        <b-input id="failedAttempts" :value="selected.failedAttempts" @change.native="selected.failedAttempts = $event.target.value" type="number" :readonly="true"></b-input>
       </b-field>
 
     </form>
@@ -348,9 +348,11 @@ Remarks:
 </script>
 
 <style lang="scss">
-
+  @import '../../styles/site.scss';
+  
   .form-scrollable {
     height: calc(100vh - ( 360px ));
     overflow-y: scroll;
   }
+
 </style>

@@ -179,8 +179,10 @@ module.exports = (env) => {
 			new webpack.ProvidePlugin({
 				Vue: ['vue/dist/vue.esm.js', 'default'],
 				_assign: ['lodash', 'assign'],
+				_chain: ['lodash', 'chain'],
 				_cloneDeep: ['lodash', 'cloneDeep'],
 				_forEach: ['lodash', 'forEach'],
+				_includes: ['lodash', 'includes'],
 				_some: ['lodash', 'some'],
 				_find: ['lodash', 'find'],
 				_get: ['lodash', 'get'],

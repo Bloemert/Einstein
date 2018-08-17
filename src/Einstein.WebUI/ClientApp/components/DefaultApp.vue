@@ -8,7 +8,7 @@
     </div>
     <footer class="footer">
         <div class="content has-text-centered">
-            <a href="https://github.com/Bloemert/Einstein"><strong>Einstein - Tech Radar</strong></a> by <a href="https://www.bloemert.com/">Bloemert Team</a> and Community!
+            <a href="https://github.com/Bloemert/Einstein"><strong class="source-link">Einstein - Tech Radar</strong></a> by <a class="contrib-link" href="https://www.bloemert.com/">Bloemert Team</a> and Community!
         </div>
     </footer>
   </div>
@@ -35,6 +35,9 @@
 </script>
 
 <style lang="scss">
+  @import '../styles/site.scss';
+
+
   html, body {
     height: 100%;
     padding: 0;
@@ -50,4 +53,11 @@
     padding: 15px 15px 15px 15px;
   }
 
+  .source-link {
+    color: $primary;
+  }
+
+  .contrib-link {
+    color: $info;
+  }
 </style>

@@ -3,7 +3,7 @@ using System;
 
 namespace Bloemert.Data.Entity.Skills.Entity
 {
-	public class TechSpot : BaseEntity
+	public class Spot : BaseEntity
 	{
 		public int SpotterId { get; set; }
 
@@ -12,9 +12,9 @@ namespace Bloemert.Data.Entity.Skills.Entity
 
 		public string Name { get; set; }
 
-		public string Ring { get; set; }
+		public int RingId { get; set; }
 
-		public string Quadrant { get; set; }
+		public int SectorId { get; set; }
 
 		public bool IsNew { get; set; }
 

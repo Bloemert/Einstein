@@ -1,4 +1,5 @@
 ﻿using Bloemert.Data.Core;
+using Newtonsoft.Json;
 using System;
 
 namespace Bloemert.Data.Entity.Auth.Entity

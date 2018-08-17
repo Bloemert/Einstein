@@ -3,7 +3,7 @@
     <header>
       <div class="buttons is-centered">
         <div class="bbar">
-          <b-tooltip label="Save changes..." position="is-bottom"><button class="button bbar-left is-primary" @click="saveChanges()"><i class="far fa-hdd" /></button></b-tooltip>
+          <b-tooltip class="tooltip" label="Save changes..." position="is-bottom"><button class="button bbar-left is-primary" @click="saveChanges()"><i class="far fa-hdd" /></button></b-tooltip>
           <b-tooltip label="Refresh..." position="is-bottom"><button class="button bbar-middle is-primary" @click="refresh()"><i class="fas fa-sync-alt" /></button></b-tooltip>
           <b-tooltip label="Undo latest change..." position="is-bottom"><button class="button bbar-middle is-secondary" @click="undo()"><i class="fas fa-undo-alt" /></button></b-tooltip>
           <b-tooltip label="Redo latest change..." position="is-bottom"><button class="button bbar-middle is-secondary" @click="redo()"><i class="fas fa-redo-alt" /></button></b-tooltip>
@@ -138,7 +138,7 @@
         loadData: 'loadFromDB',
         addUser: 'addUser',
         removeUser: 'removeUser',
-        //saveData: 'saveUserChangesToDB'
+        saveData: 'saveUserChangesToDB'
       }),
 
       getUIRowBySeqno(seqno) {
@@ -182,24 +182,19 @@
       },
 
       removeRow() {
-        this.$dialog.confirm({
-          title: 'Remove user...',
-          message: 'User will be permanently removed after clicking on Save!',
-          onConfirm: () => {
-
-            this.removeUser(this.users[this.selectedSeqno]).then(() => {
-              this.refreshCSSClasses();
-            });
-          }
-        })
+        this.removeUser(this.users[this.selectedSeqno]).then(() => {
+          this.refreshCSSClasses();
+        });
       },
 
       saveChanges() {
-
+        this.saveData();
+        this.refreshCSSClasses();
       },
 
       refresh() {
         this.loadData();
+        this.refreshCSSClasses();
       },
 
       undo() {
@@ -216,17 +211,8 @@
           uicomponent.event.preventDefault();
         }
 
-        //if (this.users[this.selectedSeqno] && this.users[this.selectedSeqno].status.result != 'OK') {
-        //  this.$dialog.alert({
-        //    title: 'Notification',
-        //    message: 'Please leave the updated form in a valid state or click refresh to undo your changes!'
-        //  });
-        //} else
-        {
-          this.selectedSeqno = uicomponent.row.seqno;
-          this.refreshCSSClasses();
-        }
-
+        this.selectedSeqno = uicomponent.row.seqno;
+        this.refreshCSSClasses();
       },
 
       onPageChange: function (newPage) {
@@ -263,13 +249,11 @@
 
   }
 
-
-
-
 </script>
 
 
-<style type="text/scss">
+<style lang="scss">
+  @import '../../styles/site.scss';
 
   .table tr th:nth-child(1), td:nth-child(1) {
     width: 15%;
@@ -278,6 +262,14 @@
   .VuePagination {
     display: none;
   }
+
+  .pagination-link.is-current {
+    position: static !important;
+    background-color: $primary !important;
+    border-color: $primary !important;
+  }
+
+
 
   .table-body-scroll tbody {
     display: block;
@@ -292,8 +284,8 @@
   }
 
   .row-selected {
-    background-color: #8c67ef;
-    color: white;
+    background-color: $primary;
+    color: $primary-invert;
   }
 
   .row-added td:first-child {
@@ -316,19 +308,18 @@
 
 
   .bbar .button {
-    margin-bottom: 0px;
+    font-size: $size-small;
+    margin-bottom: 0 !important;
   }
 
   .bbar {
     display: flex;
     margin: 5px 0px 5px 0px;
     padding: 0px 0px;
-    border-radius: 7px;
-    box-shadow: 2px 2px 2px #aaaaaa;
   }
 
   .bbar-right {
-    font-size: 0.75rem;
+    font-size: $size-small;
     margin-left: 0px;
     margin-bottom: 0px;
     border-radius: 0px 7px 7px 0px;
@@ -336,16 +327,17 @@
 
   .bbar-middle {
     margin-bottom: 0px;
-    font-size: 0.75rem;
+    font-size: $size-small;
     margin-left: 0px;
     margin-right: 0px;
     border-radius: 0px;
   }
 
   .bbar-left {
-    font-size: 0.75rem;
+    font-size: $size-small;
     margin-bottom: 0px;
     margin-right: 0px;
     border-radius: 7px 0px 0px 7px;
   }
+
 </style>

@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Core;
+using Bloemert.Lib.Config;
 using Bloemert.Lib.WebAPI;
 using Bloemert.Lib.WebAPI.Json;
 using Nancy;
@@ -36,7 +37,8 @@ namespace Einstein.WebAPI.Core
 																									"Einstein",
 																									UserPromptBehaviour.Never));
 
-			pipelines.EnableCORS();
+			IAppConfig appConfig = container.Resolve<IAppConfig>();
+			pipelines.EnableCORS(appConfig);
 		}
 
 

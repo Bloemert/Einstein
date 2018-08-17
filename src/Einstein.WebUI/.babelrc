@@ -1,6 +1,12 @@
 {
+  "ignore": [
+      "node_modules/**/*"
+  ],
 	"presets": [
 		"vue"
 	],
-	"plugins": ["transform-object-rest-spread"]
+	"plugins": [
+    "transform-object-rest-spread",
+    "transform-runtime"
+   ]
 }

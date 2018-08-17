@@ -1,3 +1,5 @@
+require('./styles/site.scss');
+
 import babelPolyfill from 'babel-polyfill'
 
 import './js/icons.js';
@@ -6,7 +8,7 @@ import router from './router.js';
 import store from './store.js';
 
 import Buefy from 'buefy';
-import 'buefy/lib/buefy.css';
+
 import { ServerTable, ClientTable, Event } from 'vue-tables-2';
 
 import Vuelidate from 'vuelidate';

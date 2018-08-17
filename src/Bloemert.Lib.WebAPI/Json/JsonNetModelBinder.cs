@@ -17,11 +17,18 @@ namespace Bloemert.Lib.WebAPI.Json
 
 		public object Bind(NancyContext ctx, Type modelType, object instance, BindingConfig configuration, params string[] blackList)
 		{
-			JsonSerializer serializer = new CustomJsonSerializer();
+			try
+			{
+				JsonSerializer serializer = new CustomJsonSerializer();
 
-			StreamReader sr = new StreamReader(ctx.Request.Body);
+				StreamReader sr = new StreamReader(ctx.Request.Body);
 
-			return JsonConvert.DeserializeObject(sr.ReadToEnd(), modelType, Settings);
+				return JsonConvert.DeserializeObject(sr.ReadToEnd(), modelType, Settings);
+			}
+			catch ( Exception ex )
+			{
+				throw ex;
+			}
 		}
 
 		public bool CanBind(Type modelType)

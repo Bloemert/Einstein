@@ -87,15 +87,6 @@ const actions = {
 	},
 
 	removeUser(context, oldUser) {
-		//return HTTP.delete('/users/' + oldUser.id + '/delete.json')
-		//	.then(response => {
-		//		// JSON responses are automatically parsed.
-		//		context.commit('RemoveUser', oldUser);
-		//	})
-		//	.catch(e => {
-		//		alert(e);
-		//	});
-
 		context.commit('RemoveUser', oldUser);
 	},
 
@@ -134,34 +125,43 @@ const actions = {
 		let otherUser = _find(context.getters.getRows, function (o) { return o.seqno != context.getters.getSelectedSeqno && o.login == fieldValue });
 
 		return otherUser == undefined;
+	},
+
+	saveUserChangesToDB(context) {
+
+		_forEach(context.getters.getRows, function (item) {
+			if (item.status.removed && !item.status.added) {
+				// REMOVE
+				HTTP.delete('/users/' + item.id + '/delete.json')
+					.catch(e => {
+						alert(e);
+					})
+					.then(response => {
+						context.dispatch("loadFromDB");
+					});
+			}
+			else if (item.status.added && !item.status.removed) {
+				// ADD
+				HTTP.put('/users/' + item.id + '/save.json', { data: item })
+					.catch(e => {
+						alert(e);
+					})
+			.then(response => {
+				context.dispatch("loadFromDB");
+			});
+			}
+			else if (item.status.modified && !item.status.removed && !item.status.added) {
+				// UPDATE
+				HTTP.put('/users/' + item.id + '/save.json', { data: item })
+					.catch(e => {
+						alert(e);
+					})
+			.then(response => {
+				context.dispatch("loadFromDB");
+			});
+			}
+		})
 	}
-
-	//saveUserChangesToDB(context) {
-
-	//	// @Todo 1: Create batch list to send 1 : 1 to REST API!
-
-	//	_forEach(context.getters.usersData.data, function (item) {
-
-	//		// Note: empty addUsers ( action 'A' ) not send!
-	//		if (item.dirty) {
-	//			if (item.dirty == 'U') {
-	//				HTTP.put('/users/' + item.id + '/save.json', { data: item })
-	//					.then(() => {
-	//						context.dispatch('loadUsersFromDB');
-	//					})
-	//					.catch(e => {
-	//						alert('Error: ' + e)
-	//					});
-	//			}
-	//			else if (item.dirty == 'R') {
-	//				HTTP.delete('/users/' + item.id + '/delete.json')
-	//					.then(() => {
-	//						context.dispatch('loadUsersFromDB');
-	//					});
-	//			}
-	//		}
-	//	});
-	//}
 };
 
 

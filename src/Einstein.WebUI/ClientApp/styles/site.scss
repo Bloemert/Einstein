@@ -1,0 +1,32 @@
+﻿@charset "utf-8";
+
+/* Choose style from https://jenil.github.io/bulmaswatch/ */
+@import "~bulmaswatch/cerulean/bulmaswatch";
+
+
+/* style buefy checkboxes according to bulmaswatch choosen style */
+.b-checkbox.checkbox input[type=checkbox]:checked + .check {
+  background-color: $primary;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-color: $primary;
+}
+
+.b-checkbox.checkbox input[type=checkbox]:not(:checked) + .check {
+  border-color: $primary;
+}
+
+
+/* style buefy tooltips according to bulmaswatch choosen style */
+.tooltip.is-primary:after {
+  background-color: $primary;
+}
+
+
+
+@media (max-width: 767px) {
+    /* On small screens, the nav menu spans the full width of the screen. Leave a space for it. */
+    body {
+        padding-top: 50px;
+    }
+}

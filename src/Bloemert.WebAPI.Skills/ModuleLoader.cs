@@ -29,7 +29,9 @@ namespace Bloemert.WebAPI.Skills
 
 		private void RegisterMappingProfiles(ContainerBuilder builder)
 		{
-			builder.RegisterTwoWayMappingProfile<TechSpotMapperProfile, TechSpot, TechSpotModel>();
+			builder.RegisterTwoWayMappingProfile<SpotMapperProfile, Spot, SpotModel>();
+			builder.RegisterTwoWayMappingProfile<SectorMapperProfile, Sector, SectorModel>();
+			builder.RegisterTwoWayMappingProfile<RingMapperProfile, Ring, RingModel>();
 
 			builder.ConfigureAutoMapper();
 		}

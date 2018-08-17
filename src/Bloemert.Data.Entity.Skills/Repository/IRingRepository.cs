@@ -3,7 +3,7 @@ using Bloemert.Data.Entity.Skills.Entity;
 
 namespace Bloemert.Data.Entity.Skills.Repository
 {
-	public interface ITechSpotRepository : IRepository<TechSpot>
+	public interface IRingRepository : IRepository<Ring>
 	{
 	}
 }

@@ -1,6 +1,9 @@
 ﻿import Vuex from 'vuex';
 
 import modAdmin from './components/admin/store';
+import modSpots from './components/spots/store';
+import modSectors from './components/sectors/store';
+import modRings from './components/rings/store';
 
 import axios from 'axios';
 
@@ -95,11 +98,14 @@ const modCore = {
 
 
 const store = new Vuex.Store({
-	strict: true, // @ToDo: process.env.NODE_ENV !== 'production',
+	strict: process.env.NODE_ENV !== 'production',
 
 	modules: {
 		core: modCore,
-		admin: modAdmin
+		admin: modAdmin,
+		spots: modSpots,
+		sectors: modSectors,
+		rings: modRings,
 	}
 })
 

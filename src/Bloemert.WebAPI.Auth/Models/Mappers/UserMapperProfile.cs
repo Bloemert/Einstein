@@ -25,7 +25,8 @@ namespace Bloemert.WebAPI.Auth.Models.Mappers
 
 		protected override void ConfigureMapping(IMappingExpression<UserModel, User> map)
 		{
-			map.ForMember(dest => dest.PasswordData, opt => opt.MapFrom(source => Users.HashPassword(source.NewPassword)));
+			//map.ForMember(dest => dest.PasswordData, opt => opt.Condition((cSrc, cDest, value) => !String.IsNullOrEmpty(value)));
+			map.ForMember(dest => dest.PasswordData, opt => opt.MapFrom(source => !String.IsNullOrEmpty(source.NewPassword) ? Users.HashPassword(source.NewPassword) : null));
 		}
 
 		protected override void ConfigureMapping(IMappingExpression<User, UserModel> map)

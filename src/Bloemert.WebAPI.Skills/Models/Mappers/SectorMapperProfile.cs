@@ -9,14 +9,14 @@ using System.Text;
 
 namespace Bloemert.WebAPI.Skills.Models.Mappers
 {
-	public class TechSpotMapperProfile : TwoWayMappingProfile<TechSpot, TechSpotModel>
+	public class SectorMapperProfile : TwoWayMappingProfile<Sector, SectorModel>
 	{
-		protected override void ConfigureMapping(IMappingExpression<TechSpotModel, TechSpot> map)
+		protected override void ConfigureMapping(IMappingExpression<SectorModel, Sector> map)
 		{
 			//map.ForMember(dest => dest.PasswordData, opt => opt.MapFrom(source => Users.HashPassword(source.NewPassword)));
 		}
 
-		protected override void ConfigureMapping(IMappingExpression<TechSpot, TechSpotModel> map)
+		protected override void ConfigureMapping(IMappingExpression<Sector, SectorModel> map)
 		{
 			// Properties with matching names are mapped automatically.
 			//map.ForMember(dest => dest.NewPassword, opt => opt.Ignore());

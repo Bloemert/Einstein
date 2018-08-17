@@ -13,14 +13,14 @@ using System.Text.RegularExpressions;
 
 namespace Bloemert.Data.Entity.Skills.Repository.Implementation
 {
-	public class TechSpotRepository : BaseRepository<TechSpotRepository, TechSpot>, ITechSpotRepository
+	public class SectorRepository : BaseRepository<SectorRepository, Sector>, ISectorRepository
 	{
 
-		public override string TableName { get; set; } = @"TechSpots";
+		public override string TableName { get; set; } = @"Sectors";
 
 		public override Regex ExcludePropertyMatch { get; set; }
 
-		public TechSpotRepository(ICommonRepositoryDependencies crd)
+		public SectorRepository(ICommonRepositoryDependencies crd)
 			: base(crd)
 		{
 		}

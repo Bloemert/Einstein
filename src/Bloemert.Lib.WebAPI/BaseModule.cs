@@ -82,6 +82,13 @@ namespace Bloemert.Lib.WebAPI
 				return Negotiate
 								.WithModel(new ModelWrapper<bool> { Data = Repository.DeleteEntity((int)args.id) });
 			});
+
+			//Options("/*", args =>
+			//{
+			//	Response response = new Nancy.Response();
+
+			//	return response.WithStatusCode(HttpStatusCode.OK);
+			//});
 		}
 	}
 }

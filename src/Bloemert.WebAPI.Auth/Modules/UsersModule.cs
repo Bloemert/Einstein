@@ -26,7 +26,7 @@ namespace Bloemert.WebAPI.Auth.Modules
 				if ( this.Context.CurrentUser == null || !this.Context.CurrentUser.Identity.IsAuthenticated)
 				{ 
 					return Negotiate
-									.WithModel(new ModelWrapper<LoginModel> { Error = new AccessViolationException("Login failed!") })
+									.WithModel(new ModelWrapper<LoginModel> { Error = "Login failed!" })
 									.WithStatusCode(HttpStatusCode.Forbidden);
 				}
 

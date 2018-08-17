@@ -94,7 +94,9 @@
     <Build Include="10 Tables\Roles.sql" />
     <Build Include="10 Tables\Sessions.sql" />
     <Build Include="10 Tables\UserRoles.sql" />
-    <Build Include="10 Tables\TechSpots.sql" />
+    <Build Include="10 Tables\Spots.sql" />
+    <Build Include="10 Tables\Sectors.sql" />
+    <Build Include="10 Tables\Rings.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Einstein.Database.refactorlog" />

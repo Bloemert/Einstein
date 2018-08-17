@@ -4,6 +4,7 @@ using Bloemert.Data.Entity.Auth.Entity;
 using Bloemert.Data.Entity.Auth.Repository;
 using Bloemert.Lib.Common;
 using Bloemert.Lib.Config;
+using Newtonsoft.Json;
 using Serilog;
 using System;
 using System.Collections.Generic;
