@@ -2,14 +2,14 @@
   <section>
     Sectors overview with details...
 
-    <sectors-table>
-
-    </sectors-table>
+    <sectors-chart></sectors-chart>
+    <sectors-table></sectors-table>
   </section>
 </template>
 
 <script>
 
+  import SectorsChart from './sectors/SectorsChart.vue';
   import SectorsTable from './sectors/SectorsTable.vue';
 
   export default {
@@ -21,6 +21,7 @@
     },
 
     components: {
+      "sectors-chart": SectorsChart,
       "sectors-table": SectorsTable
     }
   }
