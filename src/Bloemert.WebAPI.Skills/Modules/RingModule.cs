@@ -10,9 +10,9 @@ namespace Bloemert.WebAPI.Skills.Modules
 	public class RingModule : BaseModule<RingModule, IRingRepository, Ring, RingModel>
 	{
 
-		public RingModule(IAppConfig appCfg, IRingRepository spotRepository, 
+		public RingModule(IAppConfig appCfg, IRingRepository ringRepository, 
 			ITwoWayMapper<Ring, RingModel> mapper)
-			: base(appCfg, spotRepository, mapper, "/rings")
+			: base(appCfg, ringRepository, mapper, "/skills/rings")
 		{
 
 		}

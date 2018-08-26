@@ -26,7 +26,7 @@ const getters = {
 	},
 
 	getSelectedUser: state => {
-		return state.rows[selectedSeqno];
+		return state.rows[state.selectedSeqno];
 	},
 
 	getSelectedSeqno: state => {

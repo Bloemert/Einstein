@@ -1,9 +1,19 @@
 ﻿import Vuex from 'vuex';
 
 import modAdmin from './components/admin/store';
-import modSpots from './components/spots/store';
-import modSectors from './components/sectors/store';
-import modRings from './components/rings/store';
+
+import modSectors from './components/skills/sectors/store';
+import modRings from './components/skills/rings/store';
+import modSpots from './components/skills/spots/store';
+
+import modSkills from './components/skills/skills/store';
+import modSkillTypes from './components/skills/skilltypes/store';
+import modSkillCategories from './components/skills/skillcategories/store';
+
+import modEmployees from './components/work/employees/store';
+import modEmployeeSkills from './components/work/employeeskills/store';
+
+
 
 import axios from 'axios';
 
@@ -102,10 +112,18 @@ const store = new Vuex.Store({
 
 	modules: {
 		core: modCore,
+
 		admin: modAdmin,
+
 		spots: modSpots,
 		sectors: modSectors,
 		rings: modRings,
+		skills: modSkills,
+		skilltypes: modSkillTypes,
+		skillcategories: modSkillCategories,
+
+		employees: modEmployees,
+		employeeskills: modEmployeeSkills
 	}
 })
 

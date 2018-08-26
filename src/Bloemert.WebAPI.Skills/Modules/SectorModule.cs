@@ -10,9 +10,9 @@ namespace Bloemert.WebAPI.Skills.Modules
 	public class SectorModule : BaseModule<SectorModule, ISectorRepository, Sector, SectorModel>
 	{
 
-		public SectorModule(IAppConfig appCfg, ISectorRepository spotRepository, 
+		public SectorModule(IAppConfig appCfg, ISectorRepository sectorRepository, 
 			ITwoWayMapper<Sector, SectorModel> mapper)
-			: base(appCfg, spotRepository, mapper, "/sectors")
+			: base(appCfg, sectorRepository, mapper, "/skills/sectors")
 		{
 
 		}

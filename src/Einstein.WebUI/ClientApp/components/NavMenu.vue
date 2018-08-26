@@ -12,7 +12,7 @@
               Einstein
             </p>
             <p class="subtitle is-tiny">
-              Tech Radar
+              Skill Radar
             </p>
           </div>
         </div>
@@ -71,13 +71,10 @@
           <router-link class="nav-item is-tab" to="/admin">Admin</router-link>
         </li>
         <li v-if="userId > 0">
-          <router-link class="nav-item is-tab" to="/spots">Spots</router-link>
+          <router-link class="nav-item is-tab" to="/work">Work</router-link>
         </li>
         <li v-if="userId > 0">
-          <router-link class="nav-item is-tab" to="/sectors">Sectors</router-link>
-        </li>
-        <li v-if="userId > 0">
-          <router-link class="nav-item is-tab" to="/rings">Rings</router-link>
+          <router-link class="nav-item is-tab" to="/skills">Skills</router-link>
         </li>
         <li>
           <router-link class="nav-item is-tab" to="/about">About</router-link>

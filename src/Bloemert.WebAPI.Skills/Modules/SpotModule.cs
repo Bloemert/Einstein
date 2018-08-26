@@ -12,7 +12,7 @@ namespace Bloemert.WebAPI.Skills.Modules
 
 		public SpotModule(IAppConfig appCfg, ISpotRepository spotRepository, 
 			ITwoWayMapper<Spot, SpotModel> mapper)
-			: base(appCfg, spotRepository, mapper, "/spots")
+			: base(appCfg, spotRepository, mapper, "/skills/spots")
 		{
 
 		}

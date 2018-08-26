@@ -33,6 +33,10 @@ namespace Bloemert.WebAPI.Skills
 			builder.RegisterTwoWayMappingProfile<SectorMapperProfile, Sector, SectorModel>();
 			builder.RegisterTwoWayMappingProfile<RingMapperProfile, Ring, RingModel>();
 
+			builder.RegisterTwoWayMappingProfile<SkillMapperProfile, Skill, SkillModel>();
+			builder.RegisterTwoWayMappingProfile<SkillTypeMapperProfile, SkillType, SkillTypeModel>();
+			builder.RegisterTwoWayMappingProfile<SkillCategoryMapperProfile, SkillCategory, SkillCategoryModel>();
+
 			builder.ConfigureAutoMapper();
 		}
 

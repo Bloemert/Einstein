@@ -10,164 +10,164 @@ Remarks:
 <template>
   <section class="form-scrollable">
 
-    <form @submit.prevent="">
-      <div v-if="isFormDirty()">
-        <b-tag :type="!$v.$anyError ? 'is-primary block' : 'is-danger block'">
-          Status: {{ selected.status.action }} => {{ selected.status.result }}
-        </b-tag>
+    <div v-if="!selected">
+      No item selected! <br />
+      Select or create one first!
+    </div>
+    <div v-else>
+      <form @submit.prevent="">
+        <b-field label="Active" horizontal>
+          <div class="tile is-vertical">
+            <b-field>
+              <b-checkbox id="userActive"
+                          :value="selected.active" @change.native="selected.active = $event.target.value">
+              </b-checkbox>
+            </b-field>
+            <div>
+              <span class="help is-warning">Most times you need this checked!</span>
+            </div>
+          </div>
+        </b-field>
+
+        <b-field label="Login" horizontal>
+          <div class="tile is-vertical">
+            <b-field :type="fieldType($v.selected.login)">
+              <b-input id="userLogin"
+                       :value="selected.login" @change.native="selected.login = $event.target.value"
+                       autocomplete="username"
+                       @input="onInput($v.selected.login, 'login', $event)"
+                       placeholder="New login">
+              </b-input>
+            </b-field>
+            <div>
+              <span class="help is-danger" v-if="isFormDirty() && !$v.selected.login.required">Login is required.</span>
+              <span class="help is-danger" v-if="isFormDirty() && !$v.selected.login.minLength">Login must have at least {{ $v.selected.login.$params.minLength.min }} letters.</span>
+              <span class="help is-danger" v-if="isFormDirty() && !$v.selected.login.isUnique">Login is already taken.</span>
+            </div>
+          </div>
+        </b-field>
+
+        <b-field label="Firstname" horizontal>
+          <div class="tile is-vertical">
+            <b-field :type="fieldType($v.selected.firstname)">
+              <b-input id="userFirstname"
+                       :value="selected.firstname" @change.native="selected.firstname = $event.target.value"
+                       autocomplete="first-name"
+                       @input="onInput($v.selected.firstname, 'firstname', $event)"
+                       placeholder="New firstname">
+              </b-input>
+            </b-field>
+            <div>
+              <span class="help is-danger" v-if="isFormDirty() && !$v.selected.firstname.required">Firstname is required.</span>
+              <span class="help is-danger" v-if="isFormDirty() && !$v.selected.firstname.minLength">Firstname must have at least {{ $v.selected.firstname.$params.minLength.min }} letters.</span>
+            </div>
+          </div>
+        </b-field>
+
+        <b-field label="Lastname" horizontal>
+          <div class="tile is-vertical">
+            <b-field :type="fieldType($v.selected.lastname)">
+              <b-input id="userLastname"
+                       :value="selected.lastname" @change.native="selected.lastname = $event.target.value"
+                       autocomplete="family-name"
+                       @input="onInput($v.selected.lastname, 'lastname', $event)"
+                       placeholder="New lastname">
+              </b-input>
+            </b-field>
+            <div>
+              <span class="help is-danger" v-if="isFormDirty() && !$v.selected.lastname.required">Lastname is required.</span>
+              <span class="help is-danger" v-if="isFormDirty() && !$v.selected.lastname.minLength">Lastname must have at least {{ $v.selected.lastname.$params.minLength.min }} letters.</span>
+            </div>
+          </div>
+        </b-field>
+
+        <b-field label="Email" horizontal>
+          <div class="tile is-vertical">
+            <b-field :type="fieldType($v.selected.email)">
+              <b-input id="userEmail"
+                       :value="selected.email" @change.native="selected.email = $event.target.value"
+                       autocomplete="email"
+                       @input="onInput($v.selected.email, 'email', $event)"
+                       placeholder="New email">
+              </b-input>
+            </b-field>
+            <div>
+              <span class="help is-danger" v-if="isFormDirty() && !$v.selected.email.required">Email is required.</span>
+              <span class="help is-danger" v-if="isFormDirty() && !$v.selected.email.email">Email must be valid!</span>
+            </div>
+          </div>
+        </b-field>
+
+
+
+        <b-field label="Password" horizontal>
+          <div class="tile is-vertical">
+            <b-field :type="fieldType($v.selected.newPassword)">
+              <b-input id="userPassword" type="password"
+                       password-reveal
+                       :value="selected.newPassword" @change.native="selected.newPassword = $event.target.value"
+                       @input="onInput($v.selected.newPassword, 'newPassword', $event)"
+                       placeholder="New password"></b-input>
+            </b-field>
+            <div>
+              <span class="help is-danger" v-if="isFormDirty() && !$v.selected.newPassword.required">Password is required.</span>
+              <span class="help is-danger" v-if="isFormDirty() && !$v.selected.newPassword.minLength">Password must have at least {{ $v.selected.newPassword.$params.minLength.min }} letters.</span>
+            </div>
+          </div>
+        </b-field>
+
+        <b-field label="Confirm" horizontal>
+          <div class="tile is-vertical">
+            <b-field :type="fieldType($v.selected.confirmPassword)">
+              <b-input id="userConfirmPassword" type="password"
+                       password-reveal
+                       :value="selected.confirmPassword" @change.native="selected.confirmPassword = $event.target.value"
+                       @input="onInput($v.selected.confirmPassword, 'confirmPassword', $event)"
+                       placeholder="Confirm password">
+              </b-input>
+            </b-field>
+            <span class="help is-danger" v-if="isFormDirty() && !$v.selected.confirmPassword.sameAsPassword">Passwords must be identical.</span>
+          </div>
+        </b-field>
+
+
+        <b-field label="Expire date" horizontal>
+          <b-datepicker :value="selected.expireDate" @change.native="selected.expireDate = $event.target.value"
+                        placeholder="Type or select a date..."
+                        icon="calendar"
+                        :readonly="false">
+          </b-datepicker>
+          <b-timepicker :value="selected.expireDate" @change.native="selected.expireDate = $event.target.value"
+                        placeholder="Type or select a time..."
+                        icon="clock"
+                        :readonly="false">
+          </b-timepicker>
+        </b-field>
+
+
+        <b-field label="Last login" horizontal>
+          <b-datepicker :value="selected.lastLogin" @change.native="selected.lastLogin = $event.target.value"
+                        placeholder="Type or select a date..."
+                        icon="calendar"
+                        :readonly="true">
+          </b-datepicker>
+          <b-timepicker :value="selected.lastLogin" @change.native="selected.lastLogin = $event.target.value"
+                        placeholder="Type or select a time..."
+                        icon="clock"
+                        :readonly="true">
+          </b-timepicker>
+        </b-field>
+
+        <b-field label="Good Logins" horizontal>
+          <b-input id="goodLogins" :value="selected.goodLogins" @change.native="selected.goodLogins = $event.target.value" type="number" :readonly="true"></b-input>
+        </b-field>
+
+        <b-field label="Failed attempts" horizontal>
+          <b-input id="failedAttempts" :value="selected.failedAttempts" @change.native="selected.failedAttempts = $event.target.value" type="number" :readonly="true"></b-input>
+        </b-field>
+
+      </form>
       </div>
-
-      <b-field label="Active" horizontal>
-        <div class="tile is-vertical">
-          <b-field>
-            <b-checkbox id="userActive"
-                        :value="selected.active" @change.native="selected.active = $event.target.value">
-            </b-checkbox>
-          </b-field>
-          <div>
-            <span class="help is-warning">Most times you need this checked!</span>
-          </div>
-        </div>
-      </b-field>
-
-      <b-field label="Login" horizontal>
-        <div class="tile is-vertical">
-          <b-field :type="fieldType($v.selected.login)">
-            <b-input id="userLogin"
-                     :value="selected.login" @change.native="selected.login = $event.target.value" 
-                     autocomplete="username"
-                     @input="onInput($v.selected.login, 'login', $event)"
-                     placeholder="New login">
-            </b-input>
-          </b-field>
-          <div>
-            <span class="help is-danger" v-if="isFormDirty() && !$v.selected.login.required">Login is required.</span>
-            <span class="help is-danger" v-if="isFormDirty() && !$v.selected.login.minLength">Login must have at least {{ $v.selected.login.$params.minLength.min }} letters.</span>
-            <span class="help is-danger" v-if="isFormDirty() && !$v.selected.login.isUnique">Login is already taken.</span>
-          </div>
-        </div>
-      </b-field>
-
-      <b-field label="Firstname" horizontal>
-        <div class="tile is-vertical">
-          <b-field :type="fieldType($v.selected.firstname)">
-            <b-input id="userFirstname"
-                     :value="selected.firstname" @change.native="selected.firstname = $event.target.value" 
-                     autocomplete="first-name"
-                     @input="onInput($v.selected.firstname, 'firstname', $event)"
-                     placeholder="New firstname">
-            </b-input>
-          </b-field>
-          <div>
-            <span class="help is-danger" v-if="isFormDirty() && !$v.selected.firstname.required">Firstname is required.</span>
-            <span class="help is-danger" v-if="isFormDirty() && !$v.selected.firstname.minLength">Firstname must have at least {{ $v.selected.firstname.$params.minLength.min }} letters.</span>
-          </div>
-        </div>
-      </b-field>
-
-      <b-field label="Lastname" horizontal>
-        <div class="tile is-vertical">
-          <b-field :type="fieldType($v.selected.lastname)">
-            <b-input id="userLastname"
-                     :value="selected.lastname" @change.native="selected.lastname = $event.target.value" 
-                     autocomplete="family-name"
-                     @input="onInput($v.selected.lastname, 'lastname', $event)"
-                     placeholder="New lastname">
-            </b-input>
-          </b-field>
-          <div>
-            <span class="help is-danger" v-if="isFormDirty() && !$v.selected.lastname.required">Lastname is required.</span>
-            <span class="help is-danger" v-if="isFormDirty() && !$v.selected.lastname.minLength">Lastname must have at least {{ $v.selected.lastname.$params.minLength.min }} letters.</span>
-          </div>
-        </div>
-      </b-field>
-
-      <b-field label="Email" horizontal>
-        <div class="tile is-vertical">
-          <b-field :type="fieldType($v.selected.email)">
-            <b-input id="userEmail"
-                     :value="selected.email" @change.native="selected.email = $event.target.value" 
-                     autocomplete="email"
-                     @input="onInput($v.selected.email, 'email', $event)"
-                     placeholder="New email">
-            </b-input>
-          </b-field>
-          <div>
-            <span class="help is-danger" v-if="isFormDirty() && !$v.selected.email.required">Email is required.</span>
-            <span class="help is-danger" v-if="isFormDirty() && !$v.selected.email.email">Email must be valid!</span>
-          </div>
-        </div>
-      </b-field>
-
-
-
-      <b-field label="Password" horizontal>
-        <div class="tile is-vertical">
-          <b-field :type="fieldType($v.selected.newPassword)">
-            <b-input id="userPassword" type="password"
-                     password-reveal
-                     :value="selected.newPassword" @change.native="selected.newPassword = $event.target.value" 
-                     @input="onInput($v.selected.newPassword, 'newPassword', $event)"
-                     placeholder="New password"></b-input>
-          </b-field>
-          <div>
-            <span class="help is-danger" v-if="isFormDirty() && !$v.selected.newPassword.required">Password is required.</span>
-            <span class="help is-danger" v-if="isFormDirty() && !$v.selected.newPassword.minLength">Password must have at least {{ $v.selected.newPassword.$params.minLength.min }} letters.</span>
-          </div>
-        </div>
-      </b-field>
-
-      <b-field label="Confirm" horizontal>
-        <div class="tile is-vertical">
-          <b-field :type="fieldType($v.selected.confirmPassword)">
-            <b-input id="userConfirmPassword" type="password"
-                     password-reveal
-                     :value="selected.confirmPassword" @change.native="selected.confirmPassword = $event.target.value" 
-                     @input="onInput($v.selected.confirmPassword, 'confirmPassword', $event)"
-                     placeholder="Confirm password">
-            </b-input>
-          </b-field>
-          <span class="help is-danger" v-if="isFormDirty() && !$v.selected.confirmPassword.sameAsPassword">Passwords must be identical.</span>
-        </div>
-      </b-field>
-
-
-      <b-field label="Expire date" horizontal>
-        <b-datepicker :value="selected.expireDate" @change.native="selected.expireDate = $event.target.value" 
-                      placeholder="Type or select a date..."
-                      icon="calendar"
-                      :readonly="false">
-        </b-datepicker>
-        <b-timepicker :value="selected.expireDate" @change.native="selected.expireDate = $event.target.value" 
-                      placeholder="Type or select a time..."
-                      icon="clock"
-                      :readonly="false">
-        </b-timepicker>
-      </b-field>
-
-
-      <b-field label="Last login" horizontal>
-        <b-datepicker :value="selected.lastLogin" @change.native="selected.lastLogin = $event.target.value" 
-                      placeholder="Type or select a date..."
-                      icon="calendar"
-                      :readonly="true">
-        </b-datepicker>
-        <b-timepicker :value="selected.lastLogin" @change.native="selected.lastLogin = $event.target.value" 
-                      placeholder="Type or select a time..."
-                      icon="clock"
-                      :readonly="true">
-        </b-timepicker>
-      </b-field>
-
-      <b-field label="Good Logins" horizontal>
-        <b-input id="goodLogins" :value="selected.goodLogins" @change.native="selected.goodLogins = $event.target.value" type="number" :readonly="true"></b-input>
-      </b-field>
-
-      <b-field label="Failed attempts" horizontal>
-        <b-input id="failedAttempts" :value="selected.failedAttempts" @change.native="selected.failedAttempts = $event.target.value" type="number" :readonly="true"></b-input>
-      </b-field>
-
-    </form>
 
   </section>
 
@@ -179,8 +179,6 @@ Remarks:
   import { mapUsersActions, mapUsersFields, mapUsersMultiRowFields } from './store/users';
 
   import { required, requiredIf, email, sameAs, minLength } from 'vuelidate/lib/validators';
-
-  const touchMap = new WeakMap();
 
   export default {
 
@@ -201,14 +199,6 @@ Remarks:
         return this.$v.form.$anyDirty || this.$v.passwordsForm.$anyDirty;
       },
 
-      delayTouch($v) {
-        $v.$reset()
-        if (touchMap.has($v)) {
-          clearTimeout(touchMap.get($v))
-        }
-        touchMap.set($v, setTimeout($v.$touch, 1000))
-      },
-
       storeValidFieldData(fieldValidator, fieldName, fieldValue) {
           if (!fieldValidator.$anyError) {
             if (this.selected[fieldName] === fieldValue) {
@@ -221,15 +211,9 @@ Remarks:
       },
 
       onInput(fieldValidator, fieldName, fieldValue) {
-        //this.delayTouch(fieldValidator);
         if (!this.selectedSeqnoChanged) {
           fieldValidator.$touch();
         }
-      },
-
-      onBlur(fieldValidator, fieldName, fieldValue) {
-        //storeValidFieldData(fieldValidator, fieldName, fieldValue)
-
       },
 
       fieldType(v) {
@@ -254,7 +238,6 @@ Remarks:
 
 
     watch: {
-      // whenever question changes, this function will run
       selectedSeqno: function (newSeqno, oldSeqno) {
         if (newSeqno != oldSeqno) {
           this.selectedSeqnoChanged = true;

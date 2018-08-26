@@ -9743,6 +9743,14 @@
       "resolved": "https://registry.npmjs.org/vue/-/vue-2.5.16.tgz",
       "integrity": "sha512-/ffmsiVuPC8PsWcFkZngdpas19ABm5mh2wA7iDqcltyCTwlgZjHGeJYOXkBMo422iPwIcviOtrTCUpSfXmToLQ=="
     },
+    "vue-datepicker-local": {
+      "version": "1.0.18",
+      "resolved": "https://registry.npmjs.org/vue-datepicker-local/-/vue-datepicker-local-1.0.18.tgz",
+      "integrity": "sha512-o7wjmOfwu62EEOus+BwVP2nmcOyMCR8IU2qPxEPHPjBwmcL4/c1XQrKdtzriL5eGrw8hGeggrQto8/Tk9Wqwsg==",
+      "requires": {
+        "vue": "^2.5.15"
+      }
+    },
     "vue-hot-reload-api": {
       "version": "2.3.0",
       "resolved": "https://registry.npmjs.org/vue-hot-reload-api/-/vue-hot-reload-api-2.3.0.tgz",

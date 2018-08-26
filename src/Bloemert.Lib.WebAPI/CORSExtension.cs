@@ -31,7 +31,7 @@ namespace Bloemert.Lib.WebAPI
 					{
 						// handle CORS preflight request
 						ctx.Response.Headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, PATCH, OPTIONS";
-						ctx.Response.Headers["Access-Control-Expose-Headers"] = "X-Auth-Token, Authorization, Access-Control-Allow-Origin, Access-Control-Allow-Credentials";
+						ctx.Response.Headers["Access-Control-Expose-Headers"] = "X-Auth-Token, Authorization, Access-Control-Allow-Origin, Access-Control-Allow-Credentials, Content-Type";
 						/*
 						if (ctx.Request.Headers.Keys.Contains("Access-Control-Request-Headers"))
 						{

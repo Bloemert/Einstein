@@ -62,8 +62,16 @@ namespace Bloemert.Lib.WebAPI
 
 			Get("/list", args =>
 			{
-				return Negotiate
+				try
+				{
+					return Negotiate
 								.WithModel(new ModelWrapper<IList<M>> { Data = (IList<M>)Mapper.Map(Repository.ListEntity()) });
+				}
+				catch ( Exception ex )
+				{
+					return Negotiate
+								.WithModel(new ModelWrapper<IList<M>> { Error = new ModelWrapperError { Message = ex.Message, Details = ex.StackTrace } });
+				}
 			});
 
 
@@ -83,12 +91,6 @@ namespace Bloemert.Lib.WebAPI
 								.WithModel(new ModelWrapper<bool> { Data = Repository.DeleteEntity((int)args.id) });
 			});
 
-			//Options("/*", args =>
-			//{
-			//	Response response = new Nancy.Response();
-
-			//	return response.WithStatusCode(HttpStatusCode.OK);
-			//});
 		}
 	}
 }

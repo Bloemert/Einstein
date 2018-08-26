@@ -8,7 +8,7 @@
     </div>
     <footer class="footer">
         <div class="content has-text-centered">
-            <a href="https://github.com/Bloemert/Einstein"><strong class="source-link">Einstein - Tech Radar</strong></a> by <a class="contrib-link" href="https://www.bloemert.com/">Bloemert Team</a> and Community!
+            <a href="https://github.com/Bloemert/Einstein"><strong class="source-link">Einstein - Skill Radar</strong></a> by <a class="contrib-link" href="https://www.bloemert.com/">Bloemert Team</a> and Community!
         </div>
     </footer>
   </div>

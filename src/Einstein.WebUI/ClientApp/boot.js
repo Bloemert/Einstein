@@ -1,4 +1,4 @@
-require('./styles/site.scss');
+//require('./styles/site.scss');
 
 import babelPolyfill from 'babel-polyfill'
 
@@ -22,7 +22,6 @@ Vue.use(Buefy, {
 });
 Vue.use(Vuelidate);
 Vue.use(ClientTable, { options: {}, useVuex: false, theme: 'bulma', template: 'default'});
-
 
 
 // 4. Create and mount the root instance.

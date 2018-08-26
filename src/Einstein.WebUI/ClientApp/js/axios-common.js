@@ -7,7 +7,7 @@ const HTTP = axios.create({
 	baseURL: appSettings.baseUrl,
 	withCredentials: true,
 	crossDomain: true
-})
+});
 
 HTTP.interceptors.request.use(function (config) {
 	// Do something before request is sent
@@ -16,7 +16,7 @@ HTTP.interceptors.request.use(function (config) {
 	config.auth = {
 		username: user.name,
 		password: user.password
-	}
+	};
 
 	return config;
 }, function (error) {

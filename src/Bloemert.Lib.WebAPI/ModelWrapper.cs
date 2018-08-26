@@ -11,10 +11,19 @@ namespace Bloemert.Lib.WebAPI
 	{
 		public DT Data { get; set; }
 
-		public string Error { get; set; }
+		public ModelWrapperError Error { get; set; }
 
 		public User ActiveUser { get; set; }
 
 		public string tag { get; set; }
 	}
+
+
+	[Serializable]
+	public class ModelWrapperError
+	{
+		public string Message { get; set; }
+		public string Details { get; set; }
+	}
+
 }
