@@ -61,7 +61,11 @@ import {
 	faUndoAlt,
 	faRedoAlt,
 	faPlusSquare,
-	faMinusSquare
+	faMinusSquare,
+	faUserAstronaut,
+	faInfoCircle,
+	faPlusCircle,
+	faMinusCircle
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -70,7 +74,11 @@ library.add(
 	faUndoAlt,
 	faRedoAlt,
 	faPlusSquare,
-	faMinusSquare
+	faMinusSquare,
+	faUserAstronaut,
+	faInfoCircle,
+	faPlusCircle,
+	faMinusCircle
 );
 
 // Kicks off the process of finding <i> tags and replacing with <svg>

@@ -1,67 +1,6 @@
 <template>
   <section>
-    <div class="columns">
-      <!-- Left side -->
-      <div class="column is-4">
-        <div class="columns">
-          <div class="column is-3">
-            <i class="fas fa-universal-access fa-4x app-logo" />
-          </div>
-          <div class="column is-9">
-            <p class="title">
-              Einstein
-            </p>
-            <p class="subtitle is-tiny">
-              Skill Radar
-            </p>
-          </div>
-        </div>
-      </div>
 
-      <!-- Center -->
-      <div class="column  is-4">
-        <b-field style="margin-top:15px;">
-          <b-input class="search"
-                   placeholder="Search..."
-                   type="search"
-                   icon-pack="fas"
-                   icon="search">
-          </b-input>
-        </b-field>
-      </div>
-
-
-      <!-- Right side -->
-      <div class="column is-4">
-        <b-dropdown class="is-pulled-right" style="margin-top:15px;">
-          <a class="navbar-item" slot="trigger">
-            <div class="columns">
-              <div class="column">
-                <i class="fas fa-user-circle fa-2x"/>
-              </div>
-              <div class="column">
-                <i class="fas fa-caret-down"/>
-              </div>
-            </div>
-          </a>
-
-          <b-dropdown-item custom>
-            {{ userName }} <span v-if="userId > 0">({{ userId }})</span>
-          </b-dropdown-item>
-          <hr class="dropdown-divider">
-          <b-dropdown-item v-if="userId <= 0" value="Login">
-            <router-link to="/login">
-              <b-icon pack="fas" icon="sign-in-alt" /> Login
-            </router-link>
-          </b-dropdown-item>
-          <b-dropdown-item v-if="userId > 0" value="Logout">
-            <router-link to="/logout">
-              <b-icon pack="fas" icon="sign-out-alt" /> Logout
-            </router-link>
-          </b-dropdown-item>
-        </b-dropdown>
-      </div>
-    </div>
     <nav class="tabs">
       <ul>
         <li>
@@ -92,7 +31,7 @@
     data() {
       return {
         isOpen: true
-      }
+      };
     },
     computed: {
 
@@ -148,11 +87,6 @@
     font-weight: bold;
     background-color: $primary;
     color: $primary-invert;
-  }
-
-  .app-logo {
-    color: $primary;
-    background-color: $primary-invert;
   }
 
   a.navbar-item div div i {

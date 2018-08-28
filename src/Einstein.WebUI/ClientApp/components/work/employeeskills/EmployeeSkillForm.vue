@@ -46,7 +46,6 @@ Remarks:
             </b-field>
             <div>
               <span class="help is-danger" v-if="isFormDirty() && !$v.selected.description.required">Description is required.</span>
-              <span class="help is-danger" v-if="isFormDirty() && !$v.selected.description.email">Description must be valid!</span>
             </div>
           </div>
         </b-field>

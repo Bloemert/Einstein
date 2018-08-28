@@ -57,7 +57,7 @@ const router = new VueRouter({
 			},
 			children: [
 				{ path: 'employees', name: 'Employees', components: { workView: Employees } },
-				{ path: 'skills', name: 'EmployeeSkills', components: { workView: EmployeeSkills } }
+				{ path: 'employeeskills', name: 'EmployeeSkills', components: { workView: EmployeeSkills } }
 			]
 		},
 

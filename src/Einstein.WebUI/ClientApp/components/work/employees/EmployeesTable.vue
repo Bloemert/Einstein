@@ -28,7 +28,7 @@
             <b-input type="search" class="form-control table-column-filter" v-model="filterId" @input="searchByField('id', $event)" placeholder="Filter by Id"></b-input>
           </div>
           <div slot="filter__employeeNumber">
-            <b-input type="search" class="form-control table-column-filter" v-model="employeeNumber" @input="searchByField('employeeNumber', $event)" placeholder="Filter by Number"></b-input>
+            <b-input type="search" class="form-control table-column-filter" v-model="filterNumber" @input="searchByField('employeeNumber', $event)" placeholder="Filter by Number"></b-input>
           </div>
           <div slot="filter__lastname">
             <b-input type="search" class="form-control table-column-filter" v-model="filterLastname" @input="searchByField('lastname', $event)" placeholder="Filter by Lastname"></b-input>
@@ -124,7 +124,7 @@
         },
 
         filterId: null,
-        filterEmployeeNumber: null,
+        filterNumber: null,
         filterLastname: null,
         filterFirstname: null,
 

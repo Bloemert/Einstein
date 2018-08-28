@@ -5,9 +5,6 @@
         <li>
           <router-link class="nav-item is-tab" to="/work/employees">Employees</router-link>
         </li>
-        <li>
-          <router-link class="nav-item is-tab" to="/work/employeeskills">Employee Skills</router-link>
-        </li>
       </ul>
     </nav>
 
