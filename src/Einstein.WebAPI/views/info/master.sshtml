@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Einstein RestAPI</title>
+
+    <style type="text/css">
+      h1   {color: blue;}
+
+		  thead.tr {background-color: powderblue;border-width: 2px;border-style:solid;border-color:white;}
+
+			tbody.tr {background-color: lightblue;border-width: 2px;border-style:solid;border-color:white;}
+    </style>
+</head>
+
+<body>
+  <div>
+    @Section['Content'];
+  </div>
+
+  <script>
+			@Section['Scripts'];
+  </script>
+
+</body>
+
+</html>

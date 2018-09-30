@@ -19,13 +19,41 @@ namespace Einstein.WebAPI
 
 		public Program()
 		{
-			// Get appsettings.json config info
-			string userEnvConfigFile = $"{ Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}/Einstein.WebAPI/appsettings.{ Environment.GetEnvironmentVariable("Einstein.WebAPI.EnvironmentName")}.json";
+			Console.WriteLine("Starting Einstein.RestAPI...");
 
-			Config =  new ConfigurationBuilder()
-				.AddJsonFile("appsettings.json")
-				.AddJsonFile(userEnvConfigFile, optional: true)
-				.Build();
+			// Get appsettings.json config info
+			if (!File.Exists("appsettings.json"))
+			{
+				Console.WriteLine("[Error] No appsettings.json configfile found!");
+				return;
+			}
+
+			string envName = Environment.GetEnvironmentVariable("Einstein.WebAPI.EnvironmentName");
+			string userEnvConfigFile = null;
+			if (string.IsNullOrEmpty(envName))
+			{
+				Console.WriteLine("[Info] Environment variable 'Einstein.WebAPI.EnvironmentName' is not set so only using appsettings.json in current directory!");
+			}
+			else
+			{
+				userEnvConfigFile = $"{ Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}/Einstein.WebAPI/appsettings.{ envName }.json";
+			}
+
+			if ( !String.IsNullOrEmpty(userEnvConfigFile) && File.Exists(userEnvConfigFile) )
+			{
+				Console.WriteLine($"[Info] Extra settings loading from '{userEnvConfigFile}'!");
+				Config = new ConfigurationBuilder()
+					.AddJsonFile("appsettings.json")
+					.AddJsonFile(userEnvConfigFile, optional: true)
+					.Build();
+			}
+			else
+			{
+				Console.WriteLine("[Warning] No (optional) configfile found at " + userEnvConfigFile);
+				Config = new ConfigurationBuilder()
+					.AddJsonFile("appsettings.json")
+					.Build();
+			}
 
 			AppConfig = new AppConfig(Config);
 
@@ -41,15 +69,14 @@ namespace Einstein.WebAPI
 				.As<IAppConfig>()
 				.SingleInstance();
 
-
 			// Start Nancy WebAPI using Kestrel as Webserver
 			var host = new WebHostBuilder()
-					.UseContentRoot(AppConfig.GetValue("ContentRoot"))
-					.UseWebRoot(AppConfig.GetValue("WebRoot"))
 					.UseKestrel()
-					.UseStartup<Startup>()
+					.UseContentRoot(AppConfig.GetValue("ContentRoot"))
+					//.UseWebRoot(AppConfig.GetValue("WebRoot"))
 					.UseUrls(AppConfig.GetValues("URLs").Values.ToArray())
 					.UseEnvironment(AppConfig.GetValue("Environment"))
+					.UseStartup<Startup>()
 					.Build();
 
 			host.Run();

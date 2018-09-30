@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -40,9 +39,6 @@ namespace Einstein.WebUI
 
 			if (env.IsDevelopment())
 			{
-
-				TelemetryConfiguration.Active.DisableTelemetry = true;
-
 				app.UseDeveloperExceptionPage();
 
 				app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions

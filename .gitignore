@@ -303,3 +303,7 @@ __pycache__/
 
 # OpenCover UI analysis results
 OpenCover/
+
+# No settings in git
+**/**/appsettings.json
+**/**/logsettings.json

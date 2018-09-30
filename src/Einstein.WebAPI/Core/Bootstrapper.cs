@@ -46,8 +46,6 @@ namespace Einstein.WebAPI.Core
 		public override void Configure(INancyEnvironment environment)
 		{
 			base.Configure(environment);
-
-			environment.StaticContent(@"d:\temp");
 		}
 
 		protected override void ConfigureApplicationContainer(ILifetimeScope container)

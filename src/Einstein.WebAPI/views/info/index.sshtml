@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <title>Einstein RestAPI</title>
+
+  <style type="text/css">
+    body {
+      font-family: sans-serif;
+    }
+
+    h1   {
+      color: blue;
+    }
+
+    section {
+      margin: auto auto;
+      margin-top: 30px;
+      border-width: 0px;
+      border-style:solid;
+      border-color:black;
+    }
+
+    .section_header {
+      font-weight: bolder;
+      font-size: 12pt;
+      text-align: center;
+    }
+
+    .section_description {
+      font-style: italic;
+      font-size: 10pt;
+      text-align: center;
+    }
+
+    table {
+      margin: auto auto
+    }
+
+    thead tr {
+      background-color: blue;
+      border-width: 2px;
+      border-style:solid;
+      border-color:white;
+      color: white;
+    }
+
+    tbody tr {
+      background-color: lightgray;
+      border-width: 2px;
+      border-style:solid;
+      border-color:white;
+    }
+
+    tbody tr td:first-child {
+      font-weight: 600;
+      background-color: cornflowerblue
+    }
+  </style>
+</head>
+
+<body>
+  <h1>@Model.Title</h1>
+
+  <section>
+    <div>
+      <div class="section_header"><a href="@Model.NancySection.Link">@Model.NancySection.Title</a></div>
+      <div class="section_description">@Model.NancySection.Description</div>
+    </div>
+
+    <table>
+      <thead>
+        <tr><th>Item</th><th>Value</th><th>Description/Remarks</th></tr>
+      </thead>
+      <tbody>
+        @Each.NancySection.Items
+        <tr><td>@Current.Name</td><td>@Current.Value</td><td>@Current.Description</td></tr>
+        @EndEach
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <div>
+      <div class="section_header"><a href="@Model.DotNetSection.Link">@Model.DotNetSection.Title</a></div>
+      <div class="section_description">@Model.DotNetSection.Description</div>
+    </div>
+
+    <table>
+      <thead>
+        <tr><th>Item</th><th>Value</th><th>Description/Remarks</th></tr>
+      </thead>
+      <tbody>
+        @Each.DotNetSection.Items
+        <tr><td>@Current.Name</td><td>@Current.Value</td><td>@Current.Description</td></tr>
+        @EndEach
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <div>
+      <div class="section_header"><a href="@Model.AssembliesSection.Link">@Model.AssembliesSection.Title</a></div>
+      <div class="section_description">@Model.AssembliesSection.Description</div>
+    </div>
+
+    <table>
+      <thead>
+        <tr><th>Item</th><th>Value</th><th>Description/Remarks</th></tr>
+      </thead>
+      <tbody>
+        @Each.AssembliesSection.Items
+        <tr><td>@Current.Name</td><td>@Current.Value</td><td>@Current.Description</td></tr>
+        @EndEach
+      </tbody>
+    </table>
+  </section>
+
+</body>
+
+</html>

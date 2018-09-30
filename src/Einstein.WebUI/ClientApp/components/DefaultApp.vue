@@ -4,16 +4,18 @@
 
     <div class="container box is-fluid column">
       <!--<div class="container is-fluid">
-        <nav-menu />
-      </div>-->
+    <nav-menu />
+  </div>-->
       <div class="container is-fluid">
         <router-view class="main-content"></router-view>
       </div>
-      <footer class="footer">
-          <div class="content has-text-centered">
-              <a href="https://github.com/Bloemert/Einstein"><strong class="source-link">Einstein - Skill Radar</strong></a> by <a class="contrib-link" href="https://www.bloemert.com/">Bloemert Team</a> and Community!
-          </div>
-      </footer>
+      <!--
+  <footer class="footer">
+      <div class="content has-text-centered">
+          <a href="https://github.com/Bloemert/Einstein"><strong class="source-link">Einstein - Skill Radar</strong></a> by <a class="contrib-link" href="https://www.bloemert.com/">Bloemert Team</a> and Community!
+      </div>
+  </footer>
+    -->
     </div>
   </div>
 </template>

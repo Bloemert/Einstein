@@ -1,0 +1,17 @@
+﻿    <section>
+      <div>
+        <div class="section_header"><a href="@Model.Link">@Model.Title</a></div>
+        <div class="section_description">@Model.Description</div>
+      </div>
+
+      <table>
+        <thead>
+          <tr><th>Item</th><th>Value</th><th>Description/Remarks</th></tr>
+        </thead>
+        <tbody>
+          @Each.Items
+          <tr><td>@Current.Name</td><td>@Current.Value</td><td>@Current.Description</td></tr>
+          @EndEach
+        </tbody>
+      </table>
+    </section>

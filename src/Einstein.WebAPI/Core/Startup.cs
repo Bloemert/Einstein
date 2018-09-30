@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -38,11 +37,12 @@ namespace Einstein.WebAPI.Core
 
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 		{
+			//app.UseDefaultFiles();
+			//app.UseStaticFiles();
+
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
-
-				TelemetryConfiguration.Active.DisableTelemetry = true;
 			}
 
 			//app.UseResponseBuffering();
