@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Bloemert.Lib.Logging\Bloemert.Lib.Logging.csproj" />
+    <ProjectReference Include="..\Bloemert.Lib.Config\Bloemert.Lib.Config.csproj" />
   </ItemGroup>
 
 </Project>

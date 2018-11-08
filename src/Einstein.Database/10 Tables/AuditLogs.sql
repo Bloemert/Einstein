@@ -1,8 +1,0 @@
-﻿CREATE TABLE [dbo].[AuditLogs]
-(
-	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
-  [Deleted] BIT NOT NULL DEFAULT 0,
-	[Level] NVARCHAR(16) NOT NULL,
-	[Message] NVARCHAR(MAX) NULL,
-	[TimeStamp] DATETIME NOT NULL
-)

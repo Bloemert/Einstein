@@ -86,7 +86,7 @@
     <Folder Include="10 Tables" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="10 Tables\AuditLogs.sql" />
+    <Build Include="10 Tables\Logs.sql" />
     <Build Include="10 Tables\Settings.sql" />
     <Build Include="10 Tables\Users.sql" />
     <Build Include="10 Tables\ActionPermissions.sql" />

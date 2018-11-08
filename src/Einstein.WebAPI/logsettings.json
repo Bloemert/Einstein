@@ -1,20 +1,39 @@
 ﻿{
   "Serilog": {
     "Using": [
-      "Serilog.Sinks.Literate",
-      "Serilog.Sinks.Debug",
-      "Serilog.Sinks.RollingFile"
+      "Serilog.Sinks.MSSQLServer"
     ],
     "MinimumLevel": "Debug",
     "WriteTo": [
-      { "Name": "Debug" },
       {
-        "Name": "RollingFile",
+        // This MSSqlServer sink MUST be the first [0]!
+        "Name": "MSSqlServer",
         "Args": {
-          "pathFormat": "c:/temp/Logs/Einstein.WebAPI.json",
-          "formatter": "Serilog.Formatting.Json.JsonFormatter, Serilog"
-        },
-        "shared": "true"
+          "connectionString": "LogDB",
+          "tableName": "Logs",
+          "restrictedToMinimumLevel": "Warning",
+          "batchPostingLimit": 1000,
+          "period": "0:00:01",
+          "autoCreateSqlTable": true,
+          "columnOptionsSection": {
+            "primaryKeyColumnName": "Id",
+            "addStandardColumns": [ "LogEvent" ],
+            "removeStandardColumns": [
+              "MessageTemplate"
+            ],
+            "customColumns": [
+              {
+                "ColumnName": "Deleted",
+                "DataType": "bool",
+                "DefaultValue": false
+              }
+            ],
+            "logEvent": {
+              "columnName": "LogEvent",
+              "excludeAdditionalProperties": true
+            }
+          }
+        }
       }
     ],
     "Enrich": [ "FromLogContext", "WithMachineName", "WithThreadId" ],

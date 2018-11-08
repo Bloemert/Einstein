@@ -1,9 +1,21 @@
 <template>
   <div>
-    <div>@ToDo: Show me the logs!</div>
+    <logs-table></logs-table>
   </div>
 </template>
 
+<script>
+  import LogsTable from './LogsTable.vue';
+
+  export default {
+    name: 'Logs',
+
+    components: {
+      'logs-table': LogsTable
+    }
+
+  }
+</script>
 
 
 

@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Bloemert.Lib.Auto\Bloemert.Lib.Auto.csproj" />
     <ProjectReference Include="..\Bloemert.Lib.Common\Bloemert.Lib.Common.csproj" />
+    <ProjectReference Include="..\Bloemert.Lib.Logging\Bloemert.Lib.Logging.csproj" />
   </ItemGroup>
 
 </Project>

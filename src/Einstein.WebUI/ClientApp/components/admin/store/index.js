@@ -1,8 +1,9 @@
 ﻿import HTTP from './../../../js/axios-common';
 
 import modUsers from './users';
+import modLogs from './logs';
 
-import { createNamespacedHelpers } from 'vuex'
+import { createNamespacedHelpers } from 'vuex';
 
 import { createHelpers, getField, updateField } from 'vuex-map-fields';
 
@@ -27,7 +28,8 @@ const actions = {
 };
 
 const modules = {
-	users: modUsers
+	users: modUsers,
+	logs: modLogs
 };
 
 const modAdmin = {
@@ -40,7 +42,7 @@ const modAdmin = {
 	actions: actions,
 
 	modules: modules
-}
+};
 
 export default modAdmin;
 

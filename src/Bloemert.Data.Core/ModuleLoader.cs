@@ -9,7 +9,7 @@ namespace Bloemert.Data.Core
 		protected override void Load(ContainerBuilder builder)
 		{
 			// Register referenced Modules
-			builder.RegisterModule<Bloemert.Lib.Logging.ModuleLoader>();
+			builder.RegisterModule<Bloemert.Lib.Config.ModuleLoader>();
 
 			// Initialize and Register all neccesary base instances in proper order!
 			builder.RegisterAggregateService<ICommonRepositoryDependencies>();
