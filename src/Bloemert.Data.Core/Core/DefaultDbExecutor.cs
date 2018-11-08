@@ -28,6 +28,8 @@ namespace Bloemert.Data.Core
 		{
 			DynamicParameters dynDbParams = dbParams != null ? dbParams.DynamicParameters : null;
 
+			Log.Debug("Select:\n{query}\n on entity: {FullName}\n using parameters: {DynamicParameters}!", query, typeof(E).FullName, dynDbParams);
+
 			E result = default(E);
 
 			try
@@ -50,6 +52,8 @@ namespace Bloemert.Data.Core
 		{
 			DynamicParameters dynDbParams = dbParams != null ? dbParams.DynamicParameters : null;
 
+			Log.Debug("SelectAsync:\n{query}\n on entity: {FullName}\n using parameters: {DynamicParameters}!", query, typeof(E).FullName, dynDbParams);
+
 			try
 			{
 				using (var conn = ConnectionFactory.Create())
@@ -71,6 +75,8 @@ namespace Bloemert.Data.Core
 		{
 			DynamicParameters dynDbParams = dbParams != null ? dbParams.DynamicParameters : null;
 
+			Log.Debug("Select: {query}\n on dynamic entity with parameters: {DynamicParameters}!", query, dynDbParams);
+
 			try
 			{
 				using (var conn = ConnectionFactory.Create())
@@ -88,6 +94,8 @@ namespace Bloemert.Data.Core
 		public async Task<dynamic> SelectAsync(string query, IDbParameters dbParams)
 		{
 			DynamicParameters dynDbParams = dbParams != null ? dbParams.DynamicParameters : null;
+
+			Log.Debug("SelectAsync: {query}\n on dynamic entity with parameters: {DynamicParameters}!", query, dynDbParams);
 
 			try
 			{
@@ -110,6 +118,8 @@ namespace Bloemert.Data.Core
 		{
 			DynamicParameters dynDbParams = dbParams != null ? dbParams.DynamicParameters : null;
 
+			Log.Debug("List: {query}\n for entity: {FullName}\n using parameters : {DynamicParameters}!", query, typeof(E).FullName, dynDbParams);
+
 			IList<E> result = default(IList<E>);
 
 			try
@@ -131,6 +141,8 @@ namespace Bloemert.Data.Core
 		public async Task<IList<E>> ListAsync<E>(string query, IDbParameters dbParams)
 		{
 			DynamicParameters dynDbParams = dbParams != null ? dbParams.DynamicParameters : null;
+
+			Log.Debug("ListAsync: {query}\n for entity: {FullName}\n using parameters: {DynamicParameters}!", query, typeof(E).FullName, dynDbParams);
 
 			try
 			{
@@ -156,6 +168,8 @@ namespace Bloemert.Data.Core
 		{
 			DynamicParameters dynDbParams = dbParams != null ? dbParams.DynamicParameters : null;
 
+			Log.Debug("List: {query}\n for dynamic entity using parameters: {DynamicParameters}!", query, dynDbParams);
+
 			try
 			{
 				using (var conn = ConnectionFactory.Create())
@@ -173,6 +187,8 @@ namespace Bloemert.Data.Core
 		public async Task<IEnumerable<dynamic>> ListAsync(string query, IDbParameters dbParams)
 		{
 			DynamicParameters dynDbParams = dbParams != null ? dbParams.DynamicParameters : null;
+
+			Log.Debug("ListAsync: {query}\n for dynamic entity using parameters: {DynamicParameters}!", query, dynDbParams);
 
 			try
 			{
@@ -194,6 +210,11 @@ namespace Bloemert.Data.Core
 		{
 			DynamicParameters dynDbParams = dbParams != null ? dbParams.DynamicParameters : null;
 
+			Log.Debug("Dictionary: {query}\n for KeyType = {typeof(KT)FullName}, ValueType = {typeof(VT)FullName}\n entity using parameters: {DynamicParameters}!",
+								query,
+								typeof(KT).FullName,
+								typeof(VT).FullName,
+								dynDbParams);
 			IDictionary<KT, VT> result = default(IDictionary<KT, VT>);
 
 			try
@@ -220,6 +241,12 @@ namespace Bloemert.Data.Core
 		{
 			DynamicParameters dynDbParams = dbParams != null ? dbParams.DynamicParameters : null;
 
+			Log.Debug("Dictionary: {query}\n for KeyType = {typeof(KT)FullName}, ValueType = {typeof(VT)FullName}\n entity using parameters: {DynamicParameters}!",
+					query,
+					typeof(KT).FullName,
+					typeof(VT).FullName,
+					dynDbParams);
+
 			try
 			{
 				using (var conn = ConnectionFactory.Create())
@@ -245,6 +272,11 @@ namespace Bloemert.Data.Core
 		{
 			DynamicParameters dynDbParams = dbParams != null ? dbParams.DynamicParameters : null;
 
+			Log.Debug("ExecuteScalar: {query}\n for Type = {typeof(FT)FullName}\n using parameters: {DynamicParameters}!",
+								query,
+								typeof(FT).FullName,
+								dynDbParams);
+
 			try
 			{
 				using (var conn = ConnectionFactory.Create())
@@ -265,6 +297,11 @@ namespace Bloemert.Data.Core
 		public async Task<FT> ExecuteScalarAsync<FT>(string query, IDbParameters dbParams)
 		{
 			DynamicParameters dynDbParams = dbParams != null ? dbParams.DynamicParameters : null;
+
+			Log.Debug("ExecuteScalarAsync: {query}\n for Type = {typeof(FT)FullName}\n using parameters: {DynamicParameters}!",
+					query,
+					typeof(FT).FullName,
+					dynDbParams);
 
 			try
 			{
@@ -289,6 +326,8 @@ namespace Bloemert.Data.Core
 		{
 			DynamicParameters dynDbParams = dbParams != null ? dbParams.DynamicParameters : null;
 
+			Log.Debug("Execute: {query}\n using parameters: {DynamicParameters}!", query, dynDbParams);
+
 			try
 			{
 				using (var conn = ConnectionFactory.Create())
@@ -306,6 +345,8 @@ namespace Bloemert.Data.Core
 		public async Task ExecuteAsync(string query, IDbParameters dbParams)
 		{
 			DynamicParameters dynDbParams = dbParams != null ? dbParams.DynamicParameters : null;
+
+			Log.Debug("ExecuteAsync: {query}\n using parameters: {DynamicParameters}!", query, dynDbParams);
 
 			try
 			{
@@ -327,6 +368,8 @@ namespace Bloemert.Data.Core
 		{
 			DynamicParameters dynDbParams = dbParams != null ? dbParams.DynamicParameters : null;
 
+			Log.Debug("ExecuteAndQuery: {query}\n using parameters: {dynDbParams}!", query, dynDbParams);
+
 			try
 			{
 				using (var conn = ConnectionFactory.Create())
@@ -345,6 +388,8 @@ namespace Bloemert.Data.Core
 		public async Task<E> ExecuteAndQueryAsync<E>(string query, IDbParameters dbParams)
 		{
 			DynamicParameters dynDbParams = dbParams != null ? dbParams.DynamicParameters : null;
+
+			Log.Debug("ExecuteAndQueryAsync: {query}\n using parameters: {dynDbParams}!", query, dynDbParams);
 
 			try
 			{

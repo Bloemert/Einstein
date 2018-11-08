@@ -1,7 +1,7 @@
 ﻿
 using Bloemert.Data.Core;
 
-namespace Bloemert.Data.Entity.Admin
+namespace Bloemert.Data.Entity.Admin.Entity
 {
 	public class Setting : BaseEntity
 	{

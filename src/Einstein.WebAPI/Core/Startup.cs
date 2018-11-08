@@ -29,6 +29,7 @@ namespace Einstein.WebAPI.Core
 			IoCBuilder.RegisterModule<Bloemert.Data.Entity.Auth.ModuleLoader>();
 			IoCBuilder.RegisterModule<Bloemert.Data.Entity.Skills.ModuleLoader>();
 			IoCBuilder.RegisterModule<Bloemert.WebAPI.Auth.ModuleLoader>();
+			IoCBuilder.RegisterModule<Bloemert.WebAPI.Admin.ModuleLoader>();
 			IoCBuilder.RegisterModule<Bloemert.WebAPI.Skills.ModuleLoader>();
 			IoCBuilder.RegisterModule<Bloemert.WebAPI.Work.ModuleLoader>();
 		}

@@ -67,6 +67,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bloemert.Data.Entity.Work",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bloemert.WebAPI.Work", "Bloemert.WebAPI.Work\Bloemert.WebAPI.Work.csproj", "{152D4CAB-0036-43F1-9743-81AC18FA830E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bloemert.WebAPI.Admin", "Bloemert.WebAPI.Admin\Bloemert.WebAPI.Admin.csproj", "{BC3E6DBE-4A2B-479B-A487-C8487672D204}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -231,6 +233,14 @@ Global
 		{152D4CAB-0036-43F1-9743-81AC18FA830E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{152D4CAB-0036-43F1-9743-81AC18FA830E}.Release|x64.ActiveCfg = Release|x64
 		{152D4CAB-0036-43F1-9743-81AC18FA830E}.Release|x64.Build.0 = Release|x64
+		{BC3E6DBE-4A2B-479B-A487-C8487672D204}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC3E6DBE-4A2B-479B-A487-C8487672D204}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC3E6DBE-4A2B-479B-A487-C8487672D204}.Debug|x64.ActiveCfg = Debug|x64
+		{BC3E6DBE-4A2B-479B-A487-C8487672D204}.Debug|x64.Build.0 = Debug|x64
+		{BC3E6DBE-4A2B-479B-A487-C8487672D204}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC3E6DBE-4A2B-479B-A487-C8487672D204}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC3E6DBE-4A2B-479B-A487-C8487672D204}.Release|x64.ActiveCfg = Release|x64
+		{BC3E6DBE-4A2B-479B-A487-C8487672D204}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -257,6 +267,7 @@ Global
 		{D0F2182C-A10B-46B1-887B-38B58AAF9631} = {1F90A797-0CF4-4DBA-BAA9-332654910208}
 		{A2C57513-E12C-404B-BDEB-4C83A885B614} = {58E95410-CE15-4CDF-BC44-482F39D5DD46}
 		{152D4CAB-0036-43F1-9743-81AC18FA830E} = {1F90A797-0CF4-4DBA-BAA9-332654910208}
+		{BC3E6DBE-4A2B-479B-A487-C8487672D204} = {1F90A797-0CF4-4DBA-BAA9-332654910208}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B5DFBCB6-F0D7-4BB8-965C-F853DF088BA2}

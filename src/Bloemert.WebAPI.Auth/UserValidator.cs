@@ -10,13 +10,17 @@ namespace Bloemert.WebAPI.Auth
 	using Bloemert.Data.Entity.Auth.Repository;
 	using Bloemert.WebAPI.Auth.Models;
 	using Nancy.Authentication.Basic;
+	using Serilog;
 
 	public class UserValidator : IUserValidator
 	{
+		private ILogger Log { get; }
+
 		IUserRepository users { get; set; }
 
-		public UserValidator(IUserRepository userRepository)
+		public UserValidator(ILogger log, IUserRepository userRepository)
 		{
+			Log = log;
 			users = userRepository;
 		}
 
@@ -24,13 +28,21 @@ namespace Bloemert.WebAPI.Auth
 		{
 			if ( String.IsNullOrEmpty(username) || String.IsNullOrEmpty(password) )
 			{
+				Log.Warning("Login validation failed because of wrong input: {username}!", username);
+
 				return null;
 			}
 
 			User user = users.Validate(username, password);
 			if ( user != null )
 			{
+				Log.Information("Login validation OK for: {username}!", username);
+
 				return new UserPrincipal(new UserIdentity(user));
+			}
+			else
+			{
+				Log.Warning("Login validation failed because of wrong username / password combination: {username}!", username);
 			}
 
 			return null;
