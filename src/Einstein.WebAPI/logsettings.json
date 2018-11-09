@@ -21,13 +21,13 @@
             "removeStandardColumns": [
               "MessageTemplate"
             ],
-            "customColumns": [
-              {
-                "ColumnName": "Deleted",
-                "DataType": "bool",
-                "DefaultValue": false
-              }
-            ],
+            //"customColumns": [
+            //  {
+            //    "ColumnName": "Deleted",
+            //    "DataType": "bool",
+            //    "DefaultValue": false
+            //  }
+            //],
             "logEvent": {
               "columnName": "LogEvent",
               "excludeAdditionalProperties": true

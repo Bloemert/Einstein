@@ -1,6 +1,6 @@
-﻿CREATE TABLE [dbo].[SkillCategories]
+﻿CREATE TABLE [dbo].[EmployeeEducations]
 (
-	[Id] INT NOT NULL PRIMARY KEY IDENTITY,
+	[Id] INT NOT NULL PRIMARY KEY,
   [EffectiveStartedOn] DATETIME NOT NULL, 
   [EffectiveStartedBy] INT NOT NULL, 
   [EffectiveModifiedOn] DATETIME NOT NULL, 
@@ -8,6 +8,8 @@
   [EffectiveEndedOn] DATETIME NOT NULL, 
   [EffectiveEndedBy] INT NOT NULL, 
   [Comment] NVARCHAR(MAX) NULL,
-  [Name] nvarchar(150) NOT NULL,
-  [Description] NVARCHAR(max) NULL,
+  [EducationId] INT NOT NULL,
+  [EducationType] INT NOT NULL,
+  [StartDate] DATE NULL,
+  [FinishedDate] DATE NULL
 )

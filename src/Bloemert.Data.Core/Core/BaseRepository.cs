@@ -204,7 +204,9 @@ namespace Bloemert.Data.Core
 		{
 			if (entity != null)
 			{
-				entity.Deleted = true;
+				entity.EffectiveEndedOn = DateTime.Now;
+				//TODO: entity.EffectiveEndedBy
+
 				SaveEntity(entity);
 
 				return true;
@@ -216,7 +218,8 @@ namespace Bloemert.Data.Core
 		{
 			if (entity != null)
 			{
-				entity.Deleted = true;
+				entity.EffectiveModifiedOn = entity.EffectiveEndedOn = DateTime.Now;
+				// TODO: entity.EffectiveModifiedBy = entity.EffectiveEndedBy = CURRENT USER!
 				await SaveEntityAsync(entity);
 
 				return true;
@@ -290,103 +293,6 @@ namespace Bloemert.Data.Core
 
 		}
 
-
-		/*
-		protected virtual string GetSelectQuery()
-		{
-			return GetSelectQuery(int.MinValue);
-		}
-		protected virtual string GetSelectQuery(int entityId)
-		{
-			StringBuilder result = new StringBuilder("SELECT ");
-			var i = 0;
-
-			foreach (var pi in BaseEntityType.GetProperties()) 
-			{
-				if (i > 0)
-				{
-					result.Append(", ");
-				}
-
-				result.Append(pi.Name);
-
-				i++;
-			}
-
-			result.Append($" FROM {TableName}");
-			result.Append($" WHERE Deleted = 0 ");
-
-			if (entityId > 0)
-			{
-				result.Append($" AND ID = {_parameterPrefix}id");
-			}
-
-			return result.ToString();
-		}
-
-		protected virtual string GetUpdateQuery()
-		{
-			var i = 0;
-			StringBuilder result = new StringBuilder($"UPDATE {TableName} SET ");
-			foreach (var pi in BaseEntityType.GetProperties().Where(x => !ExcludePropertyMatch.IsMatch(x.Name)))
-			{
-				if (!pi.Name.Equals("Id"))
-				{
-					if (i > 0)
-					{
-						result.Append(", ");
-					}
-
-					result.Append($"{pi.Name} = {_parameterPrefix}{pi.Name}");
-					i++;
-				}
-			}
-
-			result.Append($" WHERE ID = {_parameterPrefix}Id");
-
-			return result.ToString();
-		}
-
-		protected virtual string GetUpdateAndQuery(E values)
-		{
-			return GetUpdateQuery();
-		}
-
-
-		protected virtual string GetInsertQuery()
-		{
-			var i = 0;
-			StringBuilder result = new StringBuilder($"INSERT INTO {TableName} (");
-			StringBuilder valueQry = new StringBuilder();
-
-			foreach (var pi in BaseEntityType.GetProperties().Where(x => !ExcludePropertyMatch.IsMatch(x.Name)))
-			{
-				if (!pi.Name.Equals("Id"))
-				{
-					if (i > 0)
-					{
-						result.Append(", ");
-						valueQry.Append(", ");
-					}
-
-					result.Append(pi.Name);
-					valueQry.Append($"{_parameterPrefix}{pi.Name}");
-					i++;
-				}
-			}
-
-			result.AppendFormat(") VALUES ({0});", valueQry.ToString());
-			result.Append("SELECT @@IDENTITY;");
-
-			return result.ToString();
-		}
-
-
-		protected virtual string GetInsertAndQuery(E values)
-		{
-			return GetInsertQuery();
-		}
-		*/
 
 		public static T ConvertFromDBVal<T>(object obj)
 		{

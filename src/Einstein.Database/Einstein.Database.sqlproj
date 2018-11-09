@@ -84,16 +84,13 @@
   <ItemGroup>
     <Folder Include="Properties" />
     <Folder Include="10 Tables" />
+    <Folder Include="80 Triggers" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="10 Tables\Logs.sql" />
     <Build Include="10 Tables\Settings.sql" />
     <Build Include="10 Tables\Users.sql" />
-    <Build Include="10 Tables\ActionPermissions.sql" />
-    <Build Include="10 Tables\Permissions.sql" />
-    <Build Include="10 Tables\Roles.sql" />
     <Build Include="10 Tables\Sessions.sql" />
-    <Build Include="10 Tables\UserRoles.sql" />
     <Build Include="10 Tables\Spots.sql" />
     <Build Include="10 Tables\Sectors.sql" />
     <Build Include="10 Tables\Rings.sql" />
@@ -103,6 +100,12 @@
     <Build Include="10 Tables\Skills.sql" />
     <Build Include="10 Tables\EmployeeSkills.sql" />
     <Build Include="10 Tables\Employees.sql" />
+    <Build Include="10 Tables\EmployeeProfiles.sql" />
+    <Build Include="10 Tables\EmployeeExperiences.sql" />
+    <Build Include="10 Tables\EmployeeSkillSources.sql" />
+    <Build Include="10 Tables\EmployeeEducations.sql" />
+    <Build Include="10 Tables\EmployeeSkillVersions.sql" />
+    <Build Include="10 Tables\SkillVersions.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Einstein.Database.refactorlog" />
