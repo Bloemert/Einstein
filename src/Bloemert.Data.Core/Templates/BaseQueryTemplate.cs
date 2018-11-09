@@ -54,7 +54,7 @@ namespace Bloemert.Data.Core.Templates
 				$"SELECT " +
 				String.Join(", ", Repository.GetColumnsFromMetaData()) + " " +
 				$"FROM {Repository.TableName} " +
-				$"WHERE DELETED = 0 AND ID = @Id";
+				$"WHERE EffectiveEndedOn > GetDate() AND ID = @Id";
 		}
 
 		public virtual string CreateListQuery()
@@ -62,7 +62,7 @@ namespace Bloemert.Data.Core.Templates
 			return
 				$"SELECT {String.Join(", ", Repository.GetColumnsFromMetaData())} " + 
 				$"FROM {Repository.TableName} " +
-				$"WHERE DELETED = 0";
+				$"WHERE EffectiveEndedOn > GetDate()";
 		}
 
 		public virtual string CreatePagedListQuery(string searchFilter, IList<string> sortColumns)
@@ -71,19 +71,19 @@ namespace Bloemert.Data.Core.Templates
 				// *** Max row count: View count query without search filters ***
 				$"SELECT COUNT(*) " +
 				$"FROM {Repository.TableName} " +
-				$"WHERE DELETED = 0 " +
+				$"WHERE EffectiveEndedOn > GetDate() " +
 				$"; " +
 
 				// *** Search row count: View count with search filters ***
 				$"SELECT COUNT(*) " +
 				$"FROM {Repository.TableName} " +
-				$"WHERE DELETED = 0 " +
+				$"WHERE EffectiveEndedOn > GetDate() " +
 				$"; " +
 
 				// *** Result data: Data query by search filters and pageOffset and pageRows ***
 				$"SELECT {String.Join(", ", Repository.GetColumnsFromMetaData())} " +
 				$"FROM {Repository.TableName} " +
-				$"WHERE DELETED = 0 " +
+				$"WHERE EffectiveEndedOn > GetDate() " +
 				$"{searchFilter} " +
 				$"ORDER BY {String.Join(", ", sortColumns)} " +
 				$"OFFSET 10 ROWS FETCH NEXT 5 ROWS ONLY " +
@@ -116,7 +116,7 @@ namespace Bloemert.Data.Core.Templates
 				$"{valuesPart.ToString()};" +
 				$"SELECT {String.Join(", ", Repository.GetColumnsFromMetaData())} " +
 				$"FROM {Repository.TableName} " +
-				$"WHERE DELETED = 0 " +
+				$"WHERE EffectiveEndedOn > GetDate() " +
 				$"AND ID = @@IDENTITY;"
 				;
 		}
@@ -138,7 +138,7 @@ namespace Bloemert.Data.Core.Templates
 			return
 				$"UPDATE {Repository.TableName} " +
 				$"{setPart.ToString()} " +
-				$"WHERE DELETED = 0 AND ID = @Id";
+				$"WHERE EffectiveEndedOn > GetDate() AND ID = @Id";
 		}
 
 
@@ -146,8 +146,8 @@ namespace Bloemert.Data.Core.Templates
 		{
 			return
 				$"UPDATE {Repository.TableName} " +
-				$"SET DELETED = 1 " +
-				$"WHERE DELETED = 0 AND ID = @Id";
+				$"SET EffectiveEndedOn = EffectiveModifiedOn = GetDate()" +
+				$"WHERE EffectiveEndedOn > GetDate() AND ID = @Id";
 		}
 
 	}
