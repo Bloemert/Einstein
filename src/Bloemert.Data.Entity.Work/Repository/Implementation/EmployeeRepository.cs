@@ -18,7 +18,6 @@ namespace Bloemert.Data.Entity.Work.Repository.Implementation
 
 		public override string TableName { get; set; } = @"Employees";
 
-
 		public EmployeeRepository(ICommonRepositoryDependencies crd)
 			: base(crd)
 		{

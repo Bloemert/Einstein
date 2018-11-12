@@ -29,7 +29,7 @@ module.exports = (env) => {
 		output: {
 			path: path.join(__dirname, 'wwwroot', 'dist'),
 			publicPath: 'dist/',
-			filename: "main.js",
+			filename: "main.js"
 		},
 
 		module: {
@@ -55,17 +55,17 @@ module.exports = (env) => {
 				},
 
 				// Typescript (Does not work yet!)
-				{
-					test: /\.ts?$/,
-					exclude: '/node_modules/',
-					include: '/ClientApp/',
-					use: {
-						loader: 'ts-loader',
-						options: {
-							appendTsSuffixTo: [/\.vue$/]
-						}
-					}
-				},
+				//{
+				//	test: /\.ts?$/,
+				//	exclude: '/node_modules/',
+				//	include: '/ClientApp/',
+				//	use: {
+				//		loader: 'ts-loader',
+				//		options: {
+				//			appendTsSuffixTo: [/\.vue$/]
+				//		}
+				//	}
+				//},
 
 				// Javascript
 				{
@@ -106,23 +106,25 @@ module.exports = (env) => {
 
 
 				// Image(s)
-				{ test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' },
+				{ test: /\.(png|jpg|jpeg|gif|svg)$/, exclude: '/node_modules/', use: 'url-loader?limit=25000' },
 
 				// Sass / Scss styling
-				{ test: /\.scss?$/, loaders: ['style-loader', 'css-loader', 'sass-loader'] },
+				{ test: /\.scss?$/, exclude: '/node_modules/', loaders: ['style-loader', 'css-loader', 'sass-loader'] },
 
 				// CSS styling
 				{
 					test: /\.css$/,
+					exclude: '/node_modules/',
 					loader: 'style-loader!css-loader'
 				},
 
 				// Scalable Vector Graphics (SVG) files
-				{ test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'file-loader?mimetype=image/svg+xml' },
+				{ test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, exclude: '/node_modules/', loader: 'file-loader?mimetype=image/svg+xml' },
 
 				// Font files
 				{
 					test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+					exclude: '/node_modules/',
 					use: [
 						{
 							loader: 'url-loader',
@@ -135,6 +137,7 @@ module.exports = (env) => {
 				},
 				{
 					test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+					exclude: '/node_modules/',
 					use: [
 						{ loader: 'file-loader' }
 					]
@@ -162,7 +165,7 @@ module.exports = (env) => {
 		},
 
 		plugins: [
-			new webpack.HotModuleReplacementPlugin(),
+			//new webpack.HotModuleReplacementPlugin(),
 			new CleanWebpackPlugin([path.join(__dirname, 'wwwroot', 'dist') + '/main.*']),
 			new VueLoaderPlugin(),
 			new CompressionPlugin({

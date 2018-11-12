@@ -1,4 +1,5 @@
-﻿using Bloemert.Data.Entity.Skills.Entity;
+﻿using Bloemert.Data.Core;
+using Bloemert.Data.Entity.Skills.Entity;
 using Bloemert.Data.Entity.Skills.Repository;
 using Bloemert.Lib.Auto.Mapping;
 using Bloemert.Lib.Config;
@@ -11,8 +12,9 @@ namespace Bloemert.WebAPI.Skills.Modules
 	{
 
 		public SkillModule(IAppConfig appCfg, ISkillRepository skillRepository, 
-			ITwoWayMapper<Skill, SkillModel> mapper)
-			: base(appCfg, skillRepository, mapper, "/skills/skills")
+			ITwoWayMapper<Skill, SkillModel> mapper,
+			IUserIdentityProvider identityProvider)
+			: base(appCfg, skillRepository, mapper, identityProvider, "/skills/skills")
 		{
 
 		}

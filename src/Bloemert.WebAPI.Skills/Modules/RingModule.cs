@@ -1,4 +1,5 @@
-﻿using Bloemert.Data.Entity.Skills.Entity;
+﻿using Bloemert.Data.Core;
+using Bloemert.Data.Entity.Skills.Entity;
 using Bloemert.Data.Entity.Skills.Repository;
 using Bloemert.Lib.Auto.Mapping;
 using Bloemert.Lib.Config;
@@ -11,8 +12,9 @@ namespace Bloemert.WebAPI.Skills.Modules
 	{
 
 		public RingModule(IAppConfig appCfg, IRingRepository ringRepository, 
-			ITwoWayMapper<Ring, RingModel> mapper)
-			: base(appCfg, ringRepository, mapper, "/skills/rings")
+			ITwoWayMapper<Ring, RingModel> mapper,
+			IUserIdentityProvider identityProvider)
+			: base(appCfg, ringRepository, mapper, identityProvider, "/skills/rings")
 		{
 
 		}

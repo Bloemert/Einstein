@@ -53,7 +53,7 @@ namespace Bloemert.Lib.Logging.Tests
 			{
 				string logfileContent = new StreamReader(fileStream).ReadToEnd();
 
-				Assert.True(logfileContent.Contains("\"SourceContext\":\"Bloemert.Lib.Logging.Tests.MyDepTest\",\"Application\":\"EinsteinTest\""));
+				Assert.Contains("\"SourceContext\":\"Bloemert.Lib.Logging.Tests.MyDepTest\",\"Application\":\"EinsteinTest\"", logfileContent);
 			}
 
 

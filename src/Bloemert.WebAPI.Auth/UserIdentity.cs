@@ -1,4 +1,5 @@
-﻿using Bloemert.Data.Entity.Auth;
+﻿using Bloemert.Data.Core.Core;
+using Bloemert.Data.Entity.Auth;
 using Bloemert.Data.Entity.Auth.Entity;
 using Nancy.Security;
 using System.Security.Claims;
@@ -6,9 +7,9 @@ using System.Security.Principal;
 
 namespace Bloemert.WebAPI.Auth
 {
-	public class UserIdentity : IIdentity
+	public class UserIdentity : IPersistentIdentity
 	{
-		public User PersistentUser { get; }
+		public IPersistentUser PersistentUser { get; }
 
 		public string AuthenticationType => "Basic authentication";
 

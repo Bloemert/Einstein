@@ -12,7 +12,6 @@ export class Log {
 		},
 
 		id = -1,
-		deleted = false,
 
 		message = '',
 		level = '',
@@ -26,7 +25,6 @@ export class Log {
 		this.status = status;
 
 		this.id = id;
-		this.deleted = deleted;
 
 		this.message = message;
 		this.level = level;
