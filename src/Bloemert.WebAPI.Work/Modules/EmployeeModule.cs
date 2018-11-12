@@ -1,4 +1,5 @@
-﻿using Bloemert.Data.Entity.Work;
+﻿using Bloemert.Data.Core;
+using Bloemert.Data.Entity.Work;
 using Bloemert.Data.Entity.Work.Entity;
 using Bloemert.Data.Entity.Work.Repository;
 using Bloemert.Lib.Auto.Mapping;
@@ -17,8 +18,9 @@ namespace Bloemert.WebAPI.Work.Modules
 	{
 
 		public EmployeeModule(IAppConfig appCfg, IEmployeeRepository employeesRepository, 
-			ITwoWayMapper<Employee, EmployeeModel> mapper)
-			: base(appCfg, employeesRepository, mapper, "/work/employees")
+			ITwoWayMapper<Employee, EmployeeModel> mapper,
+			IUserIdentityProvider identityProvider)
+			: base(appCfg, employeesRepository, mapper, identityProvider, "/work/employees")
 		{
 
 		}

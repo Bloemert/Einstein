@@ -12,6 +12,7 @@ namespace Bloemert.Data.Core
 		string EntityTypeName { get; set; }
 		Regex ExcludePropertyMatch { get; set; }
 
+		bool UseEffectiveVersioning { get; }
 
 		IEnumerable<DbColumnInfo> ReadMetadataFromTable();
 		

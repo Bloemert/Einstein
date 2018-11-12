@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Bloemert.Data.Core.Core;
 using Bloemert.Data.Core.Templates;
 using Bloemert.Lib.Common;
 using Dapper;
@@ -6,7 +7,9 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlTypes;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -38,6 +41,7 @@ namespace Bloemert.Data.Core
 
 		public virtual Regex ExcludePropertyMatch { get; set; } = new Regex(@"^\s*$");
 
+		public virtual bool UseEffectiveVersioning { get; } = false;
 
 		public ICommonRepositoryDependencies Crd { get; }
 
@@ -147,16 +151,66 @@ namespace Bloemert.Data.Core
 		{
 			IDbParameters dbParameters = DbParameters.Create(entity);
 
+			int currentUserId = -1;
+			IUserIdentityProvider uip = IoC.Resolve<IUserIdentityProvider>();
+			ClaimsPrincipal cp = uip.ClaimsPrincipal;
+			if (cp != null && cp.Identity is IPersistentIdentity)
+			{
+				currentUserId = ((IPersistentIdentity)cp.Identity).PersistentUser.Id;
+			}
+
 			if (entity.Id > 0)
-			{ 
-				this.Db.Execute(QueryTemplate.CreateUpdateQuery(), dbParameters);
+			{
+				DateTime updateDate = DateTime.Now;
+				dbParameters.AddInputParameter("EffectiveModifiedOn", updateDate, DbType.DateTime, null);
+				dbParameters.AddInputParameter("EffectiveModifiedBy", currentUserId, DbType.Int32, null);
+
+				if (UseEffectiveVersioning)
+				{
+					// Set proper effective columns for Old record.
+					dbParameters.AddInputParameter("EffectiveEndedOn", updateDate, DbType.DateTime, null);
+					dbParameters.AddInputParameter("EffectiveEndedBy", currentUserId, DbType.Int32, null);
+					int result = this.Db.Execute($"UPDATE {TableName} " +
+																$"SET EffectiveModifiedOn = @EffectiveModifiedOn," +
+																$"		EffectiveModifiedBy = @EffectiveModifiedBy," +
+																$"		EffectiveEndedOn = @EffectiveEndedOn, " +
+																$"		EffectiveEndedBy = @EffectiveEndedBy " +
+																$"WHERE Id = @Id AND EffectiveEndedOn > GetDate()", dbParameters);
+
+					if (result < 1)
+					{
+						Log.Error("UserRepository.SaveEntity failed: No update done during effectiveVersioning!");
+
+						throw new ApplicationException("UserRepository.SaveEntity failed: No update done during effectiveVersioning!");
+					}
+
+					// Save changed/modified entity as new record
+					entity.EffectiveStartedOn = updateDate;
+					entity.EffectiveStartedBy = currentUserId;
+					entity.EffectiveModifiedOn = updateDate;
+					entity.EffectiveModifiedBy = currentUserId;
+					entity.EffectiveEndedOn = SqlDateTime.MaxValue.Value.AddSeconds(-1);
+					entity.EffectiveEndedBy = -1;
+
+					return Db.ExecuteAndQuery<E>(QueryTemplate.CreateInsertQuery(), DbParameters.Create(entity));
+				}
+				else
+				{
+					return this.Db.ExecuteAndQuery<E>(QueryTemplate.CreateUpdateQuery(), dbParameters);
+				}
 			}
 			else
 			{
-				entity = Db.ExecuteAndQuery<E>(QueryTemplate.CreateInsertQuery(), dbParameters);
-			}
+				DateTime insertDate = DateTime.Now;
+				dbParameters.AddInputParameter("EffectiveStartedOn", insertDate, DbType.DateTime, null);
+				dbParameters.AddInputParameter("EffectiveStartedBy", currentUserId, DbType.Int32, null);
+				dbParameters.AddInputParameter("EffectiveModifiedOn", insertDate, DbType.DateTime, null);
+				dbParameters.AddInputParameter("EffectiveModifiedBy", currentUserId, DbType.Int32, null);
+				dbParameters.AddInputParameter("EffectiveEndedOn", SqlDateTime.MaxValue.Value.AddSeconds(-1), DbType.DateTime, null);
+				dbParameters.AddInputParameter("EffectiveEndedBy", -1, DbType.Int32, null);
 
-			return entity;
+				return Db.ExecuteAndQuery<E>(QueryTemplate.CreateInsertQuery(), dbParameters);
+			}
 		}
 
 

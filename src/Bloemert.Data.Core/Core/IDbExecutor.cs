@@ -34,7 +34,7 @@ namespace Bloemert.Data.Core
 		FT ExecuteScalar<FT>(string query, IDbParameters param = null);
 		Task<FT> ExecuteScalarAsync<FT>(string query, IDbParameters param = null);
 
-		void Execute(string query, IDbParameters param = null);
+		int Execute(string query, IDbParameters param = null);
 		Task ExecuteAsync(string query, IDbParameters param = null);
 
 		E ExecuteAndQuery<E>(string query, IDbParameters param = null);

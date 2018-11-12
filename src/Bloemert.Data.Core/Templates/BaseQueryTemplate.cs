@@ -26,6 +26,20 @@ namespace Bloemert.Data.Core.Templates
 			Repository = repository;
 		}
 
+		private IList<string> EffectiveColumns = new List<string>
+		{
+			//"EffectiveStartedOn",
+			//"EffectiveStartedBy",
+
+			//"EffectiveModifiedOn",
+			//"EffectiveModifiedBy",
+
+			//"EffectiveEndedOn",
+			//"EffectiveEndedBy",
+
+			"Comment"
+		};
+
 
 		public virtual string CreateMetaDataQuery()
 		{
@@ -96,7 +110,23 @@ namespace Bloemert.Data.Core.Templates
 
 		public virtual string CreateInsertQuery(IList<string> excludedColumns)
 		{
+			if (excludedColumns == null)
+			{
+				excludedColumns = EffectiveColumns;
+			}
+			else
+			{
+				excludedColumns = excludedColumns.Concat(EffectiveColumns).AsList();
+			}
+
 			StringBuilder valuesPart = new StringBuilder("VALUES ( ");
+			
+				//"@EffectiveStartedOn, " +
+				//"@EffectiveStartedBy, " +
+				//"@EffectiveModifiedOn, " +
+				//"@EffectiveModifiedBy, " +
+				//"@EffectiveEndedOn, " +
+				//"@EffectiveEndedBy");
 
 			var columns = Repository.GetColumnsFromMetaData(RequestedColumns.NO_PRIMARYKEY, excludedColumns);
 			foreach (string col in columns)
@@ -112,9 +142,10 @@ namespace Bloemert.Data.Core.Templates
 
 			return
 				$"INSERT INTO {Repository.TableName} " +
-				$"( {String.Join(", ", columns)} ) " +
+				//$"( EffectiveStartedOn, EffectiveStartedBy, EffectiveModifiedOn, EffectiveModifiedBy, EffectiveEndedOn, EffectiveEndedBy, " +
+				$"( { String.Join(", ", columns)} ) " +
 				$"{valuesPart.ToString()};" +
-				$"SELECT {String.Join(", ", Repository.GetColumnsFromMetaData())} " +
+				$"SELECT {String.Join(", ", Repository.GetColumnsFromMetaData(excludedColumns: excludedColumns))} " +
 				$"FROM {Repository.TableName} " +
 				$"WHERE EffectiveEndedOn > GetDate() " +
 				$"AND ID = @@IDENTITY;"
@@ -123,6 +154,15 @@ namespace Bloemert.Data.Core.Templates
 
 		public virtual string CreateUpdateQuery(IList<string> excludedColumns = null)
 		{
+			if (excludedColumns == null)
+			{
+				excludedColumns = EffectiveColumns;
+			}
+			else
+			{
+				excludedColumns = excludedColumns.Concat(EffectiveColumns).AsList();
+			}
+
 			StringBuilder setPart = new StringBuilder("SET \n");
 
 			foreach (string col in Repository.GetColumnsFromMetaData(RequestedColumns.NO_PRIMARYKEY, excludedColumns))

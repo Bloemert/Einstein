@@ -1,4 +1,5 @@
-﻿using Bloemert.Data.Entity.Skills.Entity;
+﻿using Bloemert.Data.Core;
+using Bloemert.Data.Entity.Skills.Entity;
 using Bloemert.Data.Entity.Skills.Repository;
 using Bloemert.Lib.Auto.Mapping;
 using Bloemert.Lib.Config;
@@ -11,8 +12,9 @@ namespace Bloemert.WebAPI.Skills.Modules
 	{
 
 		public SpotModule(IAppConfig appCfg, ISpotRepository spotRepository, 
-			ITwoWayMapper<Spot, SpotModel> mapper)
-			: base(appCfg, spotRepository, mapper, "/skills/spots")
+			ITwoWayMapper<Spot, SpotModel> mapper,
+			IUserIdentityProvider identityProvider)
+			: base(appCfg, spotRepository, mapper, identityProvider, "/skills/spots")
 		{
 
 		}
