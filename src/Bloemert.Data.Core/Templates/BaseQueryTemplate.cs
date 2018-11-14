@@ -26,6 +26,20 @@ namespace Bloemert.Data.Core.Templates
 			Repository = repository;
 		}
 
+		private IList<string> EffectiveColumns = new List<string>
+		{
+			//"EffectiveStartedOn",
+			//"EffectiveStartedBy",
+
+			//"EffectiveModifiedOn",
+			//"EffectiveModifiedBy",
+
+			//"EffectiveEndedOn",
+			//"EffectiveEndedBy",
+
+			"Comment"
+		};
+
 
 		public virtual string CreateMetaDataQuery()
 		{
@@ -54,7 +68,7 @@ namespace Bloemert.Data.Core.Templates
 				$"SELECT " +
 				String.Join(", ", Repository.GetColumnsFromMetaData()) + " " +
 				$"FROM {Repository.TableName} " +
-				$"WHERE DELETED = 0 AND ID = @Id";
+				$"WHERE EffectiveEndedOn > GetDate() AND ID = @Id";
 		}
 
 		public virtual string CreateListQuery()
@@ -62,7 +76,7 @@ namespace Bloemert.Data.Core.Templates
 			return
 				$"SELECT {String.Join(", ", Repository.GetColumnsFromMetaData())} " + 
 				$"FROM {Repository.TableName} " +
-				$"WHERE DELETED = 0";
+				$"WHERE EffectiveEndedOn > GetDate()";
 		}
 
 		public virtual string CreatePagedListQuery(string searchFilter, IList<string> sortColumns)
@@ -71,19 +85,19 @@ namespace Bloemert.Data.Core.Templates
 				// *** Max row count: View count query without search filters ***
 				$"SELECT COUNT(*) " +
 				$"FROM {Repository.TableName} " +
-				$"WHERE DELETED = 0 " +
+				$"WHERE EffectiveEndedOn > GetDate() " +
 				$"; " +
 
 				// *** Search row count: View count with search filters ***
 				$"SELECT COUNT(*) " +
 				$"FROM {Repository.TableName} " +
-				$"WHERE DELETED = 0 " +
+				$"WHERE EffectiveEndedOn > GetDate() " +
 				$"; " +
 
 				// *** Result data: Data query by search filters and pageOffset and pageRows ***
 				$"SELECT {String.Join(", ", Repository.GetColumnsFromMetaData())} " +
 				$"FROM {Repository.TableName} " +
-				$"WHERE DELETED = 0 " +
+				$"WHERE EffectiveEndedOn > GetDate() " +
 				$"{searchFilter} " +
 				$"ORDER BY {String.Join(", ", sortColumns)} " +
 				$"OFFSET 10 ROWS FETCH NEXT 5 ROWS ONLY " +
@@ -96,7 +110,23 @@ namespace Bloemert.Data.Core.Templates
 
 		public virtual string CreateInsertQuery(IList<string> excludedColumns)
 		{
+			if (excludedColumns == null)
+			{
+				excludedColumns = EffectiveColumns;
+			}
+			else
+			{
+				excludedColumns = excludedColumns.Concat(EffectiveColumns).AsList();
+			}
+
 			StringBuilder valuesPart = new StringBuilder("VALUES ( ");
+			
+				//"@EffectiveStartedOn, " +
+				//"@EffectiveStartedBy, " +
+				//"@EffectiveModifiedOn, " +
+				//"@EffectiveModifiedBy, " +
+				//"@EffectiveEndedOn, " +
+				//"@EffectiveEndedBy");
 
 			var columns = Repository.GetColumnsFromMetaData(RequestedColumns.NO_PRIMARYKEY, excludedColumns);
 			foreach (string col in columns)
@@ -112,17 +142,27 @@ namespace Bloemert.Data.Core.Templates
 
 			return
 				$"INSERT INTO {Repository.TableName} " +
-				$"( {String.Join(", ", columns)} ) " +
+				//$"( EffectiveStartedOn, EffectiveStartedBy, EffectiveModifiedOn, EffectiveModifiedBy, EffectiveEndedOn, EffectiveEndedBy, " +
+				$"( { String.Join(", ", columns)} ) " +
 				$"{valuesPart.ToString()};" +
-				$"SELECT {String.Join(", ", Repository.GetColumnsFromMetaData())} " +
+				$"SELECT {String.Join(", ", Repository.GetColumnsFromMetaData(excludedColumns: excludedColumns))} " +
 				$"FROM {Repository.TableName} " +
-				$"WHERE DELETED = 0 " +
+				$"WHERE EffectiveEndedOn > GetDate() " +
 				$"AND ID = @@IDENTITY;"
 				;
 		}
 
 		public virtual string CreateUpdateQuery(IList<string> excludedColumns = null)
 		{
+			if (excludedColumns == null)
+			{
+				excludedColumns = EffectiveColumns;
+			}
+			else
+			{
+				excludedColumns = excludedColumns.Concat(EffectiveColumns).AsList();
+			}
+
 			StringBuilder setPart = new StringBuilder("SET \n");
 
 			foreach (string col in Repository.GetColumnsFromMetaData(RequestedColumns.NO_PRIMARYKEY, excludedColumns))
@@ -138,7 +178,7 @@ namespace Bloemert.Data.Core.Templates
 			return
 				$"UPDATE {Repository.TableName} " +
 				$"{setPart.ToString()} " +
-				$"WHERE DELETED = 0 AND ID = @Id";
+				$"WHERE EffectiveEndedOn > GetDate() AND ID = @Id";
 		}
 
 
@@ -146,8 +186,8 @@ namespace Bloemert.Data.Core.Templates
 		{
 			return
 				$"UPDATE {Repository.TableName} " +
-				$"SET DELETED = 1 " +
-				$"WHERE DELETED = 0 AND ID = @Id";
+				$"SET EffectiveEndedOn = EffectiveModifiedOn = GetDate()" +
+				$"WHERE EffectiveEndedOn > GetDate() AND ID = @Id";
 		}
 
 	}

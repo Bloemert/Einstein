@@ -1,4 +1,5 @@
-﻿using Bloemert.Data.Entity.Auth;
+﻿using Bloemert.Data.Core;
+using Bloemert.Data.Entity.Auth;
 using Bloemert.Data.Entity.Auth.Entity;
 using Bloemert.Data.Entity.Auth.Repository;
 using Bloemert.Lib.Auto.Mapping;
@@ -17,8 +18,9 @@ namespace Bloemert.WebAPI.Auth.Modules
 	{
 
 		public UsersModule(IAppConfig appCfg, IUserRepository usersRepository, 
-			ITwoWayMapper<User, UserModel> mapper)
-			: base(appCfg, usersRepository, mapper, "/users")
+			ITwoWayMapper<User, UserModel> mapper,
+			IUserIdentityProvider identityProvider)
+			: base(appCfg, usersRepository, mapper, identityProvider, "/users")
 		{
 
 			Get("/login", args =>
@@ -30,7 +32,7 @@ namespace Bloemert.WebAPI.Auth.Modules
 									.WithStatusCode(HttpStatusCode.Forbidden);
 				}
 
-				User user = this.Context.CurrentUser.Identity.AsUserIdentity().PersistentUser;
+				User user = (User)this.Context.CurrentUser.Identity.AsUserIdentity().PersistentUser;
 
 				// Login has it's own model!
 				ModelWrapper<LoginModel> model = new ModelWrapper<LoginModel>

@@ -12,7 +12,6 @@ export class User {
 		},
 
 		id = -1,
-		deleted = false,
 
 		active = false,
 		login = '',
@@ -34,7 +33,6 @@ export class User {
 		this.status = status;
 
 		this.id = id;
-		this.deleted = deleted;
 
 		this.active = active;
 		this.login = login;

@@ -1,13 +1,12 @@
 ﻿using Bloemert.Data.Core;
 using Bloemert.Lib.Auto.Mapping;
 using Bloemert.Lib.Config;
+
 using Nancy;
 using Nancy.ModelBinding;
-using Nancy.Responses;
 using Nancy.Security;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Security.Claims;
 
 namespace Bloemert.Lib.WebAPI
@@ -25,7 +24,8 @@ namespace Bloemert.Lib.WebAPI
 				IAppConfig appCfg,
 				IRepository<E> repository,
 				ITwoWayMapper<E, M> mapper,
-				string modulePath = "")
+				IUserIdentityProvider identityProvider,
+				string modulePath)
 			: base(appCfg.GetValue(@"BaseModulePath:Value") + modulePath)
 		{
 			// Authentication for all requests!
@@ -39,6 +39,8 @@ namespace Bloemert.Lib.WebAPI
 				if (ctx.CurrentUser != null &&
 						!ctx.CurrentUser.HasClaim(ClaimTypes.System, typeof(E).Name + "_" + ctx.Request.Method))
 				{
+					identityProvider.ClaimsPrincipal = ctx.CurrentUser;
+
 					return null;
 				}
 

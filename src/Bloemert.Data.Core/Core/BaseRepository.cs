@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Bloemert.Data.Core.Core;
 using Bloemert.Data.Core.Templates;
 using Bloemert.Lib.Common;
 using Dapper;
@@ -6,7 +7,9 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlTypes;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -38,6 +41,7 @@ namespace Bloemert.Data.Core
 
 		public virtual Regex ExcludePropertyMatch { get; set; } = new Regex(@"^\s*$");
 
+		public virtual bool UseEffectiveVersioning { get; } = false;
 
 		public ICommonRepositoryDependencies Crd { get; }
 
@@ -147,16 +151,66 @@ namespace Bloemert.Data.Core
 		{
 			IDbParameters dbParameters = DbParameters.Create(entity);
 
+			int currentUserId = -1;
+			IUserIdentityProvider uip = IoC.Resolve<IUserIdentityProvider>();
+			ClaimsPrincipal cp = uip.ClaimsPrincipal;
+			if (cp != null && cp.Identity is IPersistentIdentity)
+			{
+				currentUserId = ((IPersistentIdentity)cp.Identity).PersistentUser.Id;
+			}
+
 			if (entity.Id > 0)
-			{ 
-				this.Db.Execute(QueryTemplate.CreateUpdateQuery(), dbParameters);
+			{
+				DateTime updateDate = DateTime.Now;
+				dbParameters.AddInputParameter("EffectiveModifiedOn", updateDate, DbType.DateTime, null);
+				dbParameters.AddInputParameter("EffectiveModifiedBy", currentUserId, DbType.Int32, null);
+
+				if (UseEffectiveVersioning)
+				{
+					// Set proper effective columns for Old record.
+					dbParameters.AddInputParameter("EffectiveEndedOn", updateDate, DbType.DateTime, null);
+					dbParameters.AddInputParameter("EffectiveEndedBy", currentUserId, DbType.Int32, null);
+					int result = this.Db.Execute($"UPDATE {TableName} " +
+																$"SET EffectiveModifiedOn = @EffectiveModifiedOn," +
+																$"		EffectiveModifiedBy = @EffectiveModifiedBy," +
+																$"		EffectiveEndedOn = @EffectiveEndedOn, " +
+																$"		EffectiveEndedBy = @EffectiveEndedBy " +
+																$"WHERE Id = @Id AND EffectiveEndedOn > GetDate()", dbParameters);
+
+					if (result < 1)
+					{
+						Log.Error("UserRepository.SaveEntity failed: No update done during effectiveVersioning!");
+
+						throw new ApplicationException("UserRepository.SaveEntity failed: No update done during effectiveVersioning!");
+					}
+
+					// Save changed/modified entity as new record
+					entity.EffectiveStartedOn = updateDate;
+					entity.EffectiveStartedBy = currentUserId;
+					entity.EffectiveModifiedOn = updateDate;
+					entity.EffectiveModifiedBy = currentUserId;
+					entity.EffectiveEndedOn = SqlDateTime.MaxValue.Value.AddSeconds(-1);
+					entity.EffectiveEndedBy = -1;
+
+					return Db.ExecuteAndQuery<E>(QueryTemplate.CreateInsertQuery(), DbParameters.Create(entity));
+				}
+				else
+				{
+					return this.Db.ExecuteAndQuery<E>(QueryTemplate.CreateUpdateQuery(), dbParameters);
+				}
 			}
 			else
 			{
-				entity = Db.ExecuteAndQuery<E>(QueryTemplate.CreateInsertQuery(), dbParameters);
-			}
+				DateTime insertDate = DateTime.Now;
+				dbParameters.AddInputParameter("EffectiveStartedOn", insertDate, DbType.DateTime, null);
+				dbParameters.AddInputParameter("EffectiveStartedBy", currentUserId, DbType.Int32, null);
+				dbParameters.AddInputParameter("EffectiveModifiedOn", insertDate, DbType.DateTime, null);
+				dbParameters.AddInputParameter("EffectiveModifiedBy", currentUserId, DbType.Int32, null);
+				dbParameters.AddInputParameter("EffectiveEndedOn", SqlDateTime.MaxValue.Value.AddSeconds(-1), DbType.DateTime, null);
+				dbParameters.AddInputParameter("EffectiveEndedBy", -1, DbType.Int32, null);
 
-			return entity;
+				return Db.ExecuteAndQuery<E>(QueryTemplate.CreateInsertQuery(), dbParameters);
+			}
 		}
 
 
@@ -204,7 +258,9 @@ namespace Bloemert.Data.Core
 		{
 			if (entity != null)
 			{
-				entity.Deleted = true;
+				entity.EffectiveEndedOn = DateTime.Now;
+				//TODO: entity.EffectiveEndedBy
+
 				SaveEntity(entity);
 
 				return true;
@@ -216,7 +272,8 @@ namespace Bloemert.Data.Core
 		{
 			if (entity != null)
 			{
-				entity.Deleted = true;
+				entity.EffectiveModifiedOn = entity.EffectiveEndedOn = DateTime.Now;
+				// TODO: entity.EffectiveModifiedBy = entity.EffectiveEndedBy = CURRENT USER!
 				await SaveEntityAsync(entity);
 
 				return true;
@@ -290,103 +347,6 @@ namespace Bloemert.Data.Core
 
 		}
 
-
-		/*
-		protected virtual string GetSelectQuery()
-		{
-			return GetSelectQuery(int.MinValue);
-		}
-		protected virtual string GetSelectQuery(int entityId)
-		{
-			StringBuilder result = new StringBuilder("SELECT ");
-			var i = 0;
-
-			foreach (var pi in BaseEntityType.GetProperties()) 
-			{
-				if (i > 0)
-				{
-					result.Append(", ");
-				}
-
-				result.Append(pi.Name);
-
-				i++;
-			}
-
-			result.Append($" FROM {TableName}");
-			result.Append($" WHERE Deleted = 0 ");
-
-			if (entityId > 0)
-			{
-				result.Append($" AND ID = {_parameterPrefix}id");
-			}
-
-			return result.ToString();
-		}
-
-		protected virtual string GetUpdateQuery()
-		{
-			var i = 0;
-			StringBuilder result = new StringBuilder($"UPDATE {TableName} SET ");
-			foreach (var pi in BaseEntityType.GetProperties().Where(x => !ExcludePropertyMatch.IsMatch(x.Name)))
-			{
-				if (!pi.Name.Equals("Id"))
-				{
-					if (i > 0)
-					{
-						result.Append(", ");
-					}
-
-					result.Append($"{pi.Name} = {_parameterPrefix}{pi.Name}");
-					i++;
-				}
-			}
-
-			result.Append($" WHERE ID = {_parameterPrefix}Id");
-
-			return result.ToString();
-		}
-
-		protected virtual string GetUpdateAndQuery(E values)
-		{
-			return GetUpdateQuery();
-		}
-
-
-		protected virtual string GetInsertQuery()
-		{
-			var i = 0;
-			StringBuilder result = new StringBuilder($"INSERT INTO {TableName} (");
-			StringBuilder valueQry = new StringBuilder();
-
-			foreach (var pi in BaseEntityType.GetProperties().Where(x => !ExcludePropertyMatch.IsMatch(x.Name)))
-			{
-				if (!pi.Name.Equals("Id"))
-				{
-					if (i > 0)
-					{
-						result.Append(", ");
-						valueQry.Append(", ");
-					}
-
-					result.Append(pi.Name);
-					valueQry.Append($"{_parameterPrefix}{pi.Name}");
-					i++;
-				}
-			}
-
-			result.AppendFormat(") VALUES ({0});", valueQry.ToString());
-			result.Append("SELECT @@IDENTITY;");
-
-			return result.ToString();
-		}
-
-
-		protected virtual string GetInsertAndQuery(E values)
-		{
-			return GetInsertQuery();
-		}
-		*/
 
 		public static T ConvertFromDBVal<T>(object obj)
 		{

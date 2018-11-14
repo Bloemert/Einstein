@@ -322,7 +322,7 @@ namespace Bloemert.Data.Core
 
 
 
-		public void Execute(string query, IDbParameters dbParams)
+		public int Execute(string query, IDbParameters dbParams)
 		{
 			DynamicParameters dynDbParams = dbParams != null ? dbParams.DynamicParameters : null;
 
@@ -332,7 +332,7 @@ namespace Bloemert.Data.Core
 			{
 				using (var conn = ConnectionFactory.Create())
 				{
-					conn.Execute(query, dynDbParams);
+					return conn.Execute(query, dynDbParams);
 				}
 			}
 			catch ( Exception ex )

@@ -1,4 +1,5 @@
-﻿using Bloemert.Data.Entity.Skills.Entity;
+﻿using Bloemert.Data.Core;
+using Bloemert.Data.Entity.Skills.Entity;
 using Bloemert.Data.Entity.Skills.Repository;
 using Bloemert.Lib.Auto.Mapping;
 using Bloemert.Lib.Config;
@@ -11,8 +12,9 @@ namespace Bloemert.WebAPI.Skills.Modules
 	{
 
 		public SectorModule(IAppConfig appCfg, ISectorRepository sectorRepository, 
-			ITwoWayMapper<Sector, SectorModel> mapper)
-			: base(appCfg, sectorRepository, mapper, "/skills/sectors")
+			ITwoWayMapper<Sector, SectorModel> mapper,
+			IUserIdentityProvider identityProvider)
+			: base(appCfg, sectorRepository, mapper, identityProvider, "/skills/sectors")
 		{
 
 		}

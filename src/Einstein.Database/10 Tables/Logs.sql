@@ -1,7 +1,13 @@
 ﻿CREATE TABLE [Logs] (
  
    [Id] int IDENTITY(1,1) NOT NULL,
-   [Deleted] BIT NOT NULL DEFAULT 0, 
+  [EffectiveStartedOn] DATETIME NOT NULL, 
+  [EffectiveStartedBy] INT NOT NULL, 
+  [EffectiveModifiedOn] DATETIME NOT NULL, 
+  [EffectiveModifiedBy] INT NOT NULL, 
+  [EffectiveEndedOn] DATETIME NOT NULL, 
+  [EffectiveEndedBy] INT NOT NULL, 
+  [Comment] NVARCHAR(MAX) NULL,
    [Message] nvarchar(max) NULL,
    [Level] nvarchar(128) NULL,
    [TimeStamp] datetimeoffset(7) NOT NULL,  

@@ -1,10 +1,11 @@
 ﻿using Bloemert.Data.Core;
+using Bloemert.Data.Core.Core;
 using Newtonsoft.Json;
 using System;
 
 namespace Bloemert.Data.Entity.Auth.Entity
 {
-	public class User : BaseEntity
+	public class User : BaseEntity, IPersistentUser
 	{
 		public bool Active { get; set; }
 

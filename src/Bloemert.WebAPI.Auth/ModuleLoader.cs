@@ -29,6 +29,11 @@ namespace Bloemert.WebAPI.Auth
 			 .AsImplementedInterfaces()
 			 .InstancePerRequest();
 
+			builder.RegisterType<Bloemert.WebAPI.Auth.DefaultUserIdentityProvider>()
+				.As<IUserIdentityProvider>()
+				.SingleInstance()
+				.InstancePerRequest();
+
 			builder.RegisterType<UserValidator>()
 				.As<IUserValidator>();
 
