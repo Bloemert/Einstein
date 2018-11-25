@@ -16,11 +16,16 @@ Remarks:
     </div>
     <div v-else>
       <form @submit.prevent="">
+
         <b-field label="Active" horizontal>
           <div class="tile is-vertical">
-            <b-field>
+            <b-field :type="fieldType($v.selected.active)">
               <b-checkbox id="userActive"
-                          :value="selected.active" @change.native="selected.active = $event.target.value">
+                          size="is-large"
+                          type="is-success"
+                          :value="selected.active" @change.native="selected.active = $event.target.checked"
+                          @input="onInput($v.selected.active, 'active', $event)"
+                          >
               </b-checkbox>
             </b-field>
             <div>

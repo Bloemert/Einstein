@@ -5,9 +5,9 @@ namespace Bloemert.Data.Entity.Skills.Entity
 {
 	public class SkillCategory : BaseEntity
 	{
-		public string Name { get; set; }
+		public virtual string Name { get; set; }
 
-		public string Description { get; set; }
+		public virtual string Description { get; set; }
 
 	}
 }

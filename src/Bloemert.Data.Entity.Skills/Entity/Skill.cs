@@ -5,18 +5,18 @@ namespace Bloemert.Data.Entity.Skills.Entity
 {
 	public class Skill : BaseEntity
 	{
-		public int Seqno { get; set; }
+		public virtual int Seqno { get; set; }
 
-		public string Name { get; set; }
+		public virtual string Name { get; set; }
 
-		public string Description { get; set; }
+		public virtual string Description { get; set; }
 
 
-		public string Version { get; set; }
+		public virtual string Version { get; set; }
 
-		public int SkillTypeId { get; set; }
+		public virtual int SkillTypeId { get; set; }
 
-		public int SkillCategoryId { get; set; }
+		public virtual int SkillCategoryId { get; set; }
 
 	}
 }

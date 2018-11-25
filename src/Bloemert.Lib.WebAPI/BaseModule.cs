@@ -8,6 +8,7 @@ using Nancy.Security;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using System.Linq;
 
 namespace Bloemert.Lib.WebAPI
 {
@@ -59,7 +60,7 @@ namespace Bloemert.Lib.WebAPI
 			Get("/{id}/get", args =>
 			{
 				return Negotiate
-								.WithModel(new ModelWrapper<M> { Data = Mapper.Map(Repository.GetEntity((int)args.id)) });
+								.WithModel(new ModelWrapper<M> { Data = Mapper.Map(Repository.GetEntity((Guid)args.id)) });
 			});
 
 			Get("/list", args =>
@@ -67,7 +68,7 @@ namespace Bloemert.Lib.WebAPI
 				try
 				{
 					return Negotiate
-								.WithModel(new ModelWrapper<IList<M>> { Data = (IList<M>)Mapper.Map(Repository.ListEntity()) });
+								.WithModel(new ModelWrapper<IList<M>> { Data = (IList<M>)Mapper.Map(Repository.ListQuery()) });
 				}
 				catch ( Exception ex )
 				{
@@ -90,7 +91,7 @@ namespace Bloemert.Lib.WebAPI
 			Delete("/{id}/delete", args =>
 			{
 				return Negotiate
-								.WithModel(new ModelWrapper<bool> { Data = Repository.DeleteEntity((int)args.id) });
+								.WithModel(new ModelWrapper<bool> { Data = Repository.DeleteEntity((Guid)args.id) });
 			});
 
 		}

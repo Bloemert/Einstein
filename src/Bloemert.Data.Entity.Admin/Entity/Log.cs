@@ -8,17 +8,17 @@ namespace Bloemert.Data.Entity.Admin.Entity
 {
 	public class Log : BaseEntity
 	{
-		public string Message { get; set; }
+		public virtual string Message { get; set; }
 
-   public string Level { get; set; }
+   public virtual string Level { get; set; }
 
-		public DateTimeOffset TimeStamp { get; set; }
+		public virtual DateTimeOffset TimeStamp { get; set; }
 
-		public string Exception { get; set; }
+		public virtual string Exception { get; set; }
 
-		public XmlDocument Properties { get; set; }
+		//public virtual XmlDocument Properties { get; set; }
 
-		public string LogEvent { get; set; }
+		public virtual string LogEvent { get; set; }
 
 	}
 }

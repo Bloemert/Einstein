@@ -11,7 +11,7 @@ export class User {
 			loaded: false
 		},
 
-		id = -1,
+		id = '',
 
 		active = false,
 		login = '',

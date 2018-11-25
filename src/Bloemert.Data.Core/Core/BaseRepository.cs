@@ -1,16 +1,15 @@
 ﻿using Autofac;
+using AutoMapper;
 using Bloemert.Data.Core.Core;
-using Bloemert.Data.Core.Templates;
-using Bloemert.Lib.Common;
-using Dapper;
+using NHibernate;
+using NHibernate.Linq;
 using Serilog;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlTypes;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Claims;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -27,13 +26,14 @@ namespace Bloemert.Data.Core
 
 		IDbExecutor Db { get; }
 
+		ISessionFactory NDb { get; }
 	}
 
 
 
-	public class BaseRepository<R,E> : IRepository<E>
+	public class BaseRepository<R, E> : IRepository<E>
 		where R : IRepository<E>
-		where E : IEntity
+		where E : BaseEntity
 	{
 		public virtual string TableName { get; set; }
 
@@ -45,63 +45,21 @@ namespace Bloemert.Data.Core
 
 		public ICommonRepositoryDependencies Crd { get; }
 
-		protected IQueryTemplate QueryTemplate { get; set; }
-
 
 		protected ILifetimeScope IoC { get { return Crd.IoC; } }
-		protected IDbExecutor Db { get { return Crd.Db; } }
+		protected ISessionFactory FNHSessionFactory { get { return Crd.NDb; } }
 		protected ILogger Log { get { return Crd.Log; } }
 
 
 		public BaseRepository(ICommonRepositoryDependencies crd)
 		{
-			if ( String.IsNullOrEmpty(TableName))
-			{
-				crd.Log.Error("No Table name provided!");
-			}
-
 			Crd = crd;
-
-			if (IoC.IsRegisteredWithName<IQueryTemplate>(TableName))
-			{
-				QueryTemplate = IoC.ResolveNamed<IQueryTemplate>(TableName, new NamedParameter("repository", this));
-			}
-			else
-			{
-				QueryTemplate = new BaseQueryTemplate<E>(this);
-			}
-
-			QueryTemplate.EntityMetadata = ReadMetadataFromTable();
 		}
 
 
 		protected System.Type BaseEntityType
 		{
 			get { return typeof(E); }
-		}
-
-		protected readonly string _parameterPrefix = "@";
-
-
-
-
-
-		public IEnumerable<DbColumnInfo> ReadMetadataFromTable()
-		{
-			IDbConnection dbConnection = Db.ConnectionFactory.Create();
-
-			return dbConnection.Query<DbColumnInfo>(QueryTemplate.CreateMetaDataQuery());
-		}
-
-		public virtual IList<string> GetColumnsFromMetaData(RequestedColumns cols = RequestedColumns.ALL, IList<string> excludedColumns = null)
-		{
-			return (from ci in QueryTemplate.EntityMetadata
-							where (cols == RequestedColumns.ALL || 
-											(!ci.IsExcludedProperty || !cols.HasFlag(RequestedColumns.NO_EXCLUDED) ) &&
-											(!ci.IsIdentity || !cols.HasFlag(RequestedColumns.NO_PRIMARYKEY) ) &&
-											(!ci.IsComputed || !cols.HasFlag(RequestedColumns.NO_COMPUTED)) &&
-											(excludedColumns == null || !excludedColumns.Contains(ci.ColumnName)))
-							select ci.ColumnName).ToList();
 		}
 
 
@@ -112,46 +70,40 @@ namespace Bloemert.Data.Core
 
 
 
-		public virtual E GetEntity(int id)
+		public virtual E GetEntity(Guid id)
 		{
-			var result = default(E);
+			E result = default(E);
 
-			if (id <= 0)
-				return result;
+			using (var session = Crd.NDb.OpenSession())
+			{
+				//using (var transaction = session.BeginTransaction())
+				{
+					result = session.Get<E>(id);
+				}
+			}
 
-			return Db.Select<E>(QueryTemplate.CreateSelectQuery(), DbParameters.Create(new { id = id }));
+			return result;
 		}
 
-		public async virtual Task<E> GetEntityAsync(int id)
+		public async virtual Task<E> GetEntityAsync(Guid id)
 		{
-			var result = default(E);
+			E result = default(E);
 
-			if (id > 0)
+			using (var session = Crd.NDb.OpenSession())
 			{
-				result = await Db.SelectAsync<E>(QueryTemplate.CreateSelectQuery(), DbParameters.Create(new { id = id }));
+				//using (var transaction = session.BeginTransaction())
+				{
+					result = await session.GetAsync<E>(id);
+				}
 			}
 
 			return result;
 		}
 
 
-		public virtual T GetEntity<T>(string qry, object param)
-		{
-			return Db.Select<T>(qry, DbParameters.Create(param));
-		}
-
-		public virtual async Task<T> GetEntityAsync<T>(string qry, object param)
-		{
-			return await Db.SelectAsync<T>(qry, DbParameters.Create(param));
-		}
-
-
-
 		public virtual E SaveEntity(E entity)
 		{
-			IDbParameters dbParameters = DbParameters.Create(entity);
-
-			int currentUserId = -1;
+			Guid? currentUserId = null;
 			IUserIdentityProvider uip = IoC.Resolve<IUserIdentityProvider>();
 			ClaimsPrincipal cp = uip.ClaimsPrincipal;
 			if (cp != null && cp.Identity is IPersistentIdentity)
@@ -159,80 +111,104 @@ namespace Bloemert.Data.Core
 				currentUserId = ((IPersistentIdentity)cp.Identity).PersistentUser.Id;
 			}
 
-			if (entity.Id > 0)
+
+			try
 			{
-				DateTime updateDate = DateTime.Now;
-				dbParameters.AddInputParameter("EffectiveModifiedOn", updateDate, DbType.DateTime, null);
-				dbParameters.AddInputParameter("EffectiveModifiedBy", currentUserId, DbType.Int32, null);
-
-				if (UseEffectiveVersioning)
+				using (var session = FNHSessionFactory.OpenSession())
 				{
-					// Set proper effective columns for Old record.
-					dbParameters.AddInputParameter("EffectiveEndedOn", updateDate, DbType.DateTime, null);
-					dbParameters.AddInputParameter("EffectiveEndedBy", currentUserId, DbType.Int32, null);
-					int result = this.Db.Execute($"UPDATE {TableName} " +
-																$"SET EffectiveModifiedOn = @EffectiveModifiedOn," +
-																$"		EffectiveModifiedBy = @EffectiveModifiedBy," +
-																$"		EffectiveEndedOn = @EffectiveEndedOn, " +
-																$"		EffectiveEndedBy = @EffectiveEndedBy " +
-																$"WHERE Id = @Id AND EffectiveEndedOn > GetDate()", dbParameters);
-
-					if (result < 1)
+					using (var transaction = session.BeginTransaction())
 					{
-						Log.Error("UserRepository.SaveEntity failed: No update done during effectiveVersioning!");
 
-						throw new ApplicationException("UserRepository.SaveEntity failed: No update done during effectiveVersioning!");
+						if (entity.Id != null && !entity.Id.Equals(Guid.Empty))
+						{
+							DateTime updateDate = DateTime.Now;
+							entity.EffectiveModifiedOn = updateDate;
+							entity.EffectiveModifiedBy = currentUserId;
+
+							if (UseEffectiveVersioning)
+							{
+								// Set proper effective columns for Old record.
+								entity.EffectiveEndedOn = updateDate;
+								entity.EffectiveEndedBy = currentUserId;
+
+								session.Update(entity);
+
+								// Save changed/modified entity as new record
+								E newEntity = Mapper.Map<E>(entity);
+								newEntity.EffectiveStartedOn = updateDate;
+								newEntity.EffectiveStartedBy = currentUserId;
+								newEntity.EffectiveModifiedOn = updateDate;
+								newEntity.EffectiveModifiedBy = currentUserId;
+								newEntity.EffectiveEndedOn = SqlDateTime.MaxValue.Value.AddSeconds(-1);
+								newEntity.EffectiveEndedBy = null;
+
+								newEntity = (E)session.Save(newEntity);
+								transaction.Commit();
+
+								return newEntity;
+							}
+							else
+							{
+								session.Update(entity);
+								transaction.Commit();
+
+								return entity;
+							}
+						}
+						else
+						{
+							DateTime insertDate = DateTime.Now;
+							entity.EffectiveStartedOn = insertDate;
+							entity.EffectiveStartedBy = currentUserId;
+							entity.EffectiveModifiedOn = insertDate;
+							entity.EffectiveModifiedBy = currentUserId;
+							entity.EffectiveEndedOn = SqlDateTime.MaxValue.Value.AddSeconds(-1);
+							entity.EffectiveEndedBy = null;
+
+							entity.Id = (Guid)session.Save(entity);
+							transaction.Commit();
+
+							return entity;
+						}
 					}
-
-					// Save changed/modified entity as new record
-					entity.EffectiveStartedOn = updateDate;
-					entity.EffectiveStartedBy = currentUserId;
-					entity.EffectiveModifiedOn = updateDate;
-					entity.EffectiveModifiedBy = currentUserId;
-					entity.EffectiveEndedOn = SqlDateTime.MaxValue.Value.AddSeconds(-1);
-					entity.EffectiveEndedBy = -1;
-
-					return Db.ExecuteAndQuery<E>(QueryTemplate.CreateInsertQuery(), DbParameters.Create(entity));
-				}
-				else
-				{
-					return this.Db.ExecuteAndQuery<E>(QueryTemplate.CreateUpdateQuery(), dbParameters);
 				}
 			}
-			else
+			catch (Exception ex)
 			{
-				DateTime insertDate = DateTime.Now;
-				dbParameters.AddInputParameter("EffectiveStartedOn", insertDate, DbType.DateTime, null);
-				dbParameters.AddInputParameter("EffectiveStartedBy", currentUserId, DbType.Int32, null);
-				dbParameters.AddInputParameter("EffectiveModifiedOn", insertDate, DbType.DateTime, null);
-				dbParameters.AddInputParameter("EffectiveModifiedBy", currentUserId, DbType.Int32, null);
-				dbParameters.AddInputParameter("EffectiveEndedOn", SqlDateTime.MaxValue.Value.AddSeconds(-1), DbType.DateTime, null);
-				dbParameters.AddInputParameter("EffectiveEndedBy", -1, DbType.Int32, null);
+				Log.Error("BaseEntity for {FullName} SaveEntity failed!", typeof(E).FullName, ex);
 
-				return Db.ExecuteAndQuery<E>(QueryTemplate.CreateInsertQuery(), dbParameters);
+				throw ex;
 			}
 		}
 
 
 		public virtual async Task<E> SaveEntityAsync(E entity)
 		{
-			IDbParameters dbParameters = DbParameters.Create(entity);
+			E result = entity;
 
-			if (entity.Id > 0)
+			using (var session = Crd.NDb.OpenSession())
 			{
-				await this.Db.ExecuteAsync(QueryTemplate.CreateUpdateQuery(), dbParameters);
-			}
-			else
-			{
-				entity = await Db.ExecuteAndQueryAsync<E>(QueryTemplate.CreateInsertQuery(), dbParameters);
+				using (var transaction = session.BeginTransaction())
+				{
+					if (entity.Id == null)
+					{
+						result = (E)await session.SaveAsync(entity);
+					}
+					else
+					{
+						await session.UpdateAsync(entity);
+					}
+
+					transaction.Commit();
+				}
 			}
 
-			return entity;
+			return result;
 		}
 
 
 
-		public virtual bool DeleteEntity(int id)
+		public virtual bool DeleteEntity(Guid id)
 		{
 			var entity = GetEntity(id);
 			if (entity != null)
@@ -242,7 +218,7 @@ namespace Bloemert.Data.Core
 
 			return false;
 		}
-		public virtual async Task<bool> DeleteEntityAsync(int id)
+		public virtual async Task<bool> DeleteEntityAsync(Guid id)
 		{
 			var entity = await GetEntityAsync(id);
 			if (entity != null)
@@ -253,7 +229,7 @@ namespace Bloemert.Data.Core
 			return false;
 		}
 
-		
+
 		public virtual bool DeleteEntity(E entity)
 		{
 			if (entity != null)
@@ -284,94 +260,59 @@ namespace Bloemert.Data.Core
 
 
 
-		public virtual IList<E> ListEntity()
+		public virtual IList<E> ListQuery(Expression<Func<E, bool>> predicate = null)
 		{
-			return Db.List<E>(QueryTemplate.CreateListQuery(), null).ToList();
-		}
-		public virtual async Task<IList<E>> ListEntityAsync()
-		{
-			var result = await Db.ListAsync<E>(QueryTemplate.CreateListQuery(), null);
-			return result.ToList();
-		}
+			IList<E> result = default(IList<E>);
 
-
-		public virtual IList<E> ListEntity(string query)
-		{
-			return ListEntity<E>(query, null);
-		}
-
-		public virtual async Task<IList<E>> ListEntityAsync(string query)
-		{
-			return await ListEntityAsync<E>(query, null);
-		}
-
-
-		public virtual IList<E> ListEntity(string query, object param)
-		{
-			return ListEntity<E>(query, param);
-		}
-		public virtual async Task<IList<E>> ListEntityAsync(string query, object param)
-		{
-			return await ListEntityAsync<E>(query, param);
-		}
-
-
-		public virtual IList<T> ListEntity<T>(string query)
-		{
-			return Db.List<T>(query, null);
-		}
-		public virtual async Task<IList<T>> ListEntityAsync<T>(string query)
-		{
-			return await Db.ListAsync<T>(query, null);
-		}
-
-		public virtual IList<T> ListEntity<T>(string query, object param)
-		{
-			return Db.List<T>(query, DbParameters.Create(param));
-		}
-		public virtual async Task<IList<T>> ListEntityAsync<T>(string query, object param)
-		{
-			return await Db.ListAsync<T>(query, DbParameters.Create(param));
-		}
-
-
-		void PagedListEntity()//ref IPagedList<E> in_out)
-		{
-			using (IDbConnection conn = Db.ConnectionFactory.Create())
+			try
 			{
-				SqlMapper.GridReader grid = conn.QueryMultiple(QueryTemplate.CreatePagedListQuery("", new string[]{ "ID" } ));
-				grid.ReadSingle<int>();
-				grid.ReadSingle<int>();
-				grid.Read<E>();
+				using (var session = FNHSessionFactory.OpenSession())
+				{
+					using (var transaction = session.BeginTransaction())
+					{
+						if (predicate != null)
+						{
+							result = session.Query<E>().Where(predicate).ToList();
+						}
+						else
+						{
+							result = session.Query<E>().ToList();
+						}
+
+						transaction.Commit();
+					}
+				}
+			}
+			catch ( Exception ex )
+			{
+				Log.Error("ListQuery failed on entity \"{FullName}\" ", typeof(E).FullName, ex);
+
+				throw ex;
 			}
 
+			return result;
 		}
 
 
-		public static T ConvertFromDBVal<T>(object obj)
+		public virtual async Task<IList<E>> ListQueryAsync(Expression<Func<E, bool>> predicate = null)
 		{
-			if (obj == null || obj == DBNull.Value)
-			{
-				return default(T); // returns the default value for the type
-			}
-			else
-			{
-				return (T)obj;
-			}
-		}
+			IList<E> result = default(IList<E>);
 
-		public static string ColumnNameToPropertyName(string colName)
-		{
-			return colName.Replace("_", "").ToLower().FirstLetterToUpperCase();
+			using (var session = FNHSessionFactory.OpenSession())
+			{
+				if (predicate != null)
+				{
+					result = await session.Query<E>().Where(predicate).ToListAsync();
+				}
+				else
+				{
+					result = await session.Query<E>().ToListAsync();
+				}
+			}
+
+			return result;
 		}
 	}
 
-	public enum RequestedColumns
-	{
-		ALL = 0,
-		NO_EXCLUDED = 1,
-		NO_PRIMARYKEY = 2,
-		NO_COMPUTED = 4,
-	}
 
 }

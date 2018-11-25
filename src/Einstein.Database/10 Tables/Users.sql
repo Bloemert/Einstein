@@ -1,12 +1,12 @@
 ﻿CREATE TABLE [dbo].[Users]
 (
-  [Id] INT NOT NULL PRIMARY KEY IDENTITY, 
-  [EffectiveStartedOn] DATETIME NOT NULL, 
-  [EffectiveStartedBy] INT NOT NULL, 
-  [EffectiveModifiedOn] DATETIME NOT NULL, 
-  [EffectiveModifiedBy] INT NOT NULL, 
+  [Id] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT NEWID(), 
+  [EffectiveStartedOn] DATETIME NOT NULL DEFAULT GETDATE(), 
+  [EffectiveStartedBy] UNIQUEIDENTIFIER NULL, 
+  [EffectiveModifiedOn] DATETIME NOT NULL DEFAULT GETDATE(), 
+  [EffectiveModifiedBy] UNIQUEIDENTIFIER NULL, 
   [EffectiveEndedOn] DATETIME NOT NULL, 
-  [EffectiveEndedBy] INT NOT NULL, 
+  [EffectiveEndedBy] UNIQUEIDENTIFIER NULL, 
   [Comment] NVARCHAR(MAX) NULL,
   [Active] BIT NOT NULL DEFAULT 1,
   [Login] NVARCHAR(128) NOT NULL,
@@ -17,5 +17,6 @@
   [GoodLogins] INT NOT NULL DEFAULT 0, 
   [Firstname] NVARCHAR(150) NULL, 
   [Lastname] NVARCHAR(150) NULL, 
-  [Email] NVARCHAR(150) NULL
+  [Email] NVARCHAR(150) NULL, 
+  [EmployeeId] UNIQUEIDENTIFIER NULL
 )

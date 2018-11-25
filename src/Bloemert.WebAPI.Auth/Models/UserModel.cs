@@ -9,16 +9,16 @@ namespace Bloemert.WebAPI.Auth.Models
 
 	public class UserModel : IModel
 	{
-		public int Id { get; set; }
+		public Guid Id { get; set; }
 
 		public DateTime EffectiveStartedOn { get; set; }
-		public int EffectiveStartedBy { get; set; }
+		public Guid EffectiveStartedBy { get; set; }
 
 		public DateTime EffectiveModifiedOn { get; set; }
-		public int EffectiveModifiedBy { get; set; }
+		public Guid EffectiveModifiedBy { get; set; }
 
 		public DateTime EffectiveEndedOn { get; set; }
-		public int EffectiveEndedBy { get; set; }
+		public Guid EffectiveEndedBy { get; set; }
 
 
 
