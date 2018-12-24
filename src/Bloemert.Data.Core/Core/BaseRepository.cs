@@ -65,7 +65,19 @@ namespace Bloemert.Data.Core
 
 		public virtual E NewEntity()
 		{
-			return (E)Activator.CreateInstance(BaseEntityType);
+			Guid currentUserId = Guid.Empty;
+			IUserIdentityProvider uip = IoC.Resolve<IUserIdentityProvider>();
+			ClaimsPrincipal cp = uip.ClaimsPrincipal;
+			if (cp != null && cp.Identity is IPersistentIdentity)
+			{
+				currentUserId = ((IPersistentIdentity)cp.Identity).PersistentUser.Id;
+			}
+
+			E entity = (E)Activator.CreateInstance(BaseEntityType);
+			entity.EffectiveStartedBy = currentUserId;
+			entity.Id = Guid.NewGuid();
+
+			return entity;
 		}
 
 
@@ -103,7 +115,7 @@ namespace Bloemert.Data.Core
 
 		public virtual E SaveEntity(E entity)
 		{
-			Guid? currentUserId = null;
+			Guid currentUserId = Guid.Empty;
 			IUserIdentityProvider uip = IoC.Resolve<IUserIdentityProvider>();
 			ClaimsPrincipal cp = uip.ClaimsPrincipal;
 			if (cp != null && cp.Identity is IPersistentIdentity)
@@ -140,7 +152,7 @@ namespace Bloemert.Data.Core
 								newEntity.EffectiveModifiedOn = updateDate;
 								newEntity.EffectiveModifiedBy = currentUserId;
 								newEntity.EffectiveEndedOn = SqlDateTime.MaxValue.Value.AddSeconds(-1);
-								newEntity.EffectiveEndedBy = null;
+								newEntity.EffectiveEndedBy = Guid.Empty;
 
 								newEntity = (E)session.Save(newEntity);
 								transaction.Commit();
@@ -163,7 +175,7 @@ namespace Bloemert.Data.Core
 							entity.EffectiveModifiedOn = insertDate;
 							entity.EffectiveModifiedBy = currentUserId;
 							entity.EffectiveEndedOn = SqlDateTime.MaxValue.Value.AddSeconds(-1);
-							entity.EffectiveEndedBy = null;
+							entity.EffectiveEndedBy = Guid.Empty;
 
 							entity.Id = (Guid)session.Save(entity);
 							transaction.Commit();

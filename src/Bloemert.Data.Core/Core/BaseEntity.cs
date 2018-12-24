@@ -8,14 +8,14 @@ namespace Bloemert.Data.Core
 	{
 		public virtual Guid Id { get; set; }
 
-		public virtual DateTime? EffectiveStartedOn { get; set; }
-		public virtual Guid? EffectiveStartedBy { get; set; }
+		public virtual DateTime EffectiveStartedOn { get; set; }
+		public virtual Guid EffectiveStartedBy { get; set; }
 
-		public virtual DateTime? EffectiveModifiedOn { get; set; }
-		public virtual Guid? EffectiveModifiedBy { get; set; }
+		public virtual DateTime EffectiveModifiedOn { get; set; }
+		public virtual Guid EffectiveModifiedBy { get; set; }
 
-		public virtual DateTime? EffectiveEndedOn { get; set; }
-		public virtual Guid? EffectiveEndedBy { get; set; }
+		public virtual DateTime EffectiveEndedOn { get; set; }
+		public virtual Guid EffectiveEndedBy { get; set; }
 
 	}
 }

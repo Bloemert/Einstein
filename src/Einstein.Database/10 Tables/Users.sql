@@ -7,7 +7,7 @@
   [EffectiveModifiedBy] UNIQUEIDENTIFIER NULL, 
   [EffectiveEndedOn] DATETIME NOT NULL, 
   [EffectiveEndedBy] UNIQUEIDENTIFIER NULL, 
-  [Comment] NVARCHAR(MAX) NULL,
+  [Comment] NVARCHAR(1024) NULL,
   [Active] BIT NOT NULL DEFAULT 1,
   [Login] NVARCHAR(128) NOT NULL,
   [PasswordData] NVARCHAR(2048) NOT NULL, 
@@ -15,8 +15,8 @@
   [LastLogin] DATETIME NULL, 
   [FailedAttempts] INT NOT NULL DEFAULT 0, 
   [GoodLogins] INT NOT NULL DEFAULT 0, 
-  [Firstname] NVARCHAR(150) NULL, 
-  [Lastname] NVARCHAR(150) NULL, 
-  [Email] NVARCHAR(150) NULL, 
+  [Firstname] NVARCHAR(150) NOT NULL, 
+  [Lastname] NVARCHAR(150) NOT NULL, 
+  [Email] NVARCHAR(150) NOT NULL, 
   [EmployeeId] UNIQUEIDENTIFIER NULL
 )

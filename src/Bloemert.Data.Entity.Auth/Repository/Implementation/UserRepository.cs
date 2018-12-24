@@ -62,7 +62,7 @@ namespace Bloemert.Data.Entity.Auth.Repository.Implementation
 
 		public override User SaveEntity(User entity)
 		{
-			Guid? currentUserId = null;
+			Guid currentUserId = Guid.Empty;
 			IUserIdentityProvider uip = IoC.Resolve<IUserIdentityProvider>();
 			ClaimsPrincipal cp = uip.ClaimsPrincipal;
 			if (cp != null && cp.Identity is IPersistentIdentity)
@@ -109,7 +109,7 @@ namespace Bloemert.Data.Entity.Auth.Repository.Implementation
 								newEntity.EffectiveModifiedOn = updateDate;
 								newEntity.EffectiveModifiedBy = currentUserId;
 								newEntity.EffectiveEndedOn = SqlDateTime.MaxValue.Value.AddSeconds(-1);
-								newEntity.EffectiveEndedBy = null;
+								newEntity.EffectiveEndedBy = Guid.Empty;
 
 								newEntity = (User)session.Save(newEntity);
 								transaction.Commit();
@@ -132,7 +132,7 @@ namespace Bloemert.Data.Entity.Auth.Repository.Implementation
 							entity.EffectiveModifiedOn = insertDate;
 							entity.EffectiveModifiedBy = currentUserId;
 							entity.EffectiveEndedOn = SqlDateTime.MaxValue.Value.AddSeconds(-1);
-							entity.EffectiveEndedBy = null;
+							entity.EffectiveEndedBy = Guid.Empty;
 
 							entity.Id = (Guid)session.Save(entity);
 							transaction.Commit();

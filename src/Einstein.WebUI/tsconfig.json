@@ -1,17 +1,25 @@
 {
   "compilerOptions": {
-    //"lib": [ "dom", "es5", "es2015" ],
-    "allowSyntheticDefaultImports": true,
-    //"experimentalDecorators": true,
-    "module": "es2015",
-    "moduleResolution": "node",
     "target": "es5",
-    "sourceMap": true,
-    "skipDefaultLibCheck": true,
-    "strict": true
-    //"types": [ "webpack-env" ]
+    "lib": [
+      "dom",
+      "es2015"
+    ],
+    "types": [
+      "node"
+    ],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "isolatedModules": false,
+    "experimentalDecorators": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "removeComments": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "strictFunctionTypes": false
   },
-  "exclude": [
-      "bin"
-  ]
+  "include": [
+    "./src/**/*.ts", "src/router/index.js", "src/layouts/MainLayout.vue"
+  ],
+  "compileOnSave": false
 }

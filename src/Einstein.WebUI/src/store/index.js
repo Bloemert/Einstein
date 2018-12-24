@@ -1,0 +1,23 @@
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+import ActiveUser from './active-user'
+import Users from './users'
+Vue.use(Vuex)
+
+/*
+ * If not building with SSR mode, you can
+ * directly export the Store instantiation
+ */
+
+export default function (/* { ssrContext } */) {
+  const Store = new Vuex.Store({
+    strict: process.env.NODE_ENV !== 'production',
+    modules: {
+      'user': ActiveUser,
+      'users': Users
+    }
+  })
+
+  return Store
+}

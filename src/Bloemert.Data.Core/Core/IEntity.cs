@@ -6,14 +6,14 @@ namespace Bloemert.Data.Core.Core
 	{
 		Guid Id { get; }
 
-		DateTime? EffectiveStartedOn { get; set; }
-		Guid? EffectiveStartedBy { get; set; }
+		DateTime EffectiveStartedOn { get; set; }
+		Guid EffectiveStartedBy { get; set; }
 
-		DateTime? EffectiveModifiedOn { get; set; }
-		Guid? EffectiveModifiedBy { get; set; }
+		DateTime EffectiveModifiedOn { get; set; }
+		Guid EffectiveModifiedBy { get; set; }
 
-		DateTime? EffectiveEndedOn { get; set; }
-		Guid? EffectiveEndedBy { get; set; }
+		DateTime EffectiveEndedOn { get; set; }
+		Guid EffectiveEndedBy { get; set; }
 
 	}
 }

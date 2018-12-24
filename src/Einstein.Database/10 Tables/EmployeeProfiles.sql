@@ -1,14 +1,15 @@
 ﻿CREATE TABLE [dbo].[EmployeeProfiles]
 (
-	[Id] INT NOT NULL PRIMARY KEY,
-  [EffectiveStartedOn] DATETIME NOT NULL, 
-  [EffectiveStartedBy] INT NOT NULL, 
-  [EffectiveModifiedOn] DATETIME NOT NULL, 
-  [EffectiveModifiedBy] INT NOT NULL, 
+  [Id] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT NEWID(), 
+  [EffectiveStartedOn] DATETIME NOT NULL DEFAULT GETDATE(), 
+  [EffectiveStartedBy] UNIQUEIDENTIFIER NULL, 
+  [EffectiveModifiedOn] DATETIME NOT NULL DEFAULT GETDATE(), 
+  [EffectiveModifiedBy] UNIQUEIDENTIFIER NULL, 
   [EffectiveEndedOn] DATETIME NOT NULL, 
-  [EffectiveEndedBy] INT NOT NULL, 
-  [Comment] NVARCHAR(MAX) NULL,
+  [EffectiveEndedBy] UNIQUEIDENTIFIER NULL,
+  [Comment] NVARCHAR(1024) NULL,
   [Text] NVARCHAR(MAX) NULL,
   [Tags] NVARCHAR(250) NULL,
-  [EmployeeId] INT NOT NULL
+  [EmployeeId] UNIQUEIDENTIFIER NOT NULL,
+  [EmployeeSkillSourceId] UNIQUEIDENTIFIER NOT NULL
 )
