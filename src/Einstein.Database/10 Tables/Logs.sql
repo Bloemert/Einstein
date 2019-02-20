@@ -14,8 +14,4 @@
    [Exception] nvarchar(max) NULL,
    [Properties] xml NULL,
    [LogEvent] nvarchar(256) NULL
- 
-   CONSTRAINT [PK_Logs] 
-     PRIMARY KEY CLUSTERED ([Id] DESC) 
- 
 ) 

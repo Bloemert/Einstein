@@ -8,7 +8,6 @@ namespace Bloemert.WebAPI.Auth
 	using System.Security.Principal;
 	using Bloemert.Data.Entity.Auth.Entity;
 	using Bloemert.Data.Entity.Auth.Repository;
-	using Bloemert.WebAPI.Auth.Models;
 	using Nancy.Authentication.Basic;
 	using Serilog;
 

@@ -4,10 +4,8 @@ using Bloemert.Data.Core;
 using Bloemert.Data.Entity.Admin;
 using Bloemert.Data.Entity.Admin.Entity;
 using Bloemert.Lib.Auto.Mapping.AutoMapper.Autofac;
-using Bloemert.Lib.WebAPI;
 using Bloemert.WebAPI.Admin.Models;
 using Bloemert.WebAPI.Admin.Models.Mappers;
-using Nancy;
 using System;
 using System.Reflection;
 
@@ -24,7 +22,7 @@ namespace Bloemert.WebAPI.Admin
 
 			// Initialize and Register all neccesary base instances in proper order!
 			builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
-			 .Where(t => t.IsAssignableTo<INancyModule>())
+			 .Where(t => t.IsAssignableTo<CarterModule>())
 			 .AsImplementedInterfaces()
 			 .InstancePerRequest();
 
@@ -33,7 +31,7 @@ namespace Bloemert.WebAPI.Admin
 
 		private void RegisterMappingProfiles(ContainerBuilder builder)
 		{
-			builder.RegisterTwoWayMappingProfile<LogMapperProfile, Log, LogModel>();
+			builder.RegisterTwoWayMappingProfile<LogMapperProfile, DBLog, LogModel>();
 
 			builder.ConfigureAutoMapper();
 		}

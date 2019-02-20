@@ -5,6 +5,7 @@ using Bloemert.Lib.Auto.Mapping;
 using Bloemert.Lib.Config;
 using Bloemert.Lib.WebAPI;
 using Bloemert.WebAPI.Skills.Models;
+using Serilog;
 
 namespace Bloemert.WebAPI.Skills.Modules
 {
@@ -13,8 +14,9 @@ namespace Bloemert.WebAPI.Skills.Modules
 
 		public SpotModule(IAppConfig appCfg, ISpotRepository spotRepository, 
 			ITwoWayMapper<Spot, SpotModel> mapper,
-			IUserIdentityProvider identityProvider)
-			: base(appCfg, spotRepository, mapper, identityProvider, "/skills/spots")
+			IUserIdentityProvider identityProvider,
+			ILogger log)
+			: base(appCfg, spotRepository, mapper, identityProvider, log, "/skills/spots")
 		{
 
 		}

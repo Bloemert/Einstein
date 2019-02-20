@@ -6,7 +6,7 @@ using System.Xml;
 
 namespace Bloemert.Data.Entity.Admin.Entity
 {
-	public class Log : BaseEntity
+	public class DBLog : BaseEntity
 	{
 		public virtual string Message { get; set; }
 

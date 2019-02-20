@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Bloemert.Data.Core\Bloemert.Data.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Mappings\" />
+  </ItemGroup>
+
 </Project>

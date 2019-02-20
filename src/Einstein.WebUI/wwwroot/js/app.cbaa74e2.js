@@ -1305,7 +1305,7 @@ exports = module.exports = __webpack_require__("2350")(true);
 
 
 // module
-exports.push([module.i, ".page {\n  background-image: url(" + escape(__webpack_require__("ad04")) + ");\n  background-position: center center;\n  background-repeat: no-repeat;\n  opacity: 0.5;\n}\n/*# sourceMappingURL=src/css/app.css.map */", "", {"version":3,"sources":["D:/AtWork/Projects/Einstein/src/Einstein.WebUI/src/css/D:/AtWork/Projects/Einstein/src/Einstein.WebUI/src/css/src/css/app.styl","D:/AtWork/Projects/Einstein/src/Einstein.WebUI/src/css/D:/AtWork/Projects/Einstein/src/Einstein.WebUI/src/css/app.styl"],"names":[],"mappings":"AAEA;EACE,gDAAA;EACA,mCAAA;EACA,6BAAA;EACA,aAAA;CCDD;AACD,2CAA2C","file":"app.styl","sourcesContent":["// app global css\n\n.page {\n  background-image: url('../statics/einstein-logo.png');\n  background-position: center center;\n  background-repeat:  no-repeat;\n  opacity: 0.5;\n}\n",".page {\n  background-image: url(\"../statics/einstein-logo.png\");\n  background-position: center center;\n  background-repeat: no-repeat;\n  opacity: 0.5;\n}\n/*# sourceMappingURL=src/css/app.css.map */"],"sourceRoot":""}]);
+exports.push([module.i, ".page {\n  background-image: url(" + escape(__webpack_require__("ad04")) + ");\n  background-position: center center;\n  background-repeat: no-repeat;\n  opacity: 0.35;\n}\n/*# sourceMappingURL=src/css/app.css.map */", "", {"version":3,"sources":["D:/AtWork/Projects/Einstein/src/Einstein.WebUI/src/css/D:/AtWork/Projects/Einstein/src/Einstein.WebUI/src/css/src/css/app.styl","D:/AtWork/Projects/Einstein/src/Einstein.WebUI/src/css/D:/AtWork/Projects/Einstein/src/Einstein.WebUI/src/css/app.styl"],"names":[],"mappings":"AAEA;EACE,gDAAA;EACA,mCAAA;EACA,6BAAA;EACA,cAAA;CCDD;AACD,2CAA2C","file":"app.styl","sourcesContent":["// app global css\n\n.page {\n  background-image: url('../statics/einstein-logo.png');\n  background-position: center center;\n  background-repeat:  no-repeat;\n  opacity: 0.35;\n}\n",".page {\n  background-image: url(\"../statics/einstein-logo.png\");\n  background-position: center center;\n  background-repeat: no-repeat;\n  opacity: 0.35;\n}\n/*# sourceMappingURL=src/css/app.css.map */"],"sourceRoot":""}]);
 
 // exports
 
@@ -1512,4 +1512,4 @@ component.options.__file = "Error404.vue"
 /***/ })
 
 },[[0,"runtime","vendor"]]]);
-//# sourceMappingURL=app.7e256a66.js.map
+//# sourceMappingURL=app.cbaa74e2.js.map

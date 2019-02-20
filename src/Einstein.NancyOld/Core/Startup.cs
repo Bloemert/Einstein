@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Carter;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -45,6 +46,8 @@ namespace Einstein.WebAPI.Core
 
 				TelemetryConfiguration.Active.DisableTelemetry = true;
 			}
+
+			app.UseCarter();
 
 			//app.UseResponseBuffering();
 			app.UseOwin(x => x.UseNancy(opt => opt.Bootstrapper = new Bootstrapper(IoCBuilder)));

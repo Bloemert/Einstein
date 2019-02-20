@@ -1,42 +1,29 @@
-﻿using System.IO;
-using Microsoft.AspNetCore.Hosting;
-using Einstein.WebAPI.Core;
-using System;
-using Bloemert.Lib.Config;
-using System.Linq;
-using Autofac;
+﻿using Autofac.Extensions.DependencyInjection;
 
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 namespace Einstein.WebAPI
 {
 	public class Program
 	{
-		public Program()
-		{ 
-			Startup.IoCBuilder = new ContainerBuilder();
-
-
-			// Register IConfiguration
-			Startup.IoCBuilder.RegisterInstance(AppConfig.Instance.Value)
-				.As<IAppConfig>()
-				.SingleInstance();
-
-
-			// Start Nancy WebAPI using Kestrel as Webserver
-			var host = new WebHostBuilder()
-					.UseContentRoot(AppConfig.Instance.Value.GetValue("ContentRoot"))
-					.UseWebRoot(AppConfig.Instance.Value.GetValue("WebRoot"))
-					.UseKestrel()
-					.UseStartup<Startup>()
-					.UseUrls(AppConfig.Instance.Value.GetValues("URLs").Values.ToArray())
-					.UseEnvironment(AppConfig.Instance.Value.GetValue("Environment"))
-					.Build();
-
-			host.Run();
-		}
-
-		static void Main(string[] args)
+		public static void Main(string[] args)
 		{
-			new Program();
+			CreateWebHostBuilder(args).Build().Run();
 		}
+
+		public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+				WebHost.CreateDefaultBuilder(args)
+						.UseKestrel()
+						.ConfigureServices(services => services.AddAutofac())
+						.UseContentRoot(Directory.GetCurrentDirectory())
+						.UseIISIntegration()
+						.UseStartup<Startup>();
 	}
 }

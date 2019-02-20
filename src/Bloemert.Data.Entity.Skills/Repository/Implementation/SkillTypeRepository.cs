@@ -4,6 +4,7 @@ using Bloemert.Data.Entity.Skills.Entity;
 using Bloemert.Data.Entity.Skills.Repository;
 using Bloemert.Lib.Common;
 using Bloemert.Lib.Config;
+using NHibernate;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -20,8 +21,10 @@ namespace Bloemert.Data.Entity.Skills.Repository.Implementation
 
 		public override Regex ExcludePropertyMatch { get; set; }
 
-		public SkillTypeRepository(ICommonRepositoryDependencies crd)
-			: base(crd)
+		public SkillTypeRepository(ILifetimeScope ioc,
+									ISessionFactory sessionFactory,
+									ILogger log)
+			: base(ioc, sessionFactory, log)
 		{
 		}
 

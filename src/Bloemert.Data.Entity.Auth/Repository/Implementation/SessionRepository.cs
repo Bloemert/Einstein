@@ -1,6 +1,8 @@
-﻿using Bloemert.Data.Core;
+﻿using Autofac;
+using Bloemert.Data.Core;
 using Bloemert.Data.Entity.Auth.Entity;
 using Bloemert.Lib.Common;
+using NHibernate;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -15,8 +17,10 @@ namespace Bloemert.Data.Entity.Auth.Repository.Implementation
 		public override string TableName { get; set; } = @"Sessions";
 
 
-		public SessionRepository(ICommonRepositoryDependencies crd)
-			: base(crd)
+		public SessionRepository(ILifetimeScope ioc,
+									ISessionFactory sessionFactory,
+									ILogger log)
+			: base(ioc, sessionFactory, log)
 		{
 
 		}

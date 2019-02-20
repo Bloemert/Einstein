@@ -16,6 +16,7 @@ namespace Bloemert.Data.Core
 
 
 		E NewEntity();
+		Task<E> NewEntityAsync();
 
 
 		E GetEntity(Guid id);

@@ -4,9 +4,6 @@ using Bloemert.Data.Core;
 using Bloemert.Data.Entity.Auth;
 using Bloemert.Data.Entity.Auth.Entity;
 using Bloemert.Lib.Auto.Mapping.AutoMapper.Autofac;
-using Bloemert.Lib.WebAPI;
-using Bloemert.WebAPI.Auth.Models;
-using Bloemert.WebAPI.Auth.Models.Mappers;
 using Nancy;
 using Nancy.Authentication.Basic;
 using System;
@@ -43,8 +40,6 @@ namespace Bloemert.WebAPI.Auth
 
 		private void RegisterMappingProfiles(ContainerBuilder builder)
 		{
-			builder.RegisterTwoWayMappingProfile<UserMapperProfile, User, UserModel>();
-
 			builder.ConfigureAutoMapper();
 		}
 

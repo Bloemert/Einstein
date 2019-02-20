@@ -1,6 +1,5 @@
 ﻿
 using Autofac;
-using Autofac.Extras.AggregateService;
 using Bloemert.Data.Core.Core;
 using Bloemert.Lib.Config;
 using FluentNHibernate.Automapping;
@@ -22,16 +21,9 @@ namespace Bloemert.Data.Core
 			// Register referenced Modules
 			builder.RegisterModule<Bloemert.Lib.Config.ModuleLoader>();
 
-			// Initialize and Register all neccesary base instances in proper order!
-			builder.RegisterAggregateService<ICommonRepositoryDependencies>();
-
 			builder.RegisterType<DbConnectionFactory>()
 				.As<IDbConnectionFactory>()
 				.SingleInstance();
-
-			builder.RegisterType<DefaultDbExecutor>()
-				.As<IDbExecutor>()
-				.InstancePerDependency();
 
 			builder.Register<ISessionFactory>((c, p) =>
 			{

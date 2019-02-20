@@ -7,6 +7,7 @@ using Bloemert.Data.Entity.Auth.Repository;
 using Bloemert.Lib.Common;
 using Bloemert.Lib.Config;
 using Newtonsoft.Json;
+using NHibernate;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -28,10 +29,13 @@ namespace Bloemert.Data.Entity.Auth.Repository.Implementation
 
 		public IAppConfig AppConfig { get; }
 
-		public UserRepository(ICommonRepositoryDependencies crd)
-			: base(crd)
+		public UserRepository(ILifetimeScope ioc,
+									ISessionFactory sessionFactory,
+									ILogger log,
+									IAppConfig appConfig)
+			: base(ioc, sessionFactory, log)
 		{
-			AppConfig = crd.IoC.Resolve<IAppConfig>();
+			AppConfig = appConfig;
 		}
 
 		public User Validate(string login, string password)
@@ -83,7 +87,7 @@ namespace Bloemert.Data.Entity.Auth.Repository.Implementation
 
 			try
 			{
-				using (var session = FNHSessionFactory.OpenSession())
+				using (var session = SessionFactory.OpenSession())
 				{
 					using (var transaction = session.BeginTransaction())
 					{

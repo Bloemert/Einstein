@@ -16,21 +16,6 @@ using System.Threading.Tasks;
 namespace Bloemert.Data.Core
 {
 
-	public interface ICommonRepositoryDependencies
-	{
-		ILifetimeScope IoC { get; }
-
-		IDbConnectionFactory ConnectionFactory { get; }
-
-		ILogger Log { get; }
-
-		IDbExecutor Db { get; }
-
-		ISessionFactory NDb { get; }
-	}
-
-
-
 	public class BaseRepository<R, E> : IRepository<E>
 		where R : IRepository<E>
 		where E : BaseEntity
@@ -43,17 +28,20 @@ namespace Bloemert.Data.Core
 
 		public virtual bool UseEffectiveVersioning { get; } = false;
 
-		public ICommonRepositoryDependencies Crd { get; }
+
+		protected ILifetimeScope IoC { get; }
+		protected ISessionFactory SessionFactory { get; }
+		protected ILogger Log { get; }
 
 
-		protected ILifetimeScope IoC { get { return Crd.IoC; } }
-		protected ISessionFactory FNHSessionFactory { get { return Crd.NDb; } }
-		protected ILogger Log { get { return Crd.Log; } }
-
-
-		public BaseRepository(ICommonRepositoryDependencies crd)
+		public BaseRepository(
+									ILifetimeScope ioc, 
+									ISessionFactory sessionFactory,
+									ILogger log)
 		{
-			Crd = crd;
+			IoC = ioc;
+			SessionFactory = sessionFactory;
+			Log = log;
 		}
 
 
@@ -80,13 +68,32 @@ namespace Bloemert.Data.Core
 			return entity;
 		}
 
+		public async virtual Task<E> NewEntityAsync()
+		{
+			return await Task.Run<E>( () =>
+			{
+				Guid currentUserId = Guid.Empty;
+				IUserIdentityProvider uip = IoC.Resolve<IUserIdentityProvider>();
+				ClaimsPrincipal cp = uip.ClaimsPrincipal;
+				if (cp != null && cp.Identity is IPersistentIdentity)
+				{
+					currentUserId = ((IPersistentIdentity)cp.Identity).PersistentUser.Id;
+				}
+
+				E entity = (E)Activator.CreateInstance(BaseEntityType);
+				entity.EffectiveStartedBy = currentUserId;
+				entity.Id = Guid.NewGuid();
+
+				return entity;
+			});
+		}
 
 
 		public virtual E GetEntity(Guid id)
 		{
 			E result = default(E);
 
-			using (var session = Crd.NDb.OpenSession())
+			using (var session = SessionFactory.OpenSession())
 			{
 				//using (var transaction = session.BeginTransaction())
 				{
@@ -101,7 +108,7 @@ namespace Bloemert.Data.Core
 		{
 			E result = default(E);
 
-			using (var session = Crd.NDb.OpenSession())
+			using (var session = SessionFactory.OpenSession())
 			{
 				//using (var transaction = session.BeginTransaction())
 				{
@@ -126,7 +133,7 @@ namespace Bloemert.Data.Core
 
 			try
 			{
-				using (var session = FNHSessionFactory.OpenSession())
+				using (var session = SessionFactory.OpenSession())
 				{
 					using (var transaction = session.BeginTransaction())
 					{
@@ -198,7 +205,7 @@ namespace Bloemert.Data.Core
 		{
 			E result = entity;
 
-			using (var session = Crd.NDb.OpenSession())
+			using (var session = SessionFactory.OpenSession())
 			{
 				using (var transaction = session.BeginTransaction())
 				{
@@ -278,7 +285,7 @@ namespace Bloemert.Data.Core
 
 			try
 			{
-				using (var session = FNHSessionFactory.OpenSession())
+				using (var session = SessionFactory.OpenSession())
 				{
 					using (var transaction = session.BeginTransaction())
 					{
@@ -310,7 +317,7 @@ namespace Bloemert.Data.Core
 		{
 			IList<E> result = default(IList<E>);
 
-			using (var session = FNHSessionFactory.OpenSession())
+			using (var session = SessionFactory.OpenSession())
 			{
 				if (predicate != null)
 				{

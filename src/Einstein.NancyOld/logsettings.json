@@ -1,0 +1,44 @@
+﻿{
+  "Serilog": {
+    "Using": [
+      "Serilog.Sinks.MSSQLServer"
+    ],
+    "MinimumLevel": "Debug",
+    "WriteTo": [
+      {
+        // This MSSqlServer sink MUST be the first [0]!
+        "Name": "MSSqlServer",
+        "Args": {
+          "connectionString": "LogDB",
+          "tableName": "Logs",
+          "restrictedToMinimumLevel": "Warning",
+          "batchPostingLimit": 1000,
+          "period": "0:00:01",
+          "autoCreateSqlTable": true,
+          "columnOptionsSection": {
+            "primaryKeyColumnName": "Id",
+            "addStandardColumns": [ "LogEvent" ],
+            "removeStandardColumns": [
+              "MessageTemplate"
+            ],
+            //"customColumns": [
+            //  {
+            //    "ColumnName": "Deleted",
+            //    "DataType": "bool",
+            //    "DefaultValue": false
+            //  }
+            //],
+            "logEvent": {
+              "columnName": "LogEvent",
+              "excludeAdditionalProperties": true
+            }
+          }
+        }
+      }
+    ],
+    "Enrich": [ "FromLogContext", "WithMachineName", "WithThreadId" ],
+    "Properties": {
+      "Application": "Einstein.WebAPI"
+    }
+  }
+}

@@ -1,11 +1,9 @@
 ﻿using Bloemert.Data.Core;
-using Bloemert.Lib.WebAPI;
-using Newtonsoft.Json;
 using System;
 
 namespace Bloemert.WebAPI.Work.Models
 {
-	public class EmployeeModel : IModel
+	public class EmployeeModel : BaseEntity
 	{
 		public int Id { get; set; }
 

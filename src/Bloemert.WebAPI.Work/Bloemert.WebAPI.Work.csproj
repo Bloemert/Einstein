@@ -6,8 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Carter" Version="3.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Bloemert.Data.Entity.Work\Bloemert.Data.Entity.Work.csproj" />
-    <ProjectReference Include="..\Bloemert.Lib.WebAPI\Bloemert.Lib.WebAPI.csproj" />
   </ItemGroup>
 
 </Project>

@@ -8,13 +8,13 @@ using System.Text;
 
 namespace Bloemert.WebAPI.Admin.Models.Mappers
 {
-	public class LogMapperProfile : TwoWayMappingProfile<Log, LogModel>
+	public class LogMapperProfile : TwoWayMappingProfile<DBLog, LogModel>
 	{
-		protected override void ConfigureMapping(IMappingExpression<LogModel, Log> map)
+		protected override void ConfigureMapping(IMappingExpression<LogModel, DBLog> map)
 		{
 		}
 
-		protected override void ConfigureMapping(IMappingExpression<Log, LogModel> map)
+		protected override void ConfigureMapping(IMappingExpression<DBLog, LogModel> map)
 		{
 		}
 	}
