@@ -5,6 +5,7 @@ using Bloemert.Lib.Auto.Mapping;
 using Bloemert.Lib.Config;
 using Bloemert.Lib.WebAPI;
 using Bloemert.WebAPI.Skills.Models;
+using Serilog;
 
 namespace Bloemert.WebAPI.Skills.Modules
 {
@@ -13,8 +14,9 @@ namespace Bloemert.WebAPI.Skills.Modules
 
 		public SkillModule(IAppConfig appCfg, ISkillRepository skillRepository, 
 			ITwoWayMapper<Skill, SkillModel> mapper,
-			IUserIdentityProvider identityProvider)
-			: base(appCfg, skillRepository, mapper, identityProvider, "/skills/skills")
+			IUserIdentityProvider identityProvider,
+			ILogger log)
+			: base(appCfg, skillRepository, mapper, identityProvider, log, "/skills/skills")
 		{
 
 		}

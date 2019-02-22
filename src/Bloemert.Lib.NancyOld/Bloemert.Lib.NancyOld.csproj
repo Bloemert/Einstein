@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+		<PlatformTarget>x64</PlatformTarget>
+		<TargetFrameworks>netcoreapp2.2</TargetFrameworks>
+    <Platforms>AnyCPU;x64</Platforms>
+		<RuntimeIdentifiers>win10-x64</RuntimeIdentifiers>
+		<ApplicationIcon />
+		<OutputType>Library</OutputType>
+		<StartupObject />
+		<AutoGenerateBindingRedirects>True</AutoGenerateBindingRedirects>
+	</PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Carter" Version="3.8.0" />
+    <PackageReference Include="Carter.SirenNegotiator" Version="1.0.4" />
+    <PackageReference Include="FluentValidation.WebApi" Version="8.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Bloemert.Lib.Auto\Bloemert.Lib.Auto.csproj" />
+    <ProjectReference Include="..\Bloemert.Data.Core\Bloemert.Data.Core.csproj" />
+    <ProjectReference Include="..\Bloemert.Data.Entity.Auth\Bloemert.Data.Entity.Auth.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -5,20 +5,20 @@ namespace Bloemert.Data.Entity.Skills.Entity
 {
 	public class Spot : BaseEntity
 	{
-		public int SpotterId { get; set; }
+		public virtual int SpotterId { get; set; }
 
-		public DateTime SpottedOn { get; set; }
+		public virtual DateTime SpottedOn { get; set; }
 
 
-		public string Name { get; set; }
+		public virtual string Name { get; set; }
 
-		public int RingId { get; set; }
+		public virtual int RingId { get; set; }
 
-		public int SectorId { get; set; }
+		public virtual int SectorId { get; set; }
 
-		public bool IsNew { get; set; }
+		public virtual bool IsNew { get; set; }
 
-		public string Description { get; set; }
+		public virtual string Description { get; set; }
 
 	}
 }

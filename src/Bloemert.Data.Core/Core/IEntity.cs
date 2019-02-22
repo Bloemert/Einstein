@@ -1,23 +1,19 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 
-namespace Bloemert.Data.Core
+namespace Bloemert.Data.Core.Core
 {
-	public interface IEntity 
+	public interface IEntity
 	{
-		int Id { get; set; }
-
+		Guid Id { get; }
 
 		DateTime EffectiveStartedOn { get; set; }
-		int EffectiveStartedBy { get; set; }
+		Guid EffectiveStartedBy { get; set; }
 
 		DateTime EffectiveModifiedOn { get; set; }
-		int EffectiveModifiedBy { get; set; }
+		Guid EffectiveModifiedBy { get; set; }
 
 		DateTime EffectiveEndedOn { get; set; }
-		int EffectiveEndedBy { get; set; }
+		Guid EffectiveEndedBy { get; set; }
 
 	}
 }

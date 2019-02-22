@@ -10,6 +10,5 @@ namespace Bloemert.Data.Entity.Auth
 
 		public virtual User User { get; set; }
 
-		public virtual IList<Permission> Permissions { get; set; }
 	}
 }

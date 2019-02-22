@@ -4,7 +4,7 @@ using Bloemert.Data.Entity.Work.Entity;
 using Bloemert.Lib.Auto.Mapping.AutoMapper.Autofac;
 using Bloemert.WebAPI.Work.Models;
 using Bloemert.WebAPI.Work.Models.Mappers;
-using Nancy;
+using Carter;
 using System.Reflection;
 
 namespace Bloemert.WebAPI.Work
@@ -20,7 +20,7 @@ namespace Bloemert.WebAPI.Work
 
 			// Initialize and Register all neccesary base instances in proper order!
 			builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
-			 .Where(t => t.IsAssignableTo<INancyModule>())
+			 .Where(t => t.IsAssignableTo<CarterModule>())
 			 .AsImplementedInterfaces()
 			 .InstancePerRequest();
 

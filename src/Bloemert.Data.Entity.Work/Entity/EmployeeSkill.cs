@@ -6,11 +6,11 @@ namespace Bloemert.Data.Entity.Work.Entity
 {
 	public class EmployeeSkill : BaseEntity
 	{
-		public int EmployeeId { get; set; }
+		public virtual int EmployeeId { get; set; }
 
-		public int SkillId { get; set; }
+		public virtual int SkillId { get; set; }
 
-		public int ScoreId { get; set; }
+		public virtual int ScoreId { get; set; }
 
 	}
 }

@@ -3,7 +3,7 @@ using Bloemert.Data.Entity.Admin.Entity;
 
 namespace Bloemert.Data.Entity.Admin.Repository
 {
-	public interface ILogRepository : IRepository<Log>
+	public interface ILogRepository : IRepository<DBLog>
 	{
 	}
 }

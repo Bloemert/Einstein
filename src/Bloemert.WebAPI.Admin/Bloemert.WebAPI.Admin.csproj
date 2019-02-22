@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
@@ -11,7 +11,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Bloemert.Data.Entity.Admin\Bloemert.Data.Entity.Admin.csproj" />
-    <ProjectReference Include="..\Bloemert.Lib.WebAPI\Bloemert.Lib.WebAPI.csproj" />
   </ItemGroup>
 
 </Project>

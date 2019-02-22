@@ -7,7 +7,7 @@
   [EffectiveModifiedBy] INT NOT NULL, 
   [EffectiveEndedOn] DATETIME NOT NULL, 
   [EffectiveEndedBy] INT NOT NULL, 
-  [Comment] NVARCHAR(MAX) NULL,
-  [EmployeeSkill] INT NOT NULL,
-  [SkillScore] INT NOT NULL
+  [Comment] NVARCHAR(1024) NULL,
+  [EmployeeSkillId] INT NOT NULL,
+  [SkillScoreId] INT NOT NULL
 )

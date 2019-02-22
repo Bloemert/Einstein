@@ -1,12 +1,16 @@
 {
-  "ignore": [
-      "node_modules/**/*"
+  "presets": [
+      "@vue/app"
   ],
-	"presets": [
-		"vue"
-	],
-	"plugins": [
-    "transform-object-rest-spread",
-    "transform-runtime"
-   ]
+  "plugins": [
+    "dynamic-import-node",
+    ["module-resolver", {
+      "root": ["./src"],
+      "alias": {
+        "test": "./test",
+        "underscore": "lodash"
+      }
+    }]
+  ],
+  "comments": false
 }

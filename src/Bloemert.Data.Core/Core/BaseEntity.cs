@@ -1,22 +1,21 @@
 ﻿
+using Bloemert.Data.Core.Core;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Bloemert.Data.Core
 {
-	public class BaseEntity : IEntity
+	public abstract class BaseEntity : IEntity
 	{
-		public int Id { get; set; }
+		public virtual Guid Id { get; set; }
 
-		public DateTime EffectiveStartedOn { get; set; }
-		public int EffectiveStartedBy { get; set; }
+		public virtual DateTime EffectiveStartedOn { get; set; }
+		public virtual Guid EffectiveStartedBy { get; set; }
 
-		public DateTime EffectiveModifiedOn { get; set; }
-		public int EffectiveModifiedBy { get; set; }
+		public virtual DateTime EffectiveModifiedOn { get; set; }
+		public virtual Guid EffectiveModifiedBy { get; set; }
 
-		public DateTime EffectiveEndedOn { get; set; }
-		public int EffectiveEndedBy { get; set; }
+		public virtual DateTime EffectiveEndedOn { get; set; }
+		public virtual Guid EffectiveEndedBy { get; set; }
 
 	}
 }

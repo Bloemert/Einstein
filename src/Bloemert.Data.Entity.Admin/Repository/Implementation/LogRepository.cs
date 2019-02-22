@@ -5,6 +5,7 @@ using Bloemert.Data.Entity.Admin.Repository;
 using Bloemert.Lib.Common;
 using Bloemert.Lib.Config;
 using Newtonsoft.Json;
+using NHibernate;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ using System.Text.RegularExpressions;
 
 namespace Bloemert.Data.Entity.Admin.Repository.Implementation
 {
-	public class LogRepository : BaseRepository<LogRepository, Entity.Log>, ILogRepository
+	public class LogRepository : BaseRepository<LogRepository, Entity.DBLog>, ILogRepository
 	{
 
 		public override string TableName { get; set; } = @"Logs";
@@ -23,10 +24,13 @@ namespace Bloemert.Data.Entity.Admin.Repository.Implementation
 
 		public IAppConfig AppConfig { get; }
 
-		public LogRepository(ICommonRepositoryDependencies crd)
-			: base(crd)
+		public LogRepository(ILifetimeScope ioc,
+									ISessionFactory sessionFactory,
+									ILogger log,
+									IAppConfig appConfig)
+			: base(ioc, sessionFactory, log)
 		{
-			AppConfig = crd.IoC.Resolve<IAppConfig>();
+			AppConfig = appConfig;
 		}
 
 	}

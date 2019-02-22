@@ -1,4 +1,6 @@
-﻿using Bloemert.Data.Core.Tests.Entity;
+﻿using Autofac;
+using Bloemert.Data.Core.Tests.Entity;
+using NHibernate;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -12,8 +14,10 @@ namespace Bloemert.Data.Core.Tests.Repository.Implementation
 		public override string TableName { get; set; } = @"Tests";
 
 
-		public TestRepository(ICommonRepositoryDependencies crd)
-			: base(crd)
+		public TestRepository(ILifetimeScope ioc,
+									ISessionFactory sessionFactory,
+									ILogger log)
+			: base(ioc, sessionFactory, log)
 		{
 
 		}

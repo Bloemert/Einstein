@@ -5,6 +5,7 @@ using Bloemert.Lib.Auto.Mapping;
 using Bloemert.Lib.Config;
 using Bloemert.Lib.WebAPI;
 using Bloemert.WebAPI.Skills.Models;
+using Serilog;
 
 namespace Bloemert.WebAPI.Skills.Modules
 {
@@ -13,8 +14,9 @@ namespace Bloemert.WebAPI.Skills.Modules
 
 		public SectorModule(IAppConfig appCfg, ISectorRepository sectorRepository, 
 			ITwoWayMapper<Sector, SectorModel> mapper,
-			IUserIdentityProvider identityProvider)
-			: base(appCfg, sectorRepository, mapper, identityProvider, "/skills/sectors")
+			IUserIdentityProvider identityProvider,
+			ILogger log)
+			: base(appCfg, sectorRepository, mapper, identityProvider, log, "/skills/sectors")
 		{
 
 		}

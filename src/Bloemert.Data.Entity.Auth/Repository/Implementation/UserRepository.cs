@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using AutoMapper;
 using Bloemert.Data.Core;
 using Bloemert.Data.Core.Core;
 using Bloemert.Data.Entity.Auth.Entity;
@@ -6,6 +7,7 @@ using Bloemert.Data.Entity.Auth.Repository;
 using Bloemert.Lib.Common;
 using Bloemert.Lib.Config;
 using Newtonsoft.Json;
+using NHibernate;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -27,17 +29,20 @@ namespace Bloemert.Data.Entity.Auth.Repository.Implementation
 
 		public IAppConfig AppConfig { get; }
 
-		public UserRepository(ICommonRepositoryDependencies crd)
-			: base(crd)
+		public UserRepository(ILifetimeScope ioc,
+									ISessionFactory sessionFactory,
+									ILogger log,
+									IAppConfig appConfig)
+			: base(ioc, sessionFactory, log)
 		{
-			AppConfig = crd.IoC.Resolve<IAppConfig>();
+			AppConfig = appConfig;
 		}
 
 		public User Validate(string login, string password)
 		{
 			string hashedPassword = this.HashPassword(password);
 
-			return this.ListEntity<User>(@"SELECT * FROM Users WHERE Login = @Login AND PasswordData = @HPwd", new { Login = login, HPwd = hashedPassword }).FirstOrDefault();
+			return this.ListQuery(x => x.Active && x.Login.Equals(login) && x.PasswordData.Equals(hashedPassword)).FirstOrDefault();
 		}
 
 		public string HashPassword(string password)
@@ -61,10 +66,7 @@ namespace Bloemert.Data.Entity.Auth.Repository.Implementation
 
 		public override User SaveEntity(User entity)
 		{
-			IDbParameters dbParameters = DbParameters.Create(entity);
-			IList<string> excludedColumns = null;
-
-			int currentUserId = -1;
+			Guid currentUserId = Guid.Empty;
 			IUserIdentityProvider uip = IoC.Resolve<IUserIdentityProvider>();
 			ClaimsPrincipal cp = uip.ClaimsPrincipal;
 			if (cp != null && cp.Identity is IPersistentIdentity)
@@ -74,62 +76,83 @@ namespace Bloemert.Data.Entity.Auth.Repository.Implementation
 
 			if (String.IsNullOrEmpty(entity.PasswordData))
 			{
-				excludedColumns = new List<string> { "PasswordData" };
+				// When no PasswordData is filled in by User, request it from DB first else the update will fail!
+				User oldData = this.GetEntity(entity.Id);
+
+				if ( oldData!=null )
+				{
+					entity.PasswordData = oldData.PasswordData;
+				}
 			}
 
-			if (entity.Id > 0)
+			try
 			{
-				DateTime updateDate = DateTime.Now;
-				dbParameters.AddInputParameter("EffectiveModifiedOn", updateDate, DbType.DateTime, null);
-				dbParameters.AddInputParameter("EffectiveModifiedBy", currentUserId, DbType.Int32, null);
-
-				if (UseEffectiveVersioning)
+				using (var session = SessionFactory.OpenSession())
 				{
-					// Set proper effective columns for Old record.
-					dbParameters.AddInputParameter("EffectiveEndedOn", updateDate, DbType.DateTime, null);
-					dbParameters.AddInputParameter("EffectiveEndedBy", currentUserId, DbType.Int32, null);
-					int result = this.Db.Execute($"UPDATE {TableName} " +
-																$"SET EffectiveModifiedOn = @EffectiveModifiedOn," +
-																$"		EffectiveModifiedBy = @EffectiveModifiedBy," +
-																$"		EffectiveEndedOn = @EffectiveEndedOn, " +
-																$"		EffectiveEndedBy = @EffectiveEndedBy " +
-																$"WHERE Id = @Id AND EffectiveEndedOn > GetDate()", dbParameters);
-
-					if ( result < 1 )
+					using (var transaction = session.BeginTransaction())
 					{
-						Log.Error("UserRepository.SaveEntity failed: No update done during effectiveVersioning!");
 
-						throw new ApplicationException("UserRepository.SaveEntity failed: No update done during effectiveVersioning!");
+						if (entity.Id != null && !entity.Id.Equals(Guid.Empty))
+						{
+							DateTime updateDate = DateTime.Now;
+							entity.EffectiveModifiedOn = updateDate;
+							entity.EffectiveModifiedBy = currentUserId;
+
+							if (UseEffectiveVersioning)
+							{
+								// Set proper effective columns for Old record.
+								entity.EffectiveEndedOn = updateDate;
+								entity.EffectiveEndedBy = currentUserId;
+
+								session.Update(entity);
+
+								// Save changed/modified entity as new record
+								User newEntity = Mapper.Map<User>(entity);
+								newEntity.EffectiveStartedOn = updateDate;
+								newEntity.EffectiveStartedBy = currentUserId;
+								newEntity.EffectiveModifiedOn = updateDate;
+								newEntity.EffectiveModifiedBy = currentUserId;
+								newEntity.EffectiveEndedOn = SqlDateTime.MaxValue.Value.AddSeconds(-1);
+								newEntity.EffectiveEndedBy = Guid.Empty;
+
+								newEntity = (User)session.Save(newEntity);
+								transaction.Commit();
+
+								return newEntity;
+							}
+							else
+							{
+								session.Update(entity);
+								transaction.Commit();
+
+								return entity;
+							}
+						}
+						else
+						{
+							DateTime insertDate = DateTime.Now;
+							entity.EffectiveStartedOn = insertDate;
+							entity.EffectiveStartedBy = currentUserId;
+							entity.EffectiveModifiedOn = insertDate;
+							entity.EffectiveModifiedBy = currentUserId;
+							entity.EffectiveEndedOn = SqlDateTime.MaxValue.Value.AddSeconds(-1);
+							entity.EffectiveEndedBy = Guid.Empty;
+
+							entity.Id = (Guid)session.Save(entity);
+							transaction.Commit();
+
+							return entity;
+						}
 					}
-
-					// Save changed/modified entity as new record
-					entity.EffectiveStartedOn = updateDate;
-					entity.EffectiveStartedBy = currentUserId;
-					entity.EffectiveModifiedOn = updateDate;
-					entity.EffectiveModifiedBy = currentUserId;
-					entity.EffectiveEndedOn = SqlDateTime.MaxValue.Value.AddSeconds(-1);
-					entity.EffectiveEndedBy = -1;
-
-					return Db.ExecuteAndQuery<User>(QueryTemplate.CreateInsertQuery(excludedColumns), DbParameters.Create(entity));
-				}
-				else
-				{
-					return this.Db.ExecuteAndQuery<User>(QueryTemplate.CreateUpdateQuery(excludedColumns), dbParameters);
 				}
 			}
-			else
+			catch (Exception ex)
 			{
-				DateTime insertDate = DateTime.Now;
-				dbParameters.AddInputParameter("EffectiveStartedOn", insertDate, DbType.DateTime, null);
-				dbParameters.AddInputParameter("EffectiveStartedBy", currentUserId, DbType.Int32, null);
-				dbParameters.AddInputParameter("EffectiveModifiedOn", insertDate, DbType.DateTime, null);
-				dbParameters.AddInputParameter("EffectiveModifiedBy", currentUserId, DbType.Int32, null);
-				dbParameters.AddInputParameter("EffectiveEndedOn", SqlDateTime.MaxValue.Value.AddSeconds(-1), DbType.DateTime, null);
-				dbParameters.AddInputParameter("EffectiveEndedBy", -1, DbType.Int32, null);
+				Log.Error("User SaveEntity failed!", ex);
 
-				return Db.ExecuteAndQuery<User>(QueryTemplate.CreateInsertQuery(excludedColumns), dbParameters);
+				throw ex;
 			}
-		}
 
+		}
 	}
 }

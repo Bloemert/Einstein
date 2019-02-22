@@ -4,6 +4,7 @@ using Bloemert.Data.Entity.Work.Entity;
 using Bloemert.Lib.Common;
 using Bloemert.Lib.Config;
 using Newtonsoft.Json;
+using NHibernate;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -18,8 +19,10 @@ namespace Bloemert.Data.Entity.Work.Repository.Implementation
 
 		public override string TableName { get; set; } = @"Employees";
 
-		public EmployeeRepository(ICommonRepositoryDependencies crd)
-			: base(crd)
+		public EmployeeRepository(ILifetimeScope ioc,
+									ISessionFactory sessionFactory,
+									ILogger log)
+			: base(ioc, sessionFactory, log)
 		{
 		}
 	}

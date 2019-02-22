@@ -1,13 +1,13 @@
 ﻿CREATE TABLE [dbo].[EmployeeExperiences]
 (
-	[Id] INT NOT NULL PRIMARY KEY,
-  [EffectiveStartedOn] DATETIME NOT NULL, 
-  [EffectiveStartedBy] INT NOT NULL, 
-  [EffectiveModifiedOn] DATETIME NOT NULL, 
-  [EffectiveModifiedBy] INT NOT NULL, 
+  [Id] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT NEWID(), 
+  [EffectiveStartedOn] DATETIME NOT NULL DEFAULT GETDATE(), 
+  [EffectiveStartedBy] UNIQUEIDENTIFIER NULL, 
+  [EffectiveModifiedOn] DATETIME NOT NULL DEFAULT GETDATE(), 
+  [EffectiveModifiedBy] UNIQUEIDENTIFIER NULL, 
   [EffectiveEndedOn] DATETIME NOT NULL, 
-  [EffectiveEndedBy] INT NOT NULL, 
-  [Comment] NVARCHAR(MAX) NULL,
+  [EffectiveEndedBy] UNIQUEIDENTIFIER NULL,
+  [Comment] NVARCHAR(1024) NULL,
   [Client] NVARCHAR(150) NULL,
   [Employer] NVARCHAR(150) NOT NULL,
   [FunctionTitle] NVARCHAR(150) NULL,
@@ -18,5 +18,6 @@
   [FinishedDate] DATE NULL,
   [Technics] NVARCHAR(MAX) NULL,
   [Description] NVARCHAR(MAX) NULL,
-  [Work] NVARCHAR(MAX) NULL
+  [Work] NVARCHAR(MAX) NULL,
+  [EmployeeSkillSourceId] UNIQUEIDENTIFIER NOT NULL
 )
