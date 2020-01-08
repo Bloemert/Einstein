@@ -16,8 +16,7 @@ using System.Threading.Tasks;
 namespace Bloemert.Data.Core
 {
 
-	public class BaseRepository<R, E> : IRepository<E>
-		where R : IRepository<E>
+	public class BaseRepository<E> : IRepository<E>
 		where E : BaseEntity
 	{
 		public virtual string TableName { get; set; }
@@ -30,7 +29,7 @@ namespace Bloemert.Data.Core
 
 
 		protected ILifetimeScope IoC { get; }
-		protected ISessionFactory SessionFactory { get; }
+		protected IDBContext SessionFactory { get; }
 		protected ILogger Log { get; }
 
 

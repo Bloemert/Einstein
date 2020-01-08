@@ -40,7 +40,7 @@ namespace Bloemert.Lib.Common
 		{
 			if (string.IsNullOrEmpty(hex))
 			{
-				return null;
+				return new byte[] { };
 			}
 
 			int NumberChars = hex.Length;

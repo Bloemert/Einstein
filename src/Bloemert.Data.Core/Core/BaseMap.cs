@@ -1,24 +1,21 @@
-﻿using FluentNHibernate.Mapping;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Bloemert.Data.Core.Core
 {
-	public class BaseMap<T> : ClassMap<T> where T : IEntity
+  public class BaseMap<T> : IEntityTypeConfiguration<T>
+		where T : BaseEntity
+  {
+
+	public void Configure(EntityTypeBuilder<T> builder)
 	{
-		public BaseMap()
-		{
-			Id(x => x.Id);
-			Map(x => x.EffectiveStartedOn);
-			Map(x => x.EffectiveStartedBy);
+	  // Add special configuration mappings between DB and DataLayer hier.
+	  builder.HasKey(k => k.Id);
 
-			Map(x => x.EffectiveModifiedOn);
-			Map(x => x.EffectiveModifiedBy);
-
-			Map(x => x.EffectiveEndedOn);
-			Map(x => x.EffectiveEndedBy);
-		}
 	}
+  }
 
 }

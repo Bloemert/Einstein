@@ -1,9 +1,17 @@
 ﻿{
   "Serilog": {
     "Using": [
-      "Serilog.Sinks.MSSQLServer"
+      "Serilog.Sinks.MSSQLServer",
+      "Serilog.Sinks.File"
     ],
-    "MinimumLevel": "Debug",
+    "MinimumLevel": {
+      "Default": "Debug",
+      "Override": {
+        "Microsoft": "Warning",
+        "System": "Warning",
+        "Microsoft.AspNetCore.Authentication": "Information"
+      }
+    },
     "WriteTo": [
       {
         // This MSSqlServer sink MUST be the first [0]!
@@ -33,6 +41,14 @@
               "excludeAdditionalProperties": true
             }
           }
+        }
+      },
+      {
+        "Name": "File",
+        "Args": {
+          "path": "%APPDATA%\\Einstein.WebAPI\\WebAPI-.log",
+          "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level}] {Message}{NewLine}{Exception}",
+          "rollingInterval": "Day"
         }
       }
     ],

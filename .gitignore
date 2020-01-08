@@ -303,3 +303,6 @@ __pycache__/
 
 # OpenCover UI analysis results
 OpenCover/
+
+# Secret data not in public repository
+**/appsettings.*.json

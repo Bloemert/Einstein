@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Bloemert.Data.Entity.Admin\Bloemert.Data.Entity.Admin.csproj" />
+    <ProjectReference Include="..\Bloemert.Data.Entity.Auth\Bloemert.Data.Entity.Auth.csproj" />
+    <ProjectReference Include="..\Bloemert.Data.Entity.Skills\Bloemert.Data.Entity.Skills.csproj" />
+    <ProjectReference Include="..\Bloemert.Data.Entity.Work\Bloemert.Data.Entity.Work.csproj" />
+    <ProjectReference Include="..\Bloemert.Lib.Auto\Bloemert.Lib.Auto.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -9,9 +9,11 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Serilog;
+
 namespace Einstein.WebAPI
 {
-	public class Program
+	public static class Program
 	{
 		public static void Main(string[] args)
 		{
@@ -20,10 +22,11 @@ namespace Einstein.WebAPI
 
 		public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
 				WebHost.CreateDefaultBuilder(args)
-						.UseKestrel()
+						//.UseKestrel()
 						.ConfigureServices(services => services.AddAutofac())
 						.UseContentRoot(Directory.GetCurrentDirectory())
 						.UseIISIntegration()
+						.UseSerilog()
 						.UseStartup<Startup>();
 	}
 }

@@ -27,8 +27,4 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Bloemert.Lib.Config\Bloemert.Lib.Config.csproj" />
-  </ItemGroup>
-
 </Project>

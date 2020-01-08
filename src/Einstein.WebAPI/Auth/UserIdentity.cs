@@ -1,9 +1,9 @@
-﻿using Bloemert.Data.Core.Core;
-using Bloemert.Data.Entity.Auth.Entity;
+﻿using Einstein.DataAccessLayer.Core;
+using Einstein.DataAccessLayer.Entities;
 
 namespace Einstein.WebAPI.Auth
 {
-	public class UserIdentity : IPersistentIdentity
+  public class UserIdentity : IPersistentIdentity
 	{
 		public IPersistentUser PersistentUser { get; }
 
@@ -11,7 +11,7 @@ namespace Einstein.WebAPI.Auth
 
 		public bool IsAuthenticated => (PersistentUser != null);
 
-		public string Name => PersistentUser.Login;
+		public string Name => PersistentUser.UserName;
 
 		public UserIdentity(User user) 
 		{

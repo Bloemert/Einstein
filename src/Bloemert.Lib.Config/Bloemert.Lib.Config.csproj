@@ -11,10 +11,4 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.2" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Bloemert.Lib.Auto\Bloemert.Lib.Auto.csproj" />
-    <ProjectReference Include="..\Bloemert.Lib.Common\Bloemert.Lib.Common.csproj" />
-    <ProjectReference Include="..\Bloemert.Lib.Logging\Bloemert.Lib.Logging.csproj" />
-  </ItemGroup>
-
 </Project>
